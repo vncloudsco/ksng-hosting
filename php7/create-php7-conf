@@ -1,0 +1,37 @@
+#!/bin/bash
+
+func_usage ()
+{
+  echo " Create php7-fpm configuration for specific provision"
+  echo " Usage : $0 -d domain -u user "
+  exit 1
+}
+
+while getopts d:u: OPT
+  do
+    case $OPT in
+	 "d" ) PROV="$OPTARG" ;;
+	 "u" ) USER="$OPTARG" ;;
+	 * ) func_usage ;;
+	esac
+  done
+
+if [ -z ${PROV} ] || [ -z ${USER} ]; then
+  func_usage
+fi
+
+
+CMD="sed -e 's/%%DOMAIN%%/$PROV/' /etc/php7-fpm.conf.template > /etc/php7-fpm.$PROV.conf"
+echo "$CMD" | bash
+
+CMD="sed -e 's/%%DOMAIN%%/$PROV/' -e 's/%%USER%%/$USER/' /etc/php7-fpm.d/www.conf.template > /etc/php7-fpm.d/www.$PROV.conf"
+echo "$CMD" | bash
+
+CMD="sed -e 's/%%DOMAIN%%/$PROV/' /usr/lib/systemd/system/php7-fpm.service.template > /usr/lib/systemd/system/php7-fpm.$PROV.service"
+echo "$CMD" | bash
+
+## Start service
+systemctl daemon-reload
+systemctl start php7-fpm.$PROV.service
+systemctl enable php7-fpm.$PROV.service
+
