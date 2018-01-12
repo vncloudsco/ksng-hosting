@@ -1,0 +1,37 @@
+#!/bin/bash
+
+function usage()
+{
+	echo " Remove php7-fpm configuration after deleting user"
+	echo " Usage $0 -u user "
+	exit 1
+}
+while getopts u: OPT
+	do
+		case $OPT in
+		  "u" ) USERNAME="$OPTARG" ;;
+		  "*" ) usage ;;
+		esac
+	done
+if [ -z ${USERNAME} ]; then
+	usage
+fi
+
+RET=`systemctl is-active php7-fpm.$USERNAME | grep active 2>&1 > /dev/null;echo $?`
+if [ $RET -eq 0 ]; then
+	systemctl stop php7-fpm.$USERNAME
+	systemctl disable php7-fpm.$USERNAME
+	rm -f /etc/php7-fpm.d/conf.d/$USERNAME.conf
+	rm -f /etc/php7-fpm.d/www.$USERNAME.conf
+	rm -f /usr/lib/systemd/system/php7-fpm.$USERNAME.service
+elif [ -f "/usr/lib/systemd/system/php7-fpm.$USERNAME.service" ]; then
+    systemctl disable php7-fpm.$USERNAME
+	rm -f /etc/php7-fpm.d/conf.d/$USERNAME.conf
+    rm -f /etc/php7-fpm.d/www.$USERNAME.conf
+    rm -f /usr/lib/systemd/system/php7-fpm.$USERNAME.service
+fi
+systemctl daemon-reload
+userdel --remove $USERNAME
+DEL="sed -i '/$USERNAME:/d' /tmp/userpass_list.log"
+echo $DEL | bash
+rm -rf /var/log/$USERNAME

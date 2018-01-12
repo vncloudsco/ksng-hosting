@@ -1,0 +1,47 @@
+#!/bin/bash
+
+# add a new user
+#USERNAME=webmaster$RANDOM
+function usage()
+{
+   echo " Usage $0 -u user"
+   exit 1
+}
+while getopts u: OPT
+	do
+		case $OPT in
+		 "u" ) AMAN="$OPTARG" ;;
+		 "*" ) usage ;;
+		esac
+	done
+if [ -z ${AMAN} ]; then
+	usage
+fi
+if [ `grep $AMAN /etc/passwd >/dev/null;echo $?` -eq 0 ]; then
+   	echo " User existed, please enter another one"
+	exit 1
+else
+	useradd $AMAN
+	cd /home
+	chcon unconfined_u:object_r:user_home_dir_t:s0 $AMAN
+	chmod 701 $AMAN
+
+	# create a password
+	PASSWORD=`date | md5sum | head -c 12`
+	echo "$AMAN:$PASSWORD" >> /tmp/userpass_list.log
+	echo -e "$PASSWORD\n$PASSWORD\n" | passwd $AMAN
+
+	# create php7-fpm configuration 
+	mkdir -p /var/log/$AMAN/php7-fpm
+	mkdir -p /var/log/$AMAN/php7-fpm/session
+	mkdir -p /var/log/$AMAN/php7-fpm/wsdlcache
+	mkdir -p /var/log/$AMAN/nginx
+	chown -R $AMAN:$AMAN /var/log/${AMAN}
+    /usr/src/create-php7-conf -d $AMAN -u $AMAN
+
+	# set disk quota
+	CMD="xfs_quota -x -c 'limit bsoft=1024m bhard=1280m $AMAN' /"
+	echo $CMD | bash
+
+	echo "Done"
+fi
