@@ -1,0 +1,42 @@
+#!/bin/bash
+
+cd /etc/hhvm/conf.d
+
+func_usage ()
+{
+  echo " Create HHVM configuration ini file for specify provision"
+  echo " Usage : $0 -d domain -u user "
+  exit 1
+}
+
+while getopts d:u: OPT
+  do
+    case $OPT in
+	 "d" ) PROV="$OPTARG" ;;
+	 "u" ) AMAN="$OPTARG" ;;
+	 * ) func_usage ;;
+	esac
+  done
+
+if [ -z ${PROV} ] || [ -z ${AMAN} ]; then
+  func_usage
+fi
+
+## Create file configuration .ini
+CMD="sed -e 's/%%DOMAIN%%/$PROV/' -e 's/%%USER%%/$AMAN/' template.ini > $PROV.ini"
+echo "$CMD" | bash
+## Create new service
+CMD="sed -e 's/%%DOMAIN%%/$PROV/' /etc/systemd/system/hhvm.service.template > /etc/systemd/system/hhvm.$PROV.service"
+echo "$CMD" | bash
+## Start HHVM instance
+systemctl daemon-reload
+systemctl start hhvm.$PROV
+systemctl enable hhvm.$PROV
+
+#/usr/bin/hhvm -m daemon -c /etc/hhvm/conf.d/$PROV.ini
+## Appen to onboot-start script
+#echo "/usr/bin/hhvm -m daemon -c /etc/hhvm/conf.d/$PROV.ini" >> /usr/src/start_all_hhvm_instance
+#echo "-- Change owner group of provision's socket --"
+#sleep 5s
+#chgrp www /var/cache/hhvmd/$PROV.sock
+#echo Done.
