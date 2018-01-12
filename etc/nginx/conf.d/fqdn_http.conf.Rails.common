@@ -1,0 +1,14 @@
+	listen 80;
+	server_name fqdn;
+	#access_log  /home/kusanagi/profile/log/nginx/access.log main;
+	#error_log   /home/kusanagi/profile/log/nginx/error.log warn;
+
+    access_log /var/log/profile/nginx/access.log main;
+	error_log /var/log/profile/nginx/error.log warn;
+
+	# rewrite ^(.*)$ https://fqdn$request_uri permanent; # SSL ONLY
+	charset UTF-8;
+	client_max_body_size 16M;
+	root  /home/kusanagi_user/profile/public;
+	index index.html index.htm;
+

@@ -1,0 +1,15 @@
+	ServerAdmin webmaster@example.com
+	DocumentRoot /home/kusanagi/profile/public
+	ServerName fqdn
+	ErrorLog  /home/kusanagi/profile/log/httpd/error.log
+	CustomLog /home/kusanagi/profile/log/httpd/access.log kusanagi env=!no_log
+	<Directory "/home/kusanagi/profile/public">
+		Require all granted
+		AllowOverride All
+		Options FollowSymlinks
+	</Directory>
+	<ifModule mod_rewrite.c>
+      		RewriteEngine Off
+      		RewriteCond %{HTTPS} off
+      		RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [R,L]
+	</ifModule>
