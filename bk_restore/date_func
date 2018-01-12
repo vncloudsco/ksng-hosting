@@ -1,0 +1,38 @@
+#!/bin/bash
+
+func_usage()
+{
+  echo " Usage: $0 -t time "
+  exit 1
+}
+while getopts t: OPT
+	do
+		case $OPT in
+		"t" ) _TIME="$OPTARG" ;;
+		* ) func_usage ;;
+		esac
+	done
+if [ -z ${_TIME} ]; then
+    func_usage
+fi
+
+w3-date ()
+{
+declare -A arrayDate
+arrayDate=( ["Jan"]=01 ["Feb"]=02 ["Mar"]=03 ["Apr"]=04 ["May"]=05 ["Jun"]=06 ["Jul"]=07 ["Aug"]=08 ["Sep"]=09 ["Oct"]=10 ["Nov"]=11 ["Dec"]=12 )
+time_in_day=`echo $1 |cut -d '-' -f2`
+hour=`echo ${time_in_day} | cut -d ':' -f1`
+[ $hour -lt 10 ] && [ $hour -gt 0 ] && hour="0"$hour
+minute=`echo ${time_in_day} | cut -d ':' -f2`
+second=`echo ${time_in_day} | cut -d ':' -f3`
+time_in_day=$hour":"$minute":"$second
+mon=`echo $1 |cut -d '-' -f1| cut -d '/' -f2`
+mon=${arrayDate[$mon]}
+year=`echo $1 |cut -d '-' -f1| cut -d '/' -f1`
+day=`echo $1 |cut -d '-' -f1| cut -d '/' -f3`
+[ $day -lt 10 ] && day="0"$day
+echo $year"-"$mon"-"$day"T"$time_in_day"+07:00"
+}
+
+w3date=$( w3-date ${_TIME})
+echo $w3date

@@ -1,0 +1,43 @@
+#!/bin/bash
+
+# perform incremental backup
+func_usage()
+{
+  echo " Usage: $0 -u user -d domain"
+  exit 1
+}
+while getopts u:d: OPT
+	do
+		case $OPT in
+		"u" ) _USER="$OPTARG" ;;
+		"d" ) _DOMA="$OPTARG" ;;
+		* ) func_usage ;;
+		esac
+	done
+if [ -z ${_USER} ] || [ -z ${_DOMA} ]; then
+    func_usage
+fi
+
+today=`date +%Y-%m-%d`
+sql_dir="/home/${_USER}/${_DOMA}/sqlbackup"
+if [ ! -d "${sql_dir}" ]; then
+	mkdir -p ${sql_dir}
+	chown -R ${_USER}:${_USER} ${sql_dir}
+	chmod 777 ${sql_dir}
+fi
+## backup database
+db=`grep ${_DOMA} /etc/kusanagi.d/profile.conf -A 1 | grep DBNAME | cut -d '"' -f2`
+mysqldump --single-transaction -ubk_user -pbk_Passw0rd --database $db | gzip > ${sql_dir}/$db".sql.gz"
+scp ${sql_dir}/$db".sql.gz" 150.95.104.72:/backup/ 2>&1 >/dev/null
+
+## backup source code
+echo -n ''>/tmp/ignore.log
+find /home/${_USER}/${_DOMA}/ -type f -name "*.tar.gz" -o -name "*.zip" >> /tmp/ignore.log
+source /root/dup_swift
+src_dir="/home/${_USER}/${_DOMA}/"
+dest_url="swift://vod/backup/${_USER}/${_DOMA}"
+log_archive="/var/log/${_DOMA}/bk.log"
+#duplicity --full-if-older-than=1W --no-encryption --exclude-filelist /tmp/ignore.log /home/${_USER}/${_DOMA}/ swift://vod/backup/${_USER}/${_DOMA}
+duplicity --full-if-older-than=1W --no-encryption --exclude-filelist /tmp/ignore.log $src_dir $dest_url >> $log_archive
+
+echo "Done"

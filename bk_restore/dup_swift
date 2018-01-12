@@ -1,0 +1,7 @@
+#!/bin/bash
+
+export SWIFT_USERNAME=zvnu16737311
+export SWIFT_PASSWORD=lkjhMnbv@1
+export SWIFT_AUTHURL=https://identity.tyo1.cloud.z.com/v2.0
+export SWIFT_AUTHVERSION=2
+export SWIFT_TENANTNAME=zvnt16737311
