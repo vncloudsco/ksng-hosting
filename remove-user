@@ -36,7 +36,7 @@ systemctl daemon-reload
 #Delete user from account table
 mysql -p$GetP kusanagi -e "DELETE FROM account WHERE login_id = '"$USERNAME"'"
 #Delete_provision
-/usr/src/remove_all_provision -u $USERNAME
+/usr/src/rm_user_provs -u $USERNAME
 #Delete Filerun
 sed -i "/'$USERNAME'/d" /etc/cron.daily/clean-Filerun
 mysql -p$GetP -e "DROP DATABASE IF EXISTS Filerun_"$USERNAME"_db"
