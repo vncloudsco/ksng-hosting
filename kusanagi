@@ -1,0 +1,222 @@
+#!/bin/sh
+# kusanagi command
+
+
+#stty erase ^H
+#stty erase ^?
+
+PROFILE=""
+
+# for gettext
+export TEXTDOMAIN=kusanagi
+source /usr/bin/gettext.sh
+
+LIBDIR=/usr/lib/kusanagi/lib
+
+# load configure and functions
+source /etc/kusanagi.conf
+source $LIBDIR/help.sh
+helphelp $@
+source $LIBDIR/functions.sh
+
+if [ -n "$PROFILE" ] ; then
+	TARGET_DIR=/home/kusanagi/$PROFILE
+fi
+NGINX_CACHE_DIR="/var/cache/nginx/wordpress"
+
+KUSANAGI_CLI_VER='1.3.2'
+
+case ${1} in
+
+	init)
+		source $LIBDIR/init.sh
+		k_init $@
+	;;
+	provision)
+		source $LIBDIR/provision.sh
+		k_provision $@
+	;;
+	setting)
+		source $LIBDIR/setting.sh
+		k_setting $@
+	;;
+	ssl)
+		source $LIBDIR/ssl.sh
+		k_ssl $@
+	;;
+	remove)
+		source $LIBDIR/remove.sh
+		k_remove $@
+	;;
+	httpd)
+		k_httpd $@
+	;;
+	nginx)
+		k_nginx $@
+	;;
+	php-fpm)
+		k_phpfpm $@
+	;;
+	php7)
+		k_php7 $@
+	;;
+	hhvm)
+		k_hhvm $@
+	;;
+	ruby24)
+		k_ruby24 $@
+	;;
+	target)
+		k_target $@
+	;;
+	status)
+		check_profile
+		k_status $@
+	;;
+	pro_status)
+		source $LIBDIR/pro-status.sh
+		show_pro $2
+	;;
+	pro_hhvm)
+		source $LIBDIR/hhvm-php7.sh
+		pro_hhvm $2 $3
+	;;
+	pro_php7)
+		source $LIBDIR/hhvm-php7.sh
+		pro_php7 $2 $3
+	;;
+	pro_list)
+		source $LIBDIR/list_users_prov.sh
+		prov_list $2
+	;;
+	warm-up)
+		check_profile
+		k_warmup $@
+	;;
+	configure)
+		k_configure $@
+	;;
+
+	update)
+		check_profile
+		k_update $@
+	;;
+	fcache)
+		check_profile
+		# disable the glob. like *(wildcard)
+		set -f
+		k_fcache $@
+	;;
+	bcache)
+		check_profile
+		# disable the glob. like *(wildcard)
+		set -f
+		k_bcache $@
+	;;
+	zabbix)
+		check_profile
+		k_zabbix $@
+	;;
+	https)
+		check_profile
+		source $LIBDIR/ssl.sh
+		k_https $@
+	;;
+	autorenewal)
+		check_profile
+		source $LIBDIR/autorenewal.sh
+		k_autorenewal $@
+	;;
+	monit)
+		k_monit $@
+	;;
+	restart)
+		k_restart nginx httpd hhvm php7-fpm php-fpm
+	;;
+
+	images)
+		check_profile
+		source $LIBDIR/images.sh
+		k_images $@
+		;;
+	multisite)			# undocumented option
+		check_profile
+		source $LIBDIR/multisite.sh
+		k_multisite $@
+	;;
+	-h|--help|help)
+		cat << EOD
+///////////////////////////////////////////////////
+High-Performance WordPress VirtualMachine
+///////////////////////////////////////////////////
+     __ ____  _______ ___    _   _____   __________
+    / //_/ / / / ___//   |  / | / /   | / ____/  _/
+   / ,< / / / /\__ \/ /| | /  |/ / /| |/ / __ / /
+  / /| / /_/ /___/ / ___ |/ /|  / ___ / /_/ // /
+ /_/ |_\____//____/_/  |_/_/ |_/_/  |_\____/___/
+
+CLI Subcommand inforamtion
+Manual : http://en.kusanagi.tokyo/document/command/ or type "man kusanagi"
+---------------------
+- help -
+# kusanagi [-h | --help | help]
+show this snippet.
+---------------------
+- configuration -
+init [options]
+	[--tz TZ] [--lang [ja|en]] [--keyboard [ja|en]]
+	[--passwd PASSWD] [--phrase PHRASE|--no-phrase]
+	[--dbrootpass DBPASS]
+	[--nginx|--httpd] [--hhvm|--php7|--php5|--ruby24]
+setting [--fqdn domainname]
+ssl [options] profile
+	[--email email@example.com] [--cert file --key file]
+	[--https [redirect|noredirect]]
+	[--hsts  [off|weak|mid|high]]
+	[--auto  [on|off]]
+	[--ct  [on|off] [--no-register|--noregister]]
+provision [options] profile
+	[--WordPress [--woo|--WooCommerce] [--wplang en_US|ja]|--lamp|--concrete5|--drupal|--rails]
+	[--email mail_address|--no-email]
+	[--dbname dbname] [--dbuser username] [--dbpass password]
+https [redirect|noredirect]		*obsolete
+autorenewal [on|off]		* obsolete
+remove [-y] [profile]
+---------------------
+- status -
+warm-up
+target [profile]
+update [plugin [-y] |cert] [profile]
+restart
+---------------------
+- middleware -
+nginx
+httpd
+php7
+php-fpm
+hhvm
+ruby2.4
+---------------------
+- cache -
+bcache [on|off|clear [path [--dryrun]]]
+fcache [on|off|clear [path [--dryrun]]]
+---------------------
+- manage -
+configure
+images [--jpg|--jpeg|--png] [--verbose] [--dir|--directory dirname]
+	[--quality [0-100]] [--resize [1280x1024]] [--color [0-256]] [--strip]
+	[--owner user[:group]] [--mode 0644] [profile]
+---------------------
+- expart -
+monit [on|off|config|reload]
+zabbix [on|off]
+----------------------
+EOD
+	;;
+	*)
+	echo $(eval_gettext "kusanagi cli ver${KUSANAGI_CLI_VER}.")
+	echo $(eval_gettext "Try kusanagi -h")
+	;;
+esac
+check_status
+exit ${_RETURN}
