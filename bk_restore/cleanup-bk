@@ -1,0 +1,26 @@
+#!/bin/bash
+
+usage ()
+{
+	echo "$0 -u user -d domain"
+	exit 1
+}
+while getopts u:d: OPT
+do
+	case $OPT in
+	"u" ) _user="$OPTARG" ;;
+	"d" ) _doma="$OPTARG" ;;
+	*   ) usage ;;
+	esac
+done
+if [ -z ${_user} ] || [ -z ${_doma} ]; then
+	usage
+fi
+
+## remove backup file older than 1 month
+source /root/dup_swift
+dest_url="swift://vod/backup/${_user}/${_doma}"
+log_archive="/var/log/${_doma}/archive_bk.log"
+duplicity remove-older-than 27D $dest_url --force >> $log_archive
+
+exit 0
