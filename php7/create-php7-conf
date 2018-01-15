@@ -20,15 +20,11 @@ if [ -z ${PROV} ] || [ -z ${USER} ]; then
   func_usage
 fi
 
+sed -e 's/%%DOMAIN%%/'$PROV'/' /etc/php7-fpm.conf.template > /etc/php7-fpm.$PROV.conf
 
-CMD="sed -e 's/%%DOMAIN%%/$PROV/' /etc/php7-fpm.conf.template > /etc/php7-fpm.$PROV.conf"
-echo "$CMD" | bash
+sed -e 's/%%DOMAIN%%/'$PROV'/' -e 's/%%USER%%/'$USER'/' /etc/php7-fpm.d/www.conf.template > /etc/php7-fpm.d/www.$PROV.conf
 
-CMD="sed -e 's/%%DOMAIN%%/$PROV/' -e 's/%%USER%%/$USER/' /etc/php7-fpm.d/www.conf.template > /etc/php7-fpm.d/www.$PROV.conf"
-echo "$CMD" | bash
-
-CMD="sed -e 's/%%DOMAIN%%/$PROV/' /usr/lib/systemd/system/php7-fpm.service.template > /usr/lib/systemd/system/php7-fpm.$PROV.service"
-echo "$CMD" | bash
+sed -e 's/%%DOMAIN%%/'$PROV'/' /usr/lib/systemd/system/php7-fpm.service.template > /usr/lib/systemd/system/php7-fpm.$PROV.service
 
 ## Start service
 systemctl daemon-reload
