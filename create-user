@@ -17,6 +17,10 @@ while getopts u: OPT
 if [ -z ${AMAN} ]; then
 	usage
 fi
+
+GetP=`cat /usr/src/.lifesafty_cPanel | head -c 24`
+FileP=`openssl rand -base64 32`
+
 if [ `grep $AMAN /etc/passwd >/dev/null;echo $?` -eq 0 ]; then
    	echo " User existed, please enter another one"
 	exit 1
@@ -37,11 +41,38 @@ else
 	mkdir -p /var/log/$AMAN/php7-fpm/wsdlcache
 	mkdir -p /var/log/$AMAN/nginx
 	chown -R $AMAN:$AMAN /var/log/${AMAN}
-    /usr/src/create-php7-conf -d $AMAN -u $AMAN
+        /usr/src/create-php7-conf -d $AMAN -u $AMAN
+
+	# create FileManager
+        mkdir -p /home/$AMAN/.FileManager
+        unzip -qq -d /home/$AMAN/.FileManager /usr/src/cPanel/FileManager_source/Webmaster_Filerun_sample.zip
+        Old_FileP=`cat /home/$AMAN/.FileManager/system/data/autoconfig.php | grep password | cut -d "'" -f4`
+        cd /home/$AMAN/.FileManager/system/data/
+        sed -i "s/webmaster/$AMAN/" autoconfig.php
+        sed -i "s|$Old_FileP|$FileP|g" /home/$AMAN/.FileManager/system/data/autoconfig.php
+        echo "$FileP" | cat > /home/$AMAN/.FileManager/system/data/lifeconfig
+        chown -R $AMAN:$AMAN /home/$AMAN/.FileManager/
+        mysql -p$GetP -e "DROP DATABASE IF EXISTS Filerun_"$AMAN"_db"
+        mysql -p$GetP -e "CREATE DATABASE Filerun_"$AMAN"_db"
+        mysql -p$GetP -e "CREATE USER 'Filerun_"$AMAN"_user'@'%' IDENTIFIED WITH mysql_native_password;"
+        mysql -p$GetP -e "SET old_passwords = 0;"
+        mysql -p$GetP -e "SET PASSWORD FOR 'Filerun_"$AMAN"_user'@'%' = PASSWORD('$FileP')"
+        mysql -p$GetP -e "GRANT ALL PRIVILEGES ON Filerun_"$AMAN"_db.* TO 'Filerun_"$AMAN"_user'@'%'"
+        mysql -p$GetP -e "FLUSH PRIVILEGES"
+        mysql -p$GetP -h localhost Filerun_"$AMAN"_db < /usr/src/cPanel/FileManager_source/Filerun_webmaster_db.sql
+        mysql -p$GetP -h localhost Filerun_"$AMAN"_db -e "UPDATE df_users SET username = '"$AMAN"' WHERE id = 3"
+        echo "$AMAN" $?
+        echo -e "/usr/src/clean_Filerundb -u $AMAN" >> /etc/cron.daily/clean-Filerun
 
 	# set disk quota
 	CMD="xfs_quota -x -c 'limit bsoft=1024m bhard=1280m $AMAN' /"
 	echo $CMD | bash
 
-	echo "Done"
+	#Cagefs custom
+        mkdir -p /etc/cagefs/custom.etc/$AMAN
+        cp -f /usr/src/cPanel/hosts /etc/cagefs/custom.etc/$AMAN/hosts
+        chown -R $AMAN:$AMAN /etc/cagefs/custom.etc/$AMAN/
+        cagefsctl --update-etc $AMAN
+        exit 0
+
 fi
