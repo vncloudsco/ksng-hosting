@@ -12,16 +12,13 @@ function pro_php7() {
 	 fi
 	 ## edit nginx configuration
 	 ## disable using hhvm unix socket
-	 CMD="sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/hhvmd\/$1.sock;*$\)/\t\t#\1/' /etc/nginx/conf.d/$1_http.conf"
-	 echo $CMD | bash
-	 CMD="sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/hhvmd\/$1.sock;*$\)/\t\t#\1/' /etc/nginx/conf.d/$1_ssl.conf"
-	 echo $CMD | bash
-     ## enable using php7-fpm unix socket
-	 CMD="sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/php7-fpm\/$1.sock;*$\)/\t\t\1/' /etc/nginx/conf.d/$1_http.conf"
-	 echo $CMD | bash
-	 CMD="sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/php7-fpm\/$1.sock;*$\)/\t\t\1/' /etc/nginx/conf.d/$1_ssl.conf"
-	 echo $CMD | bash
-
+	 sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/hhvmd\/'$1'.sock;*$\)/\t\t#\1/' /etc/nginx/conf.d/$1_http.conf
+	 sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/hhvmd\/'$1'.sock;*$\)/\t\t#\1/' /etc/nginx/conf.d/$1_ssl.conf
+	 
+         ## enable using php7-fpm unix socket
+	 sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/php7-fpm\/'$1'.sock;*$\)/\t\t\1/' /etc/nginx/conf.d/$1_http.conf
+	 sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/php7-fpm\/'$1'.sock;*$\)/\t\t\1/' /etc/nginx/conf.d/$1_ssl.conf
+	 
 	 ## reload nginx configuration
 	 systemctl reload nginx
 
@@ -39,16 +36,13 @@ function pro_hhvm() {
 	 fi
 	 ## edit nginx configuration
 	 ## disable using php7-fpm unix socket
-	 CMD="sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/php7-fpm\/$1.sock;*$\)/\t\t#\1/' /etc/nginx/conf.d/$1_http.conf"
-	 echo $CMD | bash
-	 CMD="sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/php7-fpm\/$1.sock;*$\)/\t\t#\1/' /etc/nginx/conf.d/$1_ssl.conf"
-	 echo $CMD | bash
-     ## enable using hhvm unix socket
-	 CMD="sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/hhvmd\/$1.sock;*$\)/\t\t\1/' /etc/nginx/conf.d/$1_http.conf"
-	 echo $CMD | bash
-	 CMD="sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/hhvmd\/$1.sock;*$\)/\t\t\1/' /etc/nginx/conf.d/$1_ssl.conf"
-	 echo $CMD | bash
-     
+	 sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/php7-fpm\/'$1'.sock;*$\)/\t\t#\1/' /etc/nginx/conf.d/$1_http.conf
+	 sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/php7-fpm\/'$1'.sock;*$\)/\t\t#\1/' /etc/nginx/conf.d/$1_ssl.conf
+	 
+	 ## enable using hhvm unix socket
+	 sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/hhvmd\/'$1'.sock;*$\)/\t\t\1/' /etc/nginx/conf.d/$1_http.conf
+	 sed -i 's/^.*\(fastcgi_pass unix:\/var\/cache\/hhvmd\/'$1'.sock;*$\)/\t\t\1/' /etc/nginx/conf.d/$1_ssl.conf
+	      
 	 ## reload nginx configuration
 	 systemctl reload nginx
 }
