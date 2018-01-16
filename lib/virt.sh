@@ -55,18 +55,15 @@ done
 if [ "$APP" != "Rails" ] ; then
     # change path to /home/$CUSTOM_USER/$PROFILE
     mkdir -p /home/$CUSTOM_USER/$PROFILE/DocumentRoot
-#	mkdir -p /home/$CUSTOM_USER/$PROFILE/sqlbackup
-#	chown -R $CUSTOM_USER:$CUSTOM_USER /home/$CUSTOM_USER/$PROFILE/sqlbackup
-#	chmod 777 /home/$CUSTOM_USER/$PROFILE/sqlbackup
     # change nginx log path to other
     mkdir -p /var/log/$PROFILE/nginx
     mkdir -p /var/log/$PROFILE/httpd
     mkdir -p /var/log/$PROFILE/hhvmd
-	mkdir -p /var/log/$PROFILE/php7-fpm
-	mkdir -p /var/log/$PROFILE/php7-fpm/session
-	mkdir -p /var/log/$PROFILE/php7-fpm/wsdlcache
+    mkdir -p /var/log/$PROFILE/php7-fpm
+    mkdir -p /var/log/$PROFILE/php7-fpm/session
+    mkdir -p /var/log/$PROFILE/php7-fpm/wsdlcache
     # change owner
-	chown -R $CUSTOM_USER:$CUSTOM_USER /var/log/$PROFILE
+    chown -R $CUSTOM_USER:$CUSTOM_USER /var/log/$PROFILE
 fi
 
 if [ \! -e /usr/lib/kusanagi/lib/deploy-$APP.sh ] ; then
@@ -83,7 +80,7 @@ sed -i "s/^\(127.0.0.1.*\)\$/\1 $FQDN $ADDFQDN/" /etc/hosts || \
 ##K_Configure HHVM/PHP7-FPM for this virtual host and start it
 if [ "$APP" != "WordPress" ]; then
    #if [ "$APP" != "Rails" ]; then
-     /usr/src/hhvm-create-ini -d $PROFILE -u $CUSTOM_USER
+     /usr/src/create-hhvm-ini -d $PROFILE -u $CUSTOM_USER
    #fi	 
 else
     /usr/src/create-php7-conf -d $PROFILE -u $CUSTOM_USER   
