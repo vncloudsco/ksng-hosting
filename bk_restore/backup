@@ -30,7 +30,6 @@ valid=`mysql -ubk_user -pbk_Passw0rd -e "SELECT SCHEMA_NAME FROM INFORMATION_SCH
 if [ ! -z $valid ]; then
 	[ ! -z $db ] && mysqldump --single-transaction -ubk_user -pbk_Passw0rd --databases $db | gzip > ${sql_dir}/$db".sql.gz" \
 && scp ${sql_dir}/$db".sql.gz" 150.95.104.72:/backup/ 2>&1 >/dev/null
-
 	## backup source code
 	ignore_log="/var/log/${_DOMA}/ignore_bk.log"
 	echo -n '' > $ignore_log
@@ -41,17 +40,16 @@ if [ ! -z $valid ]; then
 	log_archive="/var/log/${_DOMA}/archive_bk.log"
 	last_log="/var/log/${_DOMA}/last_bk.log"
 	error_log="/var/log/${_DOMA}/error_bk.log"
-	#duplicity remove-older-than 27D $dest_url --force >> $log_archive
 	duplicity --full-if-older-than=4W --no-encryption --exclude-filelist $ignore_log $src_dir $dest_url > $last_log
 	RETVAL=$?
 	error=`grep Error $last_log | awk '{print $2}'`
 	if [ $RETVAL -eq 0 ] && [ $error -eq 0 ]; then
-    	echo 0
+    		echo 0
 		cat $last_log >> $log_archive
 	else
-    	cat $last_log >> $error_log
+    		cat $last_log >> $error_log
 		duplicity cleanup $dest_url --force >> $error_log
-    	echo "Something error ! Please check $error_log"
+    		echo "Something error ! Please check $error_log"
 		echo 1
 	fi	
 else
