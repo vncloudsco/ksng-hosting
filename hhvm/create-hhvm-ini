@@ -4,7 +4,7 @@ cd /etc/hhvm/conf.d
 
 func_usage ()
 {
-  echo " Create HHVM configuration ini file for specify provision"
+  echo " Create HHVM configuration ini file for specific provision"
   echo " Usage : $0 -d domain -u user "
   exit 1
 }
