@@ -55,7 +55,7 @@ if [ $ret -eq 0 ]; then
 		echo $db".sql.gz does NOT exist"
 		echo 1
 	fi
-else 
-	echo "Restoration failed ! Contact your provider for help! "
+else
+	echo "Restoration failed ! Contact your provider for help!"
 	echo 1
 fi
