@@ -1,0 +1,27 @@
+#!/bin/bash
+
+lve_usage()
+{
+	local aCPU=0 lCPU=0 aPMem=0 lPMem=0 aNproc=0 lNproc=0 aIO=0 lIO=0
+	log=`lveinfo -u $1 | head -n -1 | tail -n1`
+	latest=`echo $log | grep +`
+	disk_usage=`xfs_quota -x -c 'report -h' / | grep $1 | head -n1| awk '{print $2}'`
+	disk_quota=`xfs_quota -x -c 'report -h' / | grep $1 | head -n1| awk '{print $3}'`
+	echo "disk_usage="$disk_usage"  disk_quota="$disk_quota
+	[ -z "$latest" ] && aCPU=`echo $log | awk -F \| '{print $4}'`
+	[ -z "$latest" ] && lCPU=`echo $log | awk -F \| '{print $6}'`
+	echo "aCPU="$aCPU"		lCPU="$lCPU
+	[ -z "$latest" ] && aPMem=`echo $log | awk -F \| '{print $15}'`
+	[ -z "$latest" ] && lPMem=`echo $log | awk -F \| '{print $17}'`
+	echo "aPMem="$aPMem"	lPMem="$lPMem
+	[ -z "$latest" ] && aNproc=`echo $log | awk -F \| '{print $18}'`
+	[ -z "$latest" ] && lNproc=`echo $log | awk -F \| '{print $20}'`
+	echo "aNproc="$aNproc"	lNproc="$lNproc
+	[ -z "$latest" ] && aIO=`echo $log | awk -F \| '{print $23}'`
+	[ -z "$latest" ] && lIO=`echo $log | awk -F \| '{print $25}'`
+	echo "aIO="$aIO"		lIO="$lIO
+	inode_usage=`xfs_quota -x -c 'report -i' / | grep $1 | head -n1| awk '{print $2}'`
+	inode_quota=`xfs_quota -x -c 'report -i' / | grep $1 | head -n1| awk '{print $3}'`
+	echo "inode_usage="$inode_usage"	inode_quota="$inode_quota
+}
+lve_usage $1
