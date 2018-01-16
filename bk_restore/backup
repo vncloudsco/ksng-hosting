@@ -18,26 +18,43 @@ if [ -z ${_USER} ] || [ -z ${_DOMA} ]; then
     func_usage
 fi
 
-today=`date +%Y-%m-%d`
 sql_dir="/home/${_USER}/${_DOMA}/sqlbackup"
-if [ ! -d "${sql_dir}" ]; then
+if [ ! -d "${sql_dir}" ] && [ -d "/home/${_USER}/${_DOMA}" ]; then
 	mkdir -p ${sql_dir}
 	chown -R ${_USER}:${_USER} ${sql_dir}
 	chmod 777 ${sql_dir}
 fi
 ## backup database
 db=`grep ${_DOMA} /etc/kusanagi.d/profile.conf -A 1 | grep DBNAME | cut -d '"' -f2`
-mysqldump --single-transaction -ubk_user -pbk_Passw0rd --database $db | gzip > ${sql_dir}/$db".sql.gz"
-scp ${sql_dir}/$db".sql.gz" 150.95.104.72:/backup/ 2>&1 >/dev/null
+valid=`mysql -ubk_user -pbk_Passw0rd -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$db'" | tail -n1`
+if [ ! -z $valid ]; then
+	[ ! -z $db ] && mysqldump --single-transaction -ubk_user -pbk_Passw0rd --databases $db | gzip > ${sql_dir}/$db".sql.gz" \
+&& scp ${sql_dir}/$db".sql.gz" 150.95.104.72:/backup/ 2>&1 >/dev/null
 
-## backup source code
-echo -n ''>/tmp/ignore.log
-find /home/${_USER}/${_DOMA}/ -type f -name "*.tar.gz" -o -name "*.zip" >> /tmp/ignore.log
-source /root/dup_swift
-src_dir="/home/${_USER}/${_DOMA}/"
-dest_url="swift://vod/backup/${_USER}/${_DOMA}"
-log_archive="/var/log/${_DOMA}/bk.log"
-#duplicity --full-if-older-than=1W --no-encryption --exclude-filelist /tmp/ignore.log /home/${_USER}/${_DOMA}/ swift://vod/backup/${_USER}/${_DOMA}
-duplicity --full-if-older-than=1W --no-encryption --exclude-filelist /tmp/ignore.log $src_dir $dest_url >> $log_archive
-
-echo "Done"
+	## backup source code
+	ignore_log="/var/log/${_DOMA}/ignore_bk.log"
+	echo -n '' > $ignore_log
+	find /home/${_USER}/${_DOMA}/ -type f -name "*.tar.gz" -o -name "*.zip" >> $ignore_log
+	source /root/dup_swift
+	src_dir="/home/${_USER}/${_DOMA}/"
+	dest_url="swift://vod/backup/${_USER}/${_DOMA}"
+	log_archive="/var/log/${_DOMA}/archive_bk.log"
+	last_log="/var/log/${_DOMA}/last_bk.log"
+	error_log="/var/log/${_DOMA}/error_bk.log"
+	#duplicity remove-older-than 27D $dest_url --force >> $log_archive
+	duplicity --full-if-older-than=4W --no-encryption --exclude-filelist $ignore_log $src_dir $dest_url > $last_log
+	RETVAL=$?
+	error=`grep Error $last_log | awk '{print $2}'`
+	if [ $RETVAL -eq 0 ] && [ $error -eq 0 ]; then
+    	echo 0
+		cat $last_log >> $log_archive
+	else
+    	cat $last_log >> $error_log
+		duplicity cleanup $dest_url --force >> $error_log
+    	echo "Something error ! Please check $error_log"
+		echo 1
+	fi	
+else
+	echo "$db does not exist"
+	echo 1
+fi
