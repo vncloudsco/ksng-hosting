@@ -35,7 +35,7 @@ function pro_hhvm() {
 	 if [ -f "/etc/hhvm/conf.d/$1.ini" ]; then
 	     systemctl start hhvm.$1 && systemctl enable hhvm.$1
 	 else 
-	     /usr/src/hhvm-create-ini -d $1 -u $2
+	     /usr/src/create-hhvm-ini -d $1 -u $2
 	 fi
 	 ## edit nginx configuration
 	 ## disable using php7-fpm unix socket
