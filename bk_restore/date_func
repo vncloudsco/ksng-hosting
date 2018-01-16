@@ -21,11 +21,6 @@ w3-date ()
 declare -A arrayDate
 arrayDate=( ["Jan"]=01 ["Feb"]=02 ["Mar"]=03 ["Apr"]=04 ["May"]=05 ["Jun"]=06 ["Jul"]=07 ["Aug"]=08 ["Sep"]=09 ["Oct"]=10 ["Nov"]=11 ["Dec"]=12 )
 time_in_day=`echo $1 |cut -d '-' -f2`
-hour=`echo ${time_in_day} | cut -d ':' -f1`
-[ $hour -lt 10 ] && [ $hour -gt 0 ] && hour="0"$hour
-minute=`echo ${time_in_day} | cut -d ':' -f2`
-second=`echo ${time_in_day} | cut -d ':' -f3`
-time_in_day=$hour":"$minute":"$second
 mon=`echo $1 |cut -d '-' -f1| cut -d '/' -f2`
 mon=${arrayDate[$mon]}
 year=`echo $1 |cut -d '-' -f1| cut -d '/' -f1`
