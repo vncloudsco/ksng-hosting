@@ -1,0 +1,68 @@
+#!/bin/bash
+
+case "$1" in
+        --list-all)
+    		cat /var/superpanel/user_package
+        ;;
+        --list-users)
+            cat /var/superpanel/users
+        ;;
+        --userid=*)
+            # print user's package
+            uid=${1#*=}
+            cat /var/superpanel/user_package | grep $uid | awk '{ print $2 }'
+        ;;
+        --get-user-reseller=*)
+            # print user's reseller
+            uid=${1#*=}
+            cat /var/superpanel/users | grep $uid | awk -F, '{ print $3 }'
+        ;;
+        --package=*)
+            # print users in provided package (and reseller)
+            pack=${1#*=}
+            res_key=$2
+            res=""
+            if [ -n "$res_key" ]; then
+                # reseller provided
+                res="${res_key/--reseller=/}"
+                cat /var/superpanel/users | awk -v pack="$pack" -v res="$res" -F, '{ if($2==pack && $3==res) print $1 }'
+            else
+                # no reseller provided
+                cat /var/superpanel/user_package | grep $pack | awk '{ print $1 }'
+            fi
+        ;;
+        --list-packages)
+            cat /var/superpanel/user_package | awk '{ print $2 }' | sort | uniq
+        ;;
+        --list-reseller-packages=*)
+            # print packages for specified reseller
+            reseller=${1#*=}
+            cat /var/superpanel/users | grep $reseller | awk -F, '{ print $3, $2 }' | sort | uniq
+        ;;
+        --list-reseller-users=*)
+            # print pairs uid,package for all users of specified reseller
+            reseller=${1#*=}
+            echo "Reseller:" $reseller
+            cat /var/superpanel/users | grep $reseller | awk -F, 'BEGIN { OFS = "," }{ print $1, $2 }' | sort | uniq
+        ;;
+        --list-resellers-packages)
+            # print packages for all resellers
+            cat /var/superpanel/users | awk -F, '{ if($3) print $3, $2 }' | sort | uniq
+        ;;
+        *)
+            echo "Usage:
+--help                               show this message
+--list-all                           prints <userid package> pairs (no parameters required)
+--list-users                         prints <userid package reseller> triple (no parameters required)
+--userid=id                          prints package for a user specified
+--get-user-reseller=id               prints reseller for a user specified
+--package=package                    prints users for a package specified
+  --reseller=reseller                prints users for a reseller package specified
+                                      (use with --package=package)
+--list-packages                      prints packages list
+--list-reseller-packages=reseller    prints packages belong to a given reseller
+--list-reseller-users=reseller       prints users belong to a given reseller
+--list-resellers-packages            prints packages belong to resellers
+--debug                              show debug messages"
+        ;;
+esac
