@@ -1,7 +1,5 @@
 #!/bin/bash
 
-# add a new user
-#USERNAME=webmaster$RANDOM
 function usage()
 {
    echo " Usage $0 -u user"
