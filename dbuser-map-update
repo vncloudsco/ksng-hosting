@@ -1,0 +1,14 @@
+#!/bin/bash
+
+map="/etc/container/dbuser-map"
+dbuser_list()
+{
+uid=`id -u $1`
+filerun="Filerun_"$1"_user"
+[ -z "`grep $filerun $map`" ] && echo $filerun" "$1" "$uid >> $map
+cat /etc/kusanagi.d/profile.conf | grep '"'$1'"' -B 4 | grep DBUSER | cut -d '"' -f 2 | \
+while read dbuser; do
+	[ -z "`grep $dbuser $map`" ] && echo $dbuser" "$1" "$uid >> $map
+done
+}
+dbuser_list $1
