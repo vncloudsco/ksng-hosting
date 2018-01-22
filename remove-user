@@ -17,6 +17,7 @@ if [ -z ${USERNAME} ]; then
 	usage
 fi
 
+GetP=`cat /usr/src/.lifesafty_cPanel | head -c 24`
 RET=`systemctl is-active php7-fpm.$USERNAME | grep active 2>&1 > /dev/null;echo $?`
 if [ $RET -eq 0 ]; then
 	systemctl stop php7-fpm.$USERNAME
@@ -30,8 +31,27 @@ elif [ -f "/usr/lib/systemd/system/php7-fpm.$USERNAME.service" ]; then
     rm -f /etc/php7-fpm.d/www.$USERNAME.conf
     rm -f /usr/lib/systemd/system/php7-fpm.$USERNAME.service
 fi
+
 systemctl daemon-reload
+#Delete user from account table
+mysql -p$GetP kusanagi -e "DELETE FROM account WHERE login_id = '"$USERNAME"'"
+#Delete_provision
+/usr/src/rm_user_provs -u $USERNAME
+#Delete Filerun
+sed -i "/'$USERNAME'/d" /etc/cron.daily/clean-Filerun
+mysql -p$GetP -e "DROP DATABASE IF EXISTS Filerun_"$USERNAME"_db"
+mysql -p$GetP -e "DROP USER 'Filerun_"$USERNAME"_user'@'%'"
+
+uid=`id -u $USERNAME`
+# remove from dbuser-map
+dbctl delete $USERNAME
+sed -i '/'$uid'/d' /etc/container/dbuser-map
+
+# delete user and remove from lvectl
+lvectl destroy $uid
 userdel --remove $USERNAME
-DEL="sed -i '/$USERNAME:/d' /tmp/userpass_list.log"
-echo $DEL | bash
+sed -i '/'$USERNAME':/d' /tmp/userpass_list.log
+sed -i '/'$uid'/d' /var/superpanel/user_package
+sed -i '/'$uid',/d' /var/superpanel/users
 rm -rf /var/log/$USERNAME
+
