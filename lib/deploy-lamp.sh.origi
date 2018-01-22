@@ -1,3 +1,0 @@
-cd /home/kusanagi/$PROFILE/DocumentRoot
-chown -R kusanagi.kusanagi /home/kusanagi/$PROFILE
-chmod 0777 /home/kusanagi/$PROFILE/DocumentRoot
