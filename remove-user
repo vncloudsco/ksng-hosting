@@ -42,8 +42,16 @@ sed -i "/'$USERNAME'/d" /etc/cron.daily/clean-Filerun
 mysql -p$GetP -e "DROP DATABASE IF EXISTS Filerun_"$USERNAME"_db"
 mysql -p$GetP -e "DROP USER 'Filerun_"$USERNAME"_user'@'%'"
 
-groupdel $USERNAME
+uid=`id -u $USERNAME`
+# remove from dbuser-map
+dbctl delete $USERNAME
+sed -i '/'$uid'/d' /etc/container/dbuser-map
+
+# delete user and remove from lvectl
+lvectl destroy $uid
 userdel --remove $USERNAME
-DEL="sed -i '/$USERNAME:/d' /tmp/userpass_list.log"
-echo $DEL | bash
+sed -i '/'$USERNAME':/d' /tmp/userpass_list.log
+sed -i '/'$uid'/d' /var/superpanel/user_package
+sed -i '/'$uid',/d' /var/superpanel/users
 rm -rf /var/log/$USERNAME
+
