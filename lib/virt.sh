@@ -88,6 +88,8 @@ fi
 ## K_Add backup command for this provision
 echo "/usr/src/backup -u $CUSTOM_USER -d $PROFILE" >> /etc/cron.daily/backup-prov
 echo "/usr/src/cleanup-bk -u $CUSTOM_USER -d $PROFILE" >> /etc/cron.weekly/cleanbk-prov
+## K_Update to dbuser-map file
+/usr/src/dbuser-map-update $CUSTOM_USER
 
 RET=0
 # setting ssl cert files
