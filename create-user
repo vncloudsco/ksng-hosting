@@ -1,23 +1,37 @@
 #!/bin/bash
 
+# add a new user
+GetP=`cat /usr/src/.lifesafty_cPanel | head -c 24`
+FileP=`openssl rand -base64 32`
 function usage()
 {
-   echo " Usage $0 -u user"
+   echo " Usage $0 -u user -p plan_number"
    exit 1
 }
-while getopts u: OPT
+while getopts u:p: OPT
 	do
 		case $OPT in
 		 "u" ) AMAN="$OPTARG" ;;
+		 "p" ) PLAN="$OPTARG" ;;
 		 "*" ) usage ;;
 		esac
 	done
-if [ -z ${AMAN} ]; then
+if [ -z ${AMAN} ] || [ -z ${PLAN} ]; then
 	usage
 fi
-
-GetP=`cat /usr/src/.lifesafty_cPanel | head -c 24`
-FileP=`openssl rand -base64 32`
+dquota[1]=2048
+dquota[2]=5120
+dquota[3]=20480
+iquota[1]=100000
+iquota[2]=250000
+iquota[3]=500000
+pkg[1]='Start'
+pkg[2]='Business'
+pkg[3]='Professional'
+bhard=${dquota[$PLAN]}
+let bsoft=bhard-100
+ihard=${iquota[$PLAN]}
+let isoft=ihard-10000
 
 if [ `grep $AMAN /etc/passwd >/dev/null;echo $?` -eq 0 ]; then
    	echo " User existed, please enter another one"
@@ -29,7 +43,7 @@ else
 	chmod 701 $AMAN
 
 	# create a password
-	PASSWORD=`date | md5sum | head -c 12`
+	PASSWORD=`openssl rand -base64 12`
 	echo "$AMAN:$PASSWORD" >> /tmp/userpass_list.log
 	echo -e "$PASSWORD\n$PASSWORD\n" | passwd $AMAN
 
@@ -39,38 +53,45 @@ else
 	mkdir -p /var/log/$AMAN/php7-fpm/wsdlcache
 	mkdir -p /var/log/$AMAN/nginx
 	chown -R $AMAN:$AMAN /var/log/${AMAN}
-        /usr/src/create-php7-conf -d $AMAN -u $AMAN
-
+    /usr/src/create-php7-conf -d $AMAN -u $AMAN
 	# create FileManager
-        mkdir -p /home/$AMAN/.FileManager
-        unzip -qq -d /home/$AMAN/.FileManager /usr/src/cPanel/FileManager_source/Webmaster_Filerun_sample.zip
-        Old_FileP=`cat /home/$AMAN/.FileManager/system/data/autoconfig.php | grep password | cut -d "'" -f4`
-        cd /home/$AMAN/.FileManager/system/data/
-        sed -i "s/webmaster/$AMAN/" autoconfig.php
-        sed -i "s|$Old_FileP|$FileP|g" /home/$AMAN/.FileManager/system/data/autoconfig.php
-        echo "$FileP" | cat > /home/$AMAN/.FileManager/system/data/lifeconfig
-        chown -R $AMAN:$AMAN /home/$AMAN/.FileManager/
-        mysql -p$GetP -e "DROP DATABASE IF EXISTS Filerun_"$AMAN"_db"
-        mysql -p$GetP -e "CREATE DATABASE Filerun_"$AMAN"_db"
-        mysql -p$GetP -e "CREATE USER 'Filerun_"$AMAN"_user'@'%' IDENTIFIED WITH mysql_native_password;"
-        mysql -p$GetP -e "SET old_passwords = 0;"
-        mysql -p$GetP -e "SET PASSWORD FOR 'Filerun_"$AMAN"_user'@'%' = PASSWORD('$FileP')"
-        mysql -p$GetP -e "GRANT ALL PRIVILEGES ON Filerun_"$AMAN"_db.* TO 'Filerun_"$AMAN"_user'@'%'"
-        mysql -p$GetP -e "FLUSH PRIVILEGES"
-        mysql -p$GetP -h localhost Filerun_"$AMAN"_db < /usr/src/cPanel/FileManager_source/Filerun_webmaster_db.sql
-        mysql -p$GetP -h localhost Filerun_"$AMAN"_db -e "UPDATE df_users SET username = '"$AMAN"' WHERE id = 3"
-        echo "$AMAN" $?
-        echo -e "/usr/src/clean_Filerundb -u $AMAN" >> /etc/cron.daily/clean-Filerun
-
+	mkdir -p /home/$AMAN/.FileManager
+	unzip -qq -d /home/$AMAN/.FileManager /usr/src/cPanel/FileManager_source/Webmaster_Filerun_sample.zip
+	Old_FileP=`cat /home/$AMAN/.FileManager/system/data/autoconfig.php | grep password | cut -d "'" -f4`
+	cd /home/$AMAN/.FileManager/system/data/
+	sed "s/webmaster/$AMAN/" autoconfig.php  > update.autoconfig.php
+	mv -f update.autoconfig.php autoconfig.php
+	sed -i "s|$Old_FileP|$FileP|g" /home/$AMAN/.FileManager/system/data/autoconfig.php
+	echo "$FileP" | cat > /home/$AMAN/.FileManager/system/data/lifeconfig
+	chown -R $AMAN:$AMAN /home/$AMAN/.FileManager/
+	mysql -p$GetP -e "DROP DATABASE IF EXISTS Filerun_"$AMAN"_db"
+	mysql -p$GetP -e "create database Filerun_"$AMAN"_db"
+	mysql -p$GetP -e "CREATE USER 'Filerun_"$AMAN"_user'@'%' IDENTIFIED WITH mysql_native_password;"
+	mysql -p$GetP -e "SET old_passwords = 0;"
+	mysql -p$GetP -e "SET PASSWORD FOR 'Filerun_"$AMAN"_user'@'%' = PASSWORD('$FileP')"
+	mysql -p$GetP -e "grant all privileges on Filerun_"$AMAN"_db.* to 'Filerun_"$AMAN"_user'@'%'"
+	mysql -p$GetP -e "flush privileges"
+	mysql -p$GetP -h localhost Filerun_"$AMAN"_db < /usr/src/cPanel/FileManager_source/Filerun_webmaster_db.sql
+    mysql -p$GetP -h localhost Filerun_"$AMAN"_db -e "UPDATE df_users SET username = '"$AMAN"' WHERE id = 3"
+	echo "$AMAN" $?
+	echo -e "/usr/src/clean_Filerundb -u $AMAN" >> /etc/cron.daily/clean-Filerun
 	# set disk quota
-	CMD="xfs_quota -x -c 'limit bsoft=1024m bhard=1280m $AMAN' /"
-	echo $CMD | bash
-
-	#Cagefs custom
-        mkdir -p /etc/cagefs/custom.etc/$AMAN
-        cp -f /usr/src/cPanel/hosts /etc/cagefs/custom.etc/$AMAN/hosts
-        chown -R $AMAN:$AMAN /etc/cagefs/custom.etc/$AMAN/
-        cagefsctl --update-etc $AMAN
-        exit 0
-
+	xfs_quota -x -c 'limit bsoft='$bsoft'm bhard='$bhard'm '$AMAN'' /
+	xfs_quota -x -c 'limit -g bsoft='$bsoft'm bhard='$bhard'm '$AMAN'' /
+	# set inode quota
+	xfs_quota -x -c 'limit isoft='$isoft' ihard='$ihard' '$AMAN'' /
+	xfs_quota -x -c 'limit -g isoft='$isoft' ihard='$ihard' '$AMAN'' /
+	# apply to lve limit
+	uid=`id -u $AMAN`
+	echo $uid ${pkg[$PLAN]} >> /var/superpanel/user_package
+	echo $uid","${pkg[$PLAN]}"," >> /var/superpanel/users
+	lvectl apply $uid
+	# update dbuser belong to this user to dbuser-map file
+	/usr/src/dbuser-map-update $AMAN
+	# Cagefs custom
+	mkdir -p /etc/cagefs/custom.etc/$AMAN
+	cp -f /usr/src/cPanel/hosts /etc/cagefs/custom.etc/$AMAN/hosts
+	chown -R $AMAN:$AMAN /etc/cagefs/custom.etc/$AMAN/
+	cagefsctl --update-etc $AMAN
+	exit 0
 fi
