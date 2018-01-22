@@ -110,11 +110,10 @@ function k_remove() {
 		rm -f /etc/php7-fpm.d/www.$TARGET.conf
 	fi
 	# remove backup command
-	CMD="sed -i '/$TARGET/d' /etc/cron.daily/backup-prov"
-	echo "$CMD" | bash
-	CMD="sed -i '/$TARGET/d' /etc/cron.weekly/cleanbk-prov"
-	echo "$CMD" | bash
-
+	sed -i '/'$TARGET'/d' /etc/cron.daily/backup-prov
+	sed -i '/'$TARGET'/d' /etc/cron.weekly/cleanbk-prov
+	# remove dbuser from dbuser-map
+        sed -i '/'$KUSANAGI_DBUSER'/d' /etc/container/dbuser-map
 	# remove db
 	if [ $REMOVE_DATABASE ] ; then
 		local DB_ROOT_PASS=$(get_db_root_password)
