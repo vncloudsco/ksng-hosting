@@ -25,11 +25,10 @@ if [ ! -d "${sql_dir}" ] && [ -d "/home/${_USER}/${_DOMA}" ]; then
 	chmod 777 ${sql_dir}
 fi
 ## backup database
-db=`grep ${_DOMA} /etc/kusanagi.d/profile.conf -A 1 | grep DBNAME | cut -d '"' -f2`
+db=`grep "/${_DOMA}" /etc/kusanagi.d/profile.conf -A 1 | grep DBNAME | cut -d '"' -f2`
 valid=`mysql -ubk_user -pbk_Passw0rd -e "SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA WHERE SCHEMA_NAME = '$db'" | tail -n1`
 if [ ! -z $valid ]; then
-	[ ! -z $db ] && mysqldump --single-transaction -ubk_user -pbk_Passw0rd --databases $db | gzip > ${sql_dir}/$db".sql.gz" \
-&& scp ${sql_dir}/$db".sql.gz" 150.95.104.72:/backup/ 2>&1 >/dev/null
+	[ ! -z $db ] && mysqldump --single-transaction -ubk_user -pbk_Passw0rd --databases $db | gzip > ${sql_dir}/$db".sql.gz"
 	## backup source code
 	ignore_log="/var/log/${_DOMA}/ignore_bk.log"
 	echo -n '' > $ignore_log
@@ -42,6 +41,7 @@ if [ ! -z $valid ]; then
 	error_log="/var/log/${_DOMA}/error_bk.log"
 	duplicity --full-if-older-than=4W --no-encryption --exclude-filelist $ignore_log $src_dir $dest_url > $last_log
 	RETVAL=$?
+	[ ! -z $db ] && scp ${sql_dir}/$db".sql.gz" 150.95.104.72:/backup/ 2>&1 >/dev/null
 	error=`grep Error $last_log | awk '{print $2}'`
 	if [ $RETVAL -eq 0 ] && [ $error -eq 0 ]; then
     		echo 0
