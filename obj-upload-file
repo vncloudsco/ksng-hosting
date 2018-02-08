@@ -1,0 +1,36 @@
+#!/bin/bash
+credential=/usr/src/credential
+source $credential
+##################################
+func_usage ()
+{
+  echo '##USAGE##'
+  echo "  $0 -c ContainerName -f UploadFilePath"
+  exit 1
+}
+
+while getopts c:f: OPT
+do
+  case $OPT in
+    "c" ) CNAME="$OPTARG" ;;
+    "f" ) UFILE="$OPTARG" ;;
+     * ) func_usage ;;
+  esac
+done
+
+if [ -z ${CNAME} ] || [ -z ${UFILE} ]; then
+  func_usage
+fi
+
+if [ ! -e ${UFILE} ]; then
+  echo "${UFILE} does not exsist."
+  exit 1
+fi
+
+curl -s -X PUT \
+-H "Accept: application/json" \
+-H "X-Auth-Token: ${TOKEN}" \
+-T ${UFILE} \
+${OBJ_URL}/${OBJ_PREFIX}${TENANT_ID}/${CNAME}/
+
+exit 0
