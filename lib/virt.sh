@@ -6,13 +6,19 @@ ITEMS=("etc/monit.d/fqdn_nginx.conf" "etc/nginx/conf.d/fqdn_http.conf" "etc/ngin
 
 local IS_ROOT_DOMAIN=$(is_root_domain $FQDN;echo $?)
 local ADDFQDN=
+## K_handle in case domain does not exist
 if  [ "$IS_ROOT_DOMAIN" -eq 0 ]  ; then
 	ADDFQDN="www.${KUSANAGI_FQDN}"
 elif [ "$IS_ROOT_DOMAIN" -eq 1 ] ; then
 	ADDFQDN=`echo $KUSANAGI_FQDN | cut -c 5-`
+elif [ "$IS_ROOT_DOMAIN" -eq 2 ] ; then
+	echo $FQDN | grep "^www\." >/dev/null 2>&1
+	if [ "$?" -eq 0 ] ; then
+		ADDFQDN=`echo $KUSANAGI_FQDN | cut -c 5-`
+	else
+		ADDFQDN="www.${KUSANAGI_FQDN}"
+	fi
 fi
-#echo "---ADD_FQDN=$ADDFQDN---"
-#echo "---IS_ROOT_DOMAIN=$IS_ROOT_DOMAIN---"
 for ITEM in ${ITEMS[@]} ; do
 	local RESOURCE="/usr/lib/kusanagi/resource"
 	TARGET="/"`echo $ITEM | sed "s/fqdn/$PROFILE/"`
@@ -58,12 +64,13 @@ if [ "$APP" != "Rails" ] ; then
     # change nginx log path to other
     mkdir -p /var/log/$PROFILE/nginx
     mkdir -p /var/log/$PROFILE/httpd
-    mkdir -p /var/log/$PROFILE/hhvmd
-    mkdir -p /var/log/$PROFILE/php7-fpm
-    mkdir -p /var/log/$PROFILE/php7-fpm/session
-    mkdir -p /var/log/$PROFILE/php7-fpm/wsdlcache
+#    mkdir -p /var/log/$PROFILE/hhvmd
+#	mkdir -p /var/log/$PROFILE/php7-fpm
+#	mkdir -p /var/log/$PROFILE/php7-fpm/session
+#	mkdir -p /var/log/$PROFILE/php7-fpm/wsdlcache
     # change owner
-    chown -R $CUSTOM_USER:$CUSTOM_USER /var/log/$PROFILE
+	chown -R $CUSTOM_USER:$CUSTOM_USER /var/log/$PROFILE
+	chown -R $CUSTOM_USER:$CUSTOM_USER /home/$CUSTOM_USER/$PROFILE
 fi
 
 if [ \! -e /usr/lib/kusanagi/lib/deploy-$APP.sh ] ; then
@@ -77,14 +84,15 @@ sed -i "s/^\(127.0.0.1.*\)\$/\1 $FQDN $ADDFQDN/" /etc/hosts || \
  (sed "s/\(^127.0.0.1.*$\)/\1 $FQDN $ADDFQDN/" /etc/hosts > /tmp/hosts.$$ && \
   cat /tmp/hosts.$$ > /etc/hosts && /usr/bin/rm /tmp/hosts.$$)
 
+## no longer used, separate user's socket is used instead
 ##K_Configure HHVM/PHP7-FPM for this virtual host and start it
-if [ "$APP" != "WordPress" ]; then
+#if [ "$APP" != "WordPress" ]; then
    #if [ "$APP" != "Rails" ]; then
-     /usr/src/create-hhvm-ini -d $PROFILE -u $CUSTOM_USER
+#     /usr/src/create-hhvm-ini -d $PROFILE -u $CUSTOM_USER
    #fi	 
-else
-    /usr/src/create-php7-conf -d $PROFILE -u $CUSTOM_USER   
-fi
+#else
+#    /usr/src/create-php7-conf -d $PROFILE -u $CUSTOM_USER   
+#fi
 ## K_Add backup command for this provision
 echo "/usr/src/backup -u $CUSTOM_USER -d $PROFILE" >> /etc/cron.daily/backup-prov
 echo "/usr/src/cleanup-bk -u $CUSTOM_USER -d $PROFILE" >> /etc/cron.weekly/cleanbk-prov
@@ -95,7 +103,7 @@ RET=0
 # setting ssl cert files
 if [ "" != "$MAILADDR" ] && [ -e $CERTBOT ]; then
 	# restart nginx or httpd server
-	#k_restart nginx //comment for cPanel interaction
+	#k_restart nginx //comment for avoiding disconnection with cPanel
 	k_reload nginx
 	# enable ssl
 	source $LIBDIR/ssl.sh
