@@ -10,8 +10,8 @@ def execute(command):
         res = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, universal_newlines=True)
         output=res.stdout
         print(output)
-    except:
-        pass
+    except BaseException as error:
+        return error
 
 class PHPmng():
 
@@ -20,8 +20,15 @@ class PHPmng():
         try:
             command = 'kusanagi which_php'
             execute(command)
-        except:
-            pass
+        except BaseException as error:
+            return error
+    @staticmethod
+    def switch_php(phpver):
+        try:
+            command = 'kusanagi phpver'
+            execute(command)
+        except BaseException as error:
+            return error
 
 #PHPmng.get_current_ver()
         
