@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 import sys
 import os
+import argparse
 import subprocess
 
 libdir = '/usr/lib/kusanagi/lib'
@@ -30,5 +31,16 @@ class PHPmng():
         except BaseException as error:
             return error
 
-#PHPmng.get_current_ver()
+
+def main():
+    show=PHPmng()
+    parse=argparse.ArgumentParser()
+    parse.add_argument('-v', '--current-version', action='store_true')
+    args=parse.parse_args()
+    show_ver=args.current-version
+    if show_ver:
+        show.get_current_ver()
+if __name__ == '__main__':
+    main()
+
         
