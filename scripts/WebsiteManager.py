@@ -2,7 +2,7 @@
 import argparse
 import subprocess
 import sys
-from PHPmanager import execute
+from phpManager import execute
 
 class WebsiteManager():
     @staticmethod
