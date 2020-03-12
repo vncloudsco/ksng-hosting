@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+
 import argparse
 import os
 import sys,shutil
@@ -12,13 +13,13 @@ import tarfile
 
 class backupManager():
 
-    def append_log(log,message):
+    def append_log(self,log,message):
         f = open(log, "a+")
         today = datetime.now()
         f.write("%s %s \n" % (today.strftime("%Y-%m-%d %H:%M:%S"), message))
         f.close()
 
-    def get_root_pass():
+    def get_root_pass(self):
         with open("/root/.my.cnf") as fp: lines = fp.read().splitlines()
         for line in lines:
             grep = re.findall(r'password', line)
@@ -26,9 +27,9 @@ class backupManager():
                 pwrd = line.split('"')[1]
         return pwrd
 
-    def get_db_name(argv):
+    def get_db_name(self,argv):
         try:
-            pwrd = get_root_pass()
+            pwrd = self.get_root_pass()
             db = pymysql.connect("localhost","root",pwrd,"secure_vps")
             cursor = db.cursor()
             cursor.execute("select id,db_name from provision where provision_name='%s'" % argv)
@@ -40,9 +41,10 @@ class backupManager():
         except pymysql.err.InternalError as err:
             print (' An error has occurred \n', err)
 
-    def backup_db(argv):
+    #@staticmethod
+    def backup_db(self,argv):
 
-        data = get_db_name(argv)
+        data = self.get_db_name(argv)
         db_name = data[1]
         try:
             sqldir = '/home/kusanagi/'+argv+'/sql_backup/'
@@ -52,19 +54,20 @@ class backupManager():
                 shutil.chown(sqldir,'kusanagi','kusanagi')
         except BaseException as error:
             print(error)
-        pwrd = get_root_pass()
+        pwrd = self.get_root_pass()
 
         log = '/home/kusanagi/'+argv+'/log/backup.log'
         mess = 'Backed up database '+db_name
-        append_log(log,mess)
+        self.append_log(log,mess)
 
         cmd = 'mysqldump --single-transaction -p'+pwrd+' --databases '+db_name+' | gzip > '+sqldir+db_name+'.sql.gz'
         execute_outputfile(cmd,log)
 
-    def update_backup_record(argv,backup_type,result):
+    #@staticmethod
+    def update_backup_record(self,argv,backup_type,result):
 
-        pwrd = get_root_pass()
-        data = get_db_name(argv)
+        pwrd = self.get_root_pass()
+        data = self.get_db_name(argv)
         provi_id = data[0]
         log = '/home/kusanagi/'+argv+'/log/backup.log'
 
@@ -82,7 +85,8 @@ class backupManager():
         db.commit()
         db.close()
 
-    def compress_provision_dir(argv,chdir=''):
+    #@staticmethod
+    def compress_provision_dir(self,argv,chdir=''):
         date = datetime.now()
         today = date.strftime("%Y-%m-%d")
         if chdir:
@@ -93,20 +97,21 @@ class backupManager():
         shutil.make_archive(tarname,"gztar",source_dir)
         return tarname
 
-    @staticmethod
-    def local_backup(argv):
+    #@staticmethod
+    def local_backup(self,argv):
 
-        append_log('/home/kusanagi/'+argv+'/log/backup.log', '--- Local backup')
-        backup_db(argv)
-        tarname = compress_provision_dir(argv)
+        self.append_log('/home/kusanagi/'+argv+'/log/backup.log', '--- Local backup')
+        self.backup_db(argv)
+        tarname = self.compress_provision_dir(argv)
 
         tar_file=pathlib.Path(tarname+'.tar.gz')
         if tar_file.exists():
-            update_backup_record(argv,0,1)
+            self.update_backup_record(argv,0,1)
         else:
-            update_backup_record(argv,0,0)
+            self.update_backup_record(argv,0,0)
 
-    def check_ssh_conn(argv,remote_user,remote_host,remote_port,remote_pass):
+    #@staticmethod
+    def check_ssh_conn(self,argv,remote_user,remote_host,remote_port,remote_pass):
         cmd = 'sshpass -p "'+remote_pass+'" ssh -o StrictHostKeyChecking=no -p '+remote_port+' -q '+remote_user+'@'+remote_host+' exit;echo $?'
         res = execute(cmd)
         log = '/home/kusanagi/'+argv+'/log/backup.log'
@@ -114,18 +119,18 @@ class backupManager():
             #print('Connect OK \n')
             pass
         else:
-            append_log(log, 'Remote connection failed. Can not issue remote backup')
-            update_backup_record(argv,1,0)
+            self.append_log(log, 'Remote connection failed. Can not issue remote backup')
+            self.update_backup_record(argv,1,0)
             sys.exit(1)
 
-    @staticmethod
-    def remote_backup(argv, remote_user, remote_host, remote_port, remote_pass, remote_dest):
+    #@staticmethod
+    def remote_backup(self,argv, remote_user, remote_host, remote_port, remote_pass, remote_dest):
 
         log = '/home/kusanagi/'+argv+'/log/backup.log'
-        append_log(log, '--- Remote backup')
-        check_ssh_conn(argv, remote_user, remote_host, remote_port, remote_pass)
-        backup_db(argv)
-        tarname = compress_provision_dir(argv,'/home/kusanagi/')
+        self.append_log(log, '--- Remote backup')
+        self.check_ssh_conn(argv, remote_user, remote_host, remote_port, remote_pass)
+        self.backup_db(argv)
+        tarname = self.compress_provision_dir(argv,'/home/kusanagi/')
 
         conf_ssh = '/etc/ssh/ssh_config'
         with open(conf_ssh) as fp: lines = fp.read().splitlines()
@@ -142,23 +147,23 @@ class backupManager():
         cmd = 'sshpass -p "'+remote_pass+'" rsync --remove-source-files -azhe \'ssh -p'+remote_port+'\' '+tarname+'.tar.gz '+remote_user+'@'+remote_host+':'+remote_dest+' 2>> '+log+' ; echo $?'
         res = execute(cmd)
         if int(res) == 0:
-            update_backup_record(argv,1,1)
+            self.update_backup_record(argv,1,1)
         else:
-            update_backup_record(argv,1,0)
+            self.update_backup_record(argv,1,0)
 
-    @staticmethod
+    #@staticmethod
     def drive_backup(argv,drive_dir):
 
         log = '/home/kusanagi/'+argv+'/log/backup.log'
-        append_log(log,'--- Backup to Google Drive')
-        backup_db(argv)
-        tarname = compress_provision_dir(argv,'/home/kusanagi/')
+        self.append_log(log,'--- Backup to Google Drive')
+        self.backup_db(argv)
+        tarname = self.compress_provision_dir(argv,'/home/kusanagi/')
         cmd = 'rclone copy '+tarname+'.tar.gz GGD1:'+drive_dir+ ' 2>> '+log+' ; echo $?'
         res = execute(cmd)
         if int(res) == 0:
-            update_backup_record(argv,2,1)
+            self.update_backup_record(argv,2,1)
         else:
-            update_backup_record(argv,2,0)
+            self.update_backup_record(argv,2,0)
         os.remove(tarname+'.tar.gz')
 
 
