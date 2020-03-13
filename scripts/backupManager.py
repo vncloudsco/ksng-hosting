@@ -152,7 +152,7 @@ class backupManager():
             self.update_backup_record(argv,1,0)
 
     #@staticmethod
-    def drive_backup(argv,drive_dir):
+    def drive_backup(self,argv,drive_dir):
 
         log = '/home/kusanagi/'+argv+'/log/backup.log'
         self.append_log(log,'--- Backup to Google Drive')
