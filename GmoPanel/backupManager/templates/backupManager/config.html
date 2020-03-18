@@ -1,0 +1,78 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <style>
+        div.error-message{
+            position: absolute;
+            top: 26px;
+            color: #fc5844;
+        }
+        #security-code{
+            height: 29.43px !important;
+        }
+    </style>
+    <div class="content animated fadeInDown">
+        <div class="widget">
+            <form id="form_access" method="post">
+                {% csrf_token %}
+                <div class="widget-header">
+                    <h2>Config Access Google Drive</h2>
+                    <div class="additional-btn">
+                        <a href="#" class="hidden reload"><i class="icon-ccw-1"></i></a>
+                    </div>
+                </div>
+                <div class="widget-content padding">
+                    <table class="table table-condensed table-striped">
+                        <tbody>
+                        <tr>
+                            <td width="10%" class="text-left"><strong>Token Access : </strong></td>
+                            <td>
+                                <div class="row">
+                                    <div class="col-lg-5 mx-md-auto paper-card">
+                                        <div class="form-group">
+                                            <div class="input-group">
+                                                {{form.token}}
+                                                <div class="input-group-btn">
+                                                    <a href="/backups/getTokenGoogle" target="_blank" class="btn btn-default change_security" type="button">
+                                                        {% if flgConfig %}
+                                                            Change Access
+                                                        {% else %}
+                                                            Create New Access
+                                                        {% endif %}
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            {% if form.token.errors %}
+                                                <span class="error" style="color:#9E2424">{{ form.token.errors.as_text }}</span>
+                                            {% endif %}
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    {% if flgConfig %}
+                        <i style="color: #9E2424">You have already configured the connection to Google Drive! If you want to change it, please click "Change Access"</i>
+                    {% endif %}
+                </div>
+                <div class="widget-footer">
+                    <button style="margin-top: 10px;" type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-saved"></i> Save </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% if message %}
+    <div id="message-title" style="display: none">{{message}}</div>
+    <script>
+        $(document).ready(function () {
+            var msg = $('#message-title').html();
+            $('#message-title').remove();
+            autohidenotify2('success','top right','Notification',msg,8000);
+        })
+    </script>
+{% endif %}
+{% endblock %}

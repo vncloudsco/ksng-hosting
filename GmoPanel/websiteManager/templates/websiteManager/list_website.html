@@ -1,0 +1,58 @@
+
+{% if not provisions %}
+    <tr>
+        <td colspan="7" style="text-align: center;">
+            No domain is available.
+        </td>
+    </tr>
+{% else %}
+    {% for item in provisions %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ item.domain }}</td>
+            <td>{{ item.provision_name }}</td>
+            <td>{{ item.email }}</td>
+            <td>
+                {% if item.app_id == 1 %}
+                    Wordpress Website
+                {% elif item.app_id == 2 %}
+                    Wordpress Ecommercial
+                {% elif item.app_id == 3 %}
+                    Drupal 8
+                {% elif item.app_id == 4}
+                    Concrete 5
+                {% else %}
+                    Another PHP frame
+                {% endif %}
+            </td>
+            <td>{{ item.created_date|date:'Y-m-d H:i' }}</td>
+            <td></td>
+            <td>
+                <div class="btn-group btn-group-xs">
+                    <a href="javascript:void(0)" data-toggle="tooltip" title="Current running in PHP 7.3"  class="change-php current-php"><span class="label label-primary">PHP 7.3</span></a>
+                </div>
+            </td>
+            <td>
+                <div class="btn-group btn-group-xs">
+                    <a data-toggle="tooltip" title="Delete {{item.domain}}" href="javascript:void(0)" class="btn btn-danger delete_domain " data-id="{{item.id}}"><i class="glyphicon glyphicon-trash"></i></a>
+                </div>
+            </td>
+        </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="8">
+            <span>Showing 1 to {{ count }} of {{ count }} entries</span>
+        </td>
+    </tr>
+{% endif %}
+<style type="text/css">
+    .bg-grey {
+        background-color: grey !important;
+    }
+    .change-php{
+        margin-right: 5px;
+    }
+    .current-php{
+        cursor: default;
+    }
+</style>

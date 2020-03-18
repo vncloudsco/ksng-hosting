@@ -1,0 +1,42 @@
+{% load app_tags %}
+<div class="col-md-12 block-space1">
+    <div id="sum_box" class="mbl ">
+        <div class="col-sm-6 col-md-3 block-space" style="border-right: 0px">
+            <div class="panel db mbm gray-back">
+                <div class="panel-body">
+                    <p class="description">DISK</p>
+                    <h4 class="value"><span>{{DiskPer}}</span><span>%</span></h4>
+                    {{ DiskPer|render_html|safe }}
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3 block-space" style="border-right: 0px">
+            <div class="panel db mbm">
+                <div class="panel-body">
+                    <p class="description">Memory</p>
+                    <h4 class="value"><span>{{MemPer}}</span>%<span></span></h4>
+                    {{ MemPer|render_html|safe }}
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3 block-space gray-back" style="border-right: 0px">
+            <div class="panel db mbm">
+                <div class="panel-body">
+                    <p class="description">CPU</p>
+                    <h4 class="value"><span>{{CpuPer}}</span>%</h4>
+                    {{ CpuPer|render_html|safe }}
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6 col-md-3 block-space" style="border-right: 0px">
+            <div class="panel db mbm">
+                <div class="panel-body">
+                    <p class="description">Swap</p>
+                    <h4 class="value"><span>{{SwapPer}}</span>%</h4>
+                    {{ SwapPer|render_html|safe }}
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,160 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <script src="{% static 'assets/libs/jquery-validation/jquery.validate.min.js' %}"></script>
+    <style type="text/css">
+        .error{
+            color: #fc5844;
+        }
+    </style>
+    <div class="content animated fadeInDown">
+        <div class="widget">
+            <div class="widget-header">
+                <h2>Backup Setting</h2>
+                <div class="additional-btn">
+                    <a href="#" class="hidden reload"><i class="icon-ccw-1"></i></a>
+                </div>
+            </div>
+            <div class="widget-content padding">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Domain</th>
+                            <th>CMS Application</th>
+                            <th>Created date</th>
+                            <th>Action</th>
+                        </tr>
+                        </thead>
+                        <tbody id="domain_list">
+                        {% if not data %}
+                            <tr>
+                                <td colspan="7" style="text-align: center;">
+                                    No domain is available.
+                                </td>
+                            </tr>
+                        {% else %}
+                            {% for item in data %}
+                                <tr>
+                                    <td>{{ forloop.counter }}</td>
+                                    <td>{{ item.domain }}</td>
+                                    <td>
+                                        {% if item.app_id == 1 %}
+                                            Wordpress Website
+                                        {% elif item.app_id == 2 %}
+                                            Wordpress Ecommercial
+                                        {% elif item.app_id == 3 %}
+                                            Drupal 8
+                                        {% elif item.app_id == 4}
+                                            Concrete 5
+                                        {% else %}
+                                            Another PHP frame
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ item.created_date|date:'Y-m-d H:i' }}</td>
+                                    <td>
+                                        <div class="btn-group btn-group-xs">
+                                            <a data-toggle="tooltip" data-id="{{ item.id }}" title="Backup Provision" href="javascript:void(0)" class="btn btn-primary btn-let backup_pro"><i class="glyphicon glyphicon-hdd"></i></a>
+                                        </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            <tr>
+                                <td colspan="8">
+                                    <span>Showing 1 to {{count}} of {{count}} entries</span>
+                                </td>
+                            </tr>
+                        {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-lg" id="modal_backup_pro" role="dialog" >
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form id="formBackup" role="form" >
+                    {% csrf_token %}
+                    {{form.id}}
+                    <div class="modal-header" style="background-color: #337ab7; color:#FFF;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><i class="glyphicon glyphicon-hdd" aria-hidden="true"></i> BackUp Setting [<i id="domain_backup">ahihi.com</i>]</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="widget" style="width: 95%;margin: 0 auto;">
+
+                            <div class="widget-content padding">
+                                <div class="form-group">
+                                    <label>{{form.type.label_tag}}</label>
+                                    {{form.type}}
+                                    {{form.errors}}
+                                </div>
+
+                                <div class="col-sm-12" id="ssh_config" style="display: none">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-sm-9">
+                                                <label>{{form.host.label_tag}}</label>
+                                                {{form.host}}
+                                                {{form.host.errors}}
+                                            </div>
+                                            <div class="col-sm-3">
+                                                <label>{{form.port.label_tag}}</label>
+                                                {{form.port}}
+                                                {{form.port.errors}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{form.user.label_tag}}</label>
+                                        {{form.user}}
+                                        {{form.user.errors}}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{form.password.label_tag}}</label>
+                                        {{form.password}}
+                                        {{form.password.errors}}
+                                    </div>
+                                    <div class="form-group">
+                                        <label>{{form.path.label_tag}}</label>
+                                        {{form.path}}
+                                        {{form.path.errors}}
+                                    </div>
+                                </div>
+                                <div class="col-sm-12" id="driver_config" style="display: none">
+                                    <div class="form-group">
+                                        <label>{{form.path_drive.label_tag}}</label>
+                                        {{form.path_drive}}
+                                        {{form.path_drive.errors}}
+                                    </div>
+                                </div>
+                                <div class="form-group" id="path_local" style="display: none;">
+                                    <label>Root Path</label>
+                                    <div class="form-control">/home/kusanagi/backup/</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align: center">
+                        <label id="icon-load-account" style="display: none">
+                            <i class="fa fa-spinner fa-pulse fa-3x fa-fw margin-bottom"></i>
+                        </label>
+                        <div id="show-btn-account">
+                            <a href="javascript:void(0)" class="btn btn-danger" data-dismiss="modal">
+                                <span class="glyphicon glyphicon-remove-circle"></span> Cancel
+                            </a>
+                            <a href="javascript:void(0)" id="backupPro" data-id="" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Backup..." class="btn btn-primary">
+                                <i class="fa fa-expeditedssl"></i> BackUp
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/backup.js' %}?{% cache_bust %}"></script>
+{% endblock %}

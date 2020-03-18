@@ -1,0 +1,52 @@
+<div id="sidebar-menu">
+    <ul class="my-menu">
+        <li><a href='/'><i class="icon-gauge-1"></i> <span>Dashboard</span> </a></li>
+        <li class='has_sub'><a href='javascript:void(0);' ><i class="icon-network-1"></i> <span>Website Control</span> <span class="pull-right"><i class="fa fa-angle-down"></i></span></a>
+            <ul>
+                <li><a href='/websites/createWebsite/' > <span>Create Website</span> </a></li>
+                <li><a href='#' id="wb-button" class="" data-toggle="modal" data-target="#wb-modal"><span>Website Builder</span> </a></li>
+                <li><a href='/websites/'> <span>Web Setting</span> </a></li>
+                <li><a href='/websites/cacheManager/'> <span>Cache Manager</span> </a></li>
+                <li><a href='/websites/sslManager/'> <span>SSL Manager</span> </a></li>
+
+
+            </ul>
+        </li>
+        <li class='has_sub'><a href='javascript:void(0);'><i class="icon-inbox-alt"></i> <span> BackUp Manager</span> <span class="pull-right"><i class="fa fa-angle-down"></i></span></a>
+            <ul>
+                <li><a href='/backups/'> <span>Backup</span> </a></li>
+                <li><a href='/backups/logs'> <span>Backup History</span> </a></li>
+                <li><a href='/backups/config'> <span>Backup Config</span> </a></li>
+                <li><a href='/backups/cronJob'> <span>CronJob Backup</span> </a></li>
+
+            </ul>
+        </li>
+        <li><a href='javascript:void(0)' id="goto"><i class="icon-folder-1"></i> <span>Files Manager</span> </a></li>
+        <li class='has_sub'><a href='javascript:void(0);'><i class="icon-upload-cloud-2"></i> <span>Upload Tools</span> <span class="pull-right"><i class="fa fa-angle-down"></i></span></a>
+            <ul>
+                <li><a href='#' class="" id="wordpress-upload" data-toggle="modal" data-target="#wp_u_modal"><span>Wordpress Auto Upload</span></a></li>
+                <li><a href='#' class="" id="source-upload" data-toggle="modal" data-target="#source_u_modal"><span>Source Code Upload</span></a></li>
+                <li><a href='#' class="" id="database-upload" data-toggle="modal" data-target="#database_u_modal"><span>Database Upload</span></a></li>
+            </ul>
+        </li>
+        <li><a href='MysqlManager'><i class="icon-database"></i> <span>MySql Manager</span> </a></li>
+        <li><a href='EmailServer'><i class="icon-mail-1"></i> <span>Email Server</span> </a></li>
+        <li class='has_sub'><a href='javascript:void(0);'><i class="icon-cogs"></i> <span>Settings</span> <span class="pull-right"><i class="fa fa-angle-down"></i></span></a>
+            <ul>
+                <li><a href='Settings/php' class=""><span>PHP Setting</span></a></li>
+                <li><a href='Settings/nginx' class=""><span>Nginx Setting</span></a></li>
+                <li><a href='Accounts/changePassword'><span>Change Password</span> </a></li>
+            </ul>
+        </li>
+        <li class='has_sub'><a href='javascript:void(0);'><i class="fa fa-shield green-color"></i> <span>Security Setting</span> <span class="pull-right"><i class="fa fa-angle-down"></i></span></a>
+            <ul>
+                <li><a href='Waf' class=""><span>WAF & Restriction</span></a></li>
+                <li><a href='Securitys/authenticatorGoogle'><span>Google Authenticator</span> </a></li>
+            </ul>
+        </li>
+        <li><a target="_blank" href='https://support.tenten.vn/index.php?type=page&urlcode=578836&title=SecureWEB-CLOUD'><i class="icon-book"></i> <span>User Guide</span> </a></li>
+    </ul>
+</div>
+{% load static %}
+{% load app_tags %}
+<script type="text/javascript" src="{% static 'js/menu.js' %}?{% cache_bust %}"></script>

@@ -1,0 +1,220 @@
+<style>
+    .loader {
+        border: 16px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 16px solid #3498db;
+        width: 120px;
+        height: 120px;
+        -webkit-animation: spin 2s linear infinite; /* Safari */
+        animation: spin 2s linear infinite;
+        top: 35%;
+        position: relative;
+        right: 48%;
+        z-index: 999999 !important;
+    }
+
+    /* Safari */
+    @-webkit-keyframes spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(360deg);
+        }
+    }
+
+    @keyframes spin {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
+<!-- Modal Logout -->
+<div class="md-modal md-just-me" id="logout-modal">
+    <div class="md-content">
+        <h3><strong>Logout</strong> Confirmation</h3>
+        <div>
+            <p class="text-center">Are you sure want to logout from this system?</p>
+            <p class="text-center">
+                <button class="btn btn-danger md-close md-close">Nope!</button>
+                <a href="{$smarty.const.SITE_URL}accounts/logout" class="btn btn-success md-close">Yeah, I'm sure</a>
+            </p>
+        </div>
+    </div>
+</div>
+<!-- Modal End -->
+<!-- Modal website builder-->
+<div id="wb-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><strong>Website builder</strong> - select your website.</h4>
+            </div>
+            <div class="modal-body" id="wb_result">
+                <div style="width:100% !important;height:100%" class="lds-facebook">
+                    <div style="left:42% !important;"></div>
+                    <div></div>
+                    <div style="left:58% !important;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End -->
+<!-- Modal wordpress upload -->
+<div id="wp_u_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><strong>Wordpress upload</strong> - select your website.</h4>
+            </div>
+            <div class="modal-body" id="wp_u_result">
+                <div style="width:100% !important;height:100%" class="lds-facebook">
+                    <div style="left:42% !important;"></div>
+                    <div></div>
+                    <div style="left:58% !important;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End -->
+<!-- Modal database upload -->
+<div id="database_u_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><strong>Database upload</strong> - select your website.</h4>
+            </div>
+            <div class="modal-body" id="database_u_result">
+                <div style="width:100% !important;height:100%" class="lds-facebook">
+                    <div style="left:42% !important;"></div>
+                    <div></div>
+                    <div style="left:58% !important;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End -->
+<!-- Modal source upload -->
+<div id="source_u_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h4><strong>Source code upload</strong> - select your website.</h4>
+            </div>
+            <div class="modal-body" id="source_u_result">
+                <div style="width:100% !important;height:100%" class="lds-facebook">
+                    <div style="left:42% !important;"></div>
+                    <div></div>
+                    <div style="left:58% !important;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal End -->
+
+<!-- Modal fade in scale up -->
+<div class="modal fade" role="dialog" id="md-3d-sign-confirm">
+    <div class="md-content" style="opacity: 1;z-index: 9999;width: 400px;top:35%">
+        <h3>?Are you delete</h3>
+        <div style="text-align: center">
+            <p>?Are you sure you want to do nothing</p>
+            <p style="text-align: center">
+                <button class="btn btn-danger" id="deleteDns">Delete</button>
+                <button class="btn btn-info" data-dismiss="modal">Close</button>
+            </p>
+        </div>
+    </div>
+    <!-- End div .md-content -->
+</div>
+
+<!-- Modal fade in scale up -->
+<div class="modal fade" role="dialog" id="md-delete-domain-confirm">
+    <div class="md-content" style="opacity: 1;z-index: 9999;width: 400px;top:35%">
+        <h3>?Are you delete</h3>
+        <div style="text-align: center">
+            <p>?Are you sure you want to do nothing</p>
+            <p style="text-align: center">
+                <button class="btn btn-danger" data-id="" id="deleteDomain">Delete</button>
+                <button class="btn btn-info" data-dismiss="modal">Close</button>
+            </p>
+        </div>
+    </div>
+    <!-- End div .md-content -->
+</div>
+
+<!-- Modal fade in scale up -->
+<div class="modal fade" role="dialog" id="delete-account-email">
+    <div class="md-content" style="opacity: 1;z-index: 9999;width: 400px;top:35%">
+        <h3>?Are you delete</h3>
+        <div style="text-align: center">
+            <p>?Are you sure you want to do nothing</p>
+            <p style="text-align: center">
+                <button class="btn btn-danger" data-id="" id="deleteAccount">Delete</button>
+                <button class="btn btn-info" data-dismiss="modal">Close</button>
+            </p>
+        </div>
+    </div>
+    <!-- End div .md-content -->
+</div>
+
+<!-- Modal fade in scale up -->
+<div class="modal fade" role="dialog" id="loader" style="z-index: 999999 !important;">
+    <div class="loader"></div>
+    <!-- End div .md-content -->
+</div>
+
+<!-- Modal fade in scale up -->
+<div class="md-modal md-fade-in-scale-up" id="md-fade-in-scale-up" style="top:30%;width: 60%;max-width: 800px">
+    <div class="md-content">
+        <h3>DNS CONFIG SETTING</h3>
+        <div>
+            <div class="text-center" style="color:#ed5564 !important;">
+                - You need to add the DNS records below:<br/>
+                - The above DNS records will take effect within 24 hours.<br/>
+            </div>
+        </div>
+        <div>
+            <table style="width: 100%;text-align: center">
+                <thead>
+                <tr class="no-b">
+                    <th style="text-align: center">Host Record</th>
+                    <th style="text-align: center">Type</th>
+                    <th style="text-align: center">Value</th>
+                </tr>
+                </thead>
+                <tbody id="tbodyDns">
+                <tr>
+                    <td>@</td>
+                    <td>A</td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <td>@</td>
+                    <td>MX</td>
+                    <td></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <div>
+            <div class=" text-center">
+                <p style="color:#ed5564 !important;">- After the above DNS records take effect, you can use the email server.</p>
+                <a href="https://docs.iredmail.org/setup.dns.html" target="_blank">- More.</a>
+            </div>
+            <p>
+            </p>
+        </div>
+    </div>
+    <!-- End div .md-content -->
+</div>

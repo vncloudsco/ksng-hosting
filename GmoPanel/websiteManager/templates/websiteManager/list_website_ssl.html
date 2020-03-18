@@ -1,0 +1,240 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <script src="{% static 'assets/libs/jquery-validation/jquery.validate.min.js' %}"></script>
+    <style type="text/css">
+        .error{
+            color: #fc5844;
+        }
+        /* Customize the label (the container) */
+        .container-ssl {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Hide the browser's default checkbox */
+        .container-ssl input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        /* Create a custom checkbox */
+        .checkmark {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            height: 22px;
+            width: 22px;
+            background-color: #eee;
+        }
+
+        /* On mouse-over, add a grey background color */
+        .container-ssl:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+
+        /* When the checkbox is checked, add a blue background */
+        .container-ssl input:checked ~ .checkmark {
+            background-color: #2196F3;
+        }
+
+        /* Create the checkmark/indicator (hidden when not checked) */
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        /* Show the checkmark when checked */
+        .container-ssl input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* Style the checkmark/indicator */
+        .container-ssl .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+    </style>
+    <div class="content animated fadeInDown">
+        <div class="widget">
+            <div class="widget-header">
+                <h2>Domain list</h2>
+                <div class="additional-btn">
+                    <a href="#" class="hidden reload"><i class="icon-ccw-1"></i></a>
+                </div>
+            </div>
+            <div class="widget-content padding">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Domain</th>
+                                <th>CMS Application</th>
+                                <th>Created date</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="domain_list">
+                            {% if not provisions %}
+                                <tr>
+                                    <td colspan="7" style="text-align: center;">
+                                        No domain is available.
+                                    </td>
+                                </tr>
+                            {% else %}
+                                {% for item in provisions %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ item.domain }}</td>
+                                        <td>
+                                            {% if item.app_id == 1 %}
+                                                Wordpress Website
+                                            {% elif item.app_id == 2 %}
+                                                Wordpress Ecommercial
+                                            {% elif item.app_id == 3 %}
+                                                Drupal 8
+                                            {% elif item.app_id == 4}
+                                                Concrete 5
+                                            {% else %}
+                                                Another PHP frame
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ item.created_date|date:"Y-m-d H:i" }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs">
+                                                <button class="btn btn-primary check-ssl-btn" data-toggle="tooltip" title="Check SSL status" id="show-{{item.id}}" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Getting status" data-id="{{item.id}}">Check status</button>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs">
+                                                <a data-toggle="tooltip" data-id="{{item.id}}" title="Install Let's encrypt" href="javascript:void(0)" class="btn btn-success btn-let"><i class="fa fa-shield"></i></a>
+                                            </div>
+                                            <div class="btn-group btn-group-xs">
+                                                <a data-toggle="tooltip" data-id="{{item.id}}" title="Install SSL manual" href="javascript:void(0)" class="btn btn-primary btn-manual"><i class="fa fa-lock"></i></a>
+                                            </div>
+                                            <div class="btn-group btn-group-xs">
+                                                <a data-toggle="tooltip" data-id="{{item.id}}" title="Remove SSL certificate" href="javascript:void(0)" class="btn btn-danger btn-remove"><i class="fa fa-unlock"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="8">
+                                        <span>Showing 1 to {{count}} of {{count}} entries</span>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-lg" id="modal_instal_ssl" role="dialog" >
+        <div class="modal-dialog" style="width: 50%;">
+            <div class="modal-content">
+                <form action="" id="formSll">
+                    <div class="modal-header" style="background-color: #337ab7; color:#FFF;">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title"><i class="fa fa-certificate" aria-hidden="true"></i> Install SSL Manual <strong id="domain_ssl"></strong></h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="widget">
+
+                            <div class="widget-content padding">
+                                <div class="form-group">
+                                    <label>PRIVATE KEY CERTIFICATE</label>
+                                    <textarea class="form-control" style="min-height: 180px;" name="ssl_key"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label>CERTIFICARE CHAIN</label>
+                                    <textarea class="form-control" style="min-height: 180px;" name="ssl_crt"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <div class="col-sm-offset-0 col-sm-10">
+                                        <label class="container-ssl">Click edit key/crt
+                                            <input type="checkbox" name="icheck_ssl" id="icheck">
+                                            <span class="checkmark"></span>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer" style="text-align: center">
+                        <label id="icon-load-account" style="display: none">
+                            <i class="fa fa-spinner fa-pulse fa-3x fa-fw margin-bottom"></i>
+                        </label>
+                        <div id="show-btn-account">
+                            <a href="javascript:void(0)" class="btn btn-danger" data-dismiss="modal">
+                                <span class="glyphicon glyphicon-remove-circle"></span> Cancel
+                            </a>
+                            <a href="javascript:void(0)" id="insallSll" data-id="" class="btn btn-primary">
+                                <i class="fa fa-expeditedssl"></i> Install
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade bs-example-modal-lg" id="modal_status_ssl" role="dialog" >
+        <div class="modal-dialog" style="width: 50%;">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color: #337ab7; color:#FFF;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><i class="fa fa-bookmark" aria-hidden="true"></i> Certificate Information<strong id="domain_ssl"></strong></h4>
+                </div>
+                <div class="modal-body">
+                    <div class="widget">
+                        <div class="widget-content padding">
+                            <div class="row">
+                                <div class="col-sm-2 col-sm-offset-2"><strong>Issued to:</strong></div>
+                                <div class="col-sm-8"><span id="subject">*.lkmart.vn</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-2 col-sm-offset-2"><strong>Issued by:</strong></div>
+                                <div class="col-sm-8"><span id="issuer">GlobalSign nv-sa AlphaSSL CA - SHA256 - G2</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-2 col-sm-offset-2"><strong>Valid from:</strong></div>
+                                <div class="col-sm-8"><span id="from">Mar 27 11:05:28 2018 GMT</span></div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-2 col-sm-offset-2"><strong>Valid to:</strong></div>
+                                <div class="col-sm-8"><span id="to">Mar 27 11:05:28 2020 GMT</span></div>
+                            </div>
+                            <div class="row" style="margin-top: 30px;">
+                                <p class="text-center"><strong><i id="duration"></i></strong></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/ssl_manager.js' %}"></script>
+{% endblock %}

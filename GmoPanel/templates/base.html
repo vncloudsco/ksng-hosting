@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        {% block title %}<title>Dashboard | SecureWeb Cloud control panel</title>{% endblock %}
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="description" content="tenten.vn SecureVPS control panel">
+        <meta name="keywords" content="tenten.vn SecureVPS control panel">
+        <meta name="author" content="tenten">
+        {% load static %}
+        <!-- Base Css Files -->
+        <link href="{% static 'assets/libs/jqueryui/ui-lightness/jquery-ui-1.10.4.custom.min.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/libs/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/libs/font-awesome/css/font-awesome.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/libs/fontello/css/fontello.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/libs/animate-css/animate.min.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/libs/nifty-modal/css/component.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/libs/magnific-popup/magnific-popup.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/libs/standalone/switchery.css' %}" rel="stylesheet"/>
+        <link href="{% static 'assets/libs/pace/pace.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/libs/sortable/sortable-theme-bootstrap.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/libs/bootstrap-datepicker/css/datepicker.css' %}" rel="stylesheet" />
+         <link href="{% static 'assets/libs/jquery-icheck/skins/all.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/libs/jquery-notifyjs/styles/metro/notify-metro.css' %}" rel="stylesheet" />
+        <link href="{% static 'assets/libs/summernote/summernote.css' %}" rel="stylesheet" />
+        <!-- Code Highlighter for Demo -->
+        <link href="{% static 'assets/libs/prettify/github.css' %}" rel="stylesheet" />
+
+        <!-- Extra CSS Libraries Start -->
+        <!-- jvectormap -->
+        <link rel="stylesheet" href="{% static 'assets/libs/jquery-jvectormap/css/jquery-jvectormap-1.2.2.css' %}">
+        <!-- Date Picker -->
+        <link rel="stylesheet" href="{% static 'assets/libs/bootstrap-datepicker/css/datepicker.css' %}">
+        <link href="{% static 'assets/libs/jquery-notifyjs/styles/metro/notify-metro.css' %}" rel="stylesheet" />
+        <!-- bootstrap wysihtml5 - text editor -->
+        <link rel="stylesheet" href="{% static 'assets/libs/bootstrap-wysihtml5/bootstrap3-wysihtml5.min.css' %}">
+        <link href="{% static 'assets/css/style.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'assets/css/main.css' %}" rel="stylesheet" type="text/css" />
+        <link href="{% static 'assets/css/style-responsive.css' %}" rel="stylesheet" />
+        <link rel="stylesheet" type="text/css" href="{% static 'assets/libs/bootstrap-select2/select2.css' %}">
+        <link href="{% static 'assets/css/loading.css' %}" rel="stylesheet" />
+
+        <link rel="apple-touch-icon" href="{% static 'assets/img/apple-touch-icon.png' %}" />
+        <link rel="apple-touch-icon" sizes="57x57" href="{% static 'assets/img/apple-touch-icon-57x57.png' %}" />
+        <link rel="apple-touch-icon" sizes="72x72" href="{% static 'assets/img/apple-touch-icon-72x72.png' %}" />
+        <link rel="apple-touch-icon" sizes="76x76" href="{% static 'assets/img/apple-touch-icon-76x76.png' %}" />
+        <link rel="apple-touch-icon" sizes="114x114" href="{% static 'assets/img/apple-touch-icon-114x114.png' %}" />
+        <link rel="apple-touch-icon" sizes="120x120" href="{% static 'assets/img/apple-touch-icon-120x120.png' %}" />
+        <link rel="apple-touch-icon" sizes="144x144" href="{% static 'assets/img/apple-touch-icon-144x144.png' %}" />
+        <link rel="apple-touch-icon" sizes="152x152" href="{% static 'assets/img/apple-touch-icon-152x152.png' %}" />
+        <link rel="icon" href="{% static 'img/favicon.png' %}">
+        <script src="{% static 'assets/libs/jquery/jquery-3.2.1.min.js' %}"></script>
+        <script src="{% static 'assets/libs/bootstrap-select2/select2.min.js' %}"></script>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script src="{% static 'assets/libs/jqueryui/jquery-ui-1.10.4.custom.min.js' %}"></script>
+        <script src="{% static 'assets/libs/jquery-ui-touch/jquery.ui.touch-punch.min.js' %}"></script>
+        <script src="{% static 'assets/libs/jquery-icheck/icheck.min.js' %}"></script>
+        <script src="{% static 'assets/libs/bootstrap/js/bootstrap.min.js' %}"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                $('.select2').select2({
+                    language: "cn",
+                    placeholder: "Select",
+                    allowClear: true
+                });
+                $('.select2 span').addClass('needsclick');
+            });
+
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+        </script>
+        <style type="text/css">
+            body { padding-right: 0 !important ; zoom: 90%;}
+        </style>
+    </head>
+
+    <body class="fixed-left">
+        {% include "modal.html" %}
+        <!-- Begin page -->
+        <div id="wrapper">
+
+            <!-- Top Bar Start -->
+            <div class="topbar">
+                <div class="topbar-left">
+                    <div class="logo">
+                        <h1><a href="{$smarty.const.SITE_URL}">SecureCloud</a></h1>
+                    </div>
+                </div>
+                <!-- Button mobile view to collapse sidebar menu -->
+                {% include "nav.html" %}
+            </div>
+            <!-- Top Bar End -->
+            <!-- Left Sidebar Start -->
+            <div class="left side-menu">
+                <div class="sidebar-inner slimscrollleft">
+                    <!--- Profile -->
+                    <div class="profile-info">
+                        <div>
+                            <a href="javascript:void(0)" class="rounded-image profile-image md-trigger" data-modal="logout-modal"><img style="width: 100px;" src="{% static 'img/user-icon.png' %}"></a>
+                        </div>
+                        <div>
+                            <div class="profile-text">Bảo Bảo</div>
+                            <a href="javascript:void(0)"><i class="fa fa-circle text-success"></i> Online</a>
+                        </div>
+                    </div>
+
+                    {% include "menu.html" %}
+                </div>
+            </div>
+            <!-- Left Sidebar End -->
+            <!-- Start right content -->
+            <div class="content-page">
+                {% block content %}
+
+                {% endblock %}
+            </div>
+            <!-- End right content -->
+        </div>
+        {% include "footer.html" %}
+        <!-- End of page -->
+        <!-- the overlay modal element -->
+        <div class="md-overlay"></div>
+
+
+        <!-- End of eoverlay modal -->
+
+        <script>
+            var resizefunc = [];
+        </script>
+
+        <script src="{% static 'assets/libs/jquery-animate-numbers/jquery.animateNumbers.js' %}"></script>
+        <script src="{% static 'assets/libs/standalone/switchery.js' %}"></script>
+        <script src="{% static 'assets/libs/fastclick/js/fastclick.js' %}"></script>
+        <script src="{% static 'assets/libs/jquery-blockui/jquery.blockUI.js' %}"></script>
+        <script src="{% static 'assets/libs/bootstrap-bootbox/bootbox.min.js' %}"></script>
+        <script src="{% static 'assets/libs/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
+        <script src="{% static 'assets/libs/jquery-sparkline/jquery-sparkline.js' %}"></script>
+        <script src="{% static 'assets/libs/nifty-modal/js/classie.js' %}"></script>
+        <script src="{% static 'assets/libs/nifty-modal/js/modalEffects.js' %}"></script>
+        <script src="{% static 'assets/libs/sortable/sortable.min.js' %}"></script>
+        <script src="{% static 'assets/libs/bootstrap-select/bootstrap-select.min.js' %}"></script>
+
+        <script src="{% static 'assets/libs/magnific-popup/jquery.magnific-popup.min.js' %}"></script>
+        <script src="{% static 'assets/libs/pace/pace.min.js' %}"></script>
+        <script src="{% static 'assets/libs/bootstrap-datepicker/js/bootstrap-datepicker.js' %}"></script>
+
+
+        <!-- Demo Specific JS Libraries -->
+        <script src="{% static 'assets/libs/prettify/prettify.js' %}"></script>
+
+        <script src="{% static 'assets/js/init.js' %}"></script>
+        <script src="{% static 'assets/libs/jquery-notifyjs/notify.min.js' %}"></script>
+        <script src="{% static 'assets/libs/jquery-notifyjs/styles/metro/notify-metro.js' %}"></script>
+        <script src="{% static 'assets/js/pages/notifications.js' %}"></script>
+
+        <script src="{% static 'assets/libs/raphael/raphael-min.js' %}"></script>
+        <script src="{% static 'assets/libs/morrischart/morris.min.js' %}"></script>
+        <script src="{% static 'assets/libs/summernote/summernote.min.js' %}"></script>
+    </body>
+</html>

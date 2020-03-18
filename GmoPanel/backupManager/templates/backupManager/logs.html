@@ -1,0 +1,137 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <script src="{% static 'assets/libs/jquery-validation/jquery.validate.min.js' %}"></script>
+    <style type="text/css">
+        .error{
+            color: #fc5844;
+        }
+    </style>
+    <div class="content animated fadeInDown">
+        <div class="widget">
+            <div class="widget-header">
+                <h2>Backup History</h2>
+                <div class="additional-btn">
+                    <a href="#" class="hidden reload"><i class="icon-ccw-1"></i></a>
+                </div>
+            </div>
+            <div class="widget-content padding">
+                {% if not flgLog %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Domain</th>
+                                <th>CMS Application</th>
+                                <th>Created date</th>
+                                <th>Action</th>
+                            </tr>
+                            </thead>
+                            <tbody id="domain_list">
+                            {% if not data %}
+                                <tr>
+                                    <td colspan="7" style="text-align: center;">
+                                        No Domain is available.
+                                    </td>
+                                </tr>
+                            {% else %}
+                                {% for item in data %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ item.domain }}</td>
+                                        <td>
+                                            {% if item.app_id == 1 %}
+                                                Wordpress Website
+                                            {% elif item.app_id == 2 %}
+                                                Wordpress Ecommercial
+                                            {% elif item.app_id == 3 %}
+                                                Drupal 8
+                                            {% elif item.app_id == 4}
+                                                Concrete 5
+                                            {% else %}
+                                                Another PHP frame
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ item.created_date|date:'Y-m-d H:i' }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs">
+                                                <a data-toggle="tooltip" title="Backup Detail" href="/backups/log/{{item.id}}" class="btn btn-primary btn-let"><i class="glyphicon glyphicon-eye-open"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="8">
+                                        <span>Showing 1 to {{count}} of {{count}} entries</span>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Domain</th>
+                                <th>Type</th>
+                                <th>Status</th>
+                                <th>Message</th>
+                                <th>Time Backup</th>
+                            </tr>
+                            </thead>
+                            <tbody id="domain_list">
+                            {% if not data %}
+                                <tr>
+                                    <td colspan="7" style="text-align: center;">
+                                        No History is available.
+                                    </td>
+                                </tr>
+                            {% else %}
+                                {% for item in data %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td></td>
+                                        <td>
+                                            {% if item.backup_type == 0 %}
+                                                Localhost
+                                            {% elif item.backup_type == 1 %}
+                                                Remote SSH
+                                            {% elif item.backup_type == 2 %}
+                                                Google Drive
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            {% if item.status == 1 %}
+                                                <span class="label label-success">Success</span>
+                                            {% elif item.status == 0 %}
+                                                <span class="label label-warning">Process...</span>
+                                            {% elif item.status == -1}
+                                                <span class="label label-danger">Failed</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>{{item.message}}</td>
+                                        <td>{{ item.created|date:'Y-m-d H:i' }}</td>
+
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="8">
+                                        <span>Showing 1 to {{count}} of {{count}} entries</span>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/backup.js' %}?{% cache_bust %}"></script>
+{% endblock %}

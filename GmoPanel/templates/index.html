@@ -1,0 +1,93 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+{% block content %}
+    <div class="content" style="min-height: 850px">
+        <!-- Main content -->
+        <!-- Small boxes (Stat box) -->
+        <div class="row">
+            <div class="col-md-12">
+                <div class=" panel-widget widget nexus-stats clearfix" style="height:240px;background:#fff !important">
+                    <div class="col-sm-12" style="height:250px;">
+                        <h4 class="title">Simple monitor <a href="https://{{ipServer}}/netdata" target="_blank" class="btn btn-lightblue-2 bg-darkblue-2" style="position: relative;left: 5%;z-index: 999">netdata</a></h4>
+                    </div>
+
+                    <div class="right row">
+                        <ul class="widget-block-list clearfix">
+                            <li class="col-3">
+                                <div class="block">
+                                    <em class="yellow-dot"></em>
+                                    <span id="resource_io">{{ DiskTotal }} GB</span>DisK
+                                </div>
+                            </li>
+                            <li class="col-3">
+                                <div class="block">
+                                    <em class="green-dot"></em>
+                                    <span id="resource_mem">{{MemToltal}} MB</span>Mem
+                                </div>
+                            </li>
+                            <li class="col-3">
+                                <div class="block">
+                                    <em class="aqua-dot"></em>
+                                    <span id="resource_cpu">{{CpuCore}} </span>CPU
+                                </div>
+                            </li>
+                            <li class="col-3">
+                                <div class="block">
+                                    <em class="aqua-dot"></em>
+                                    <span>{{SwapTotal}} MB</span>Swap
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div><!-- /.row -->
+        <!-- Start Top Stats -->
+        <div class="row" id="show_chart">
+            <div class="col-md-12 block-space1">
+                <div id="sum_box" class="mbl ">
+                    <div class="col-sm-6 col-md-3 block-space" style="border-right: 0px">
+                        <div class="panel db mbm gray-back">
+                            <div class="panel-body">
+                                <p class="description">DISK</p>
+                                <h4 class="value"><span>{{DiskPer}}</span><span>%</span></h4>
+                                {{ DiskPer|render_html|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 block-space" style="border-right: 0px">
+                        <div class="panel db mbm">
+                            <div class="panel-body">
+                                <p class="description">Memory</p>
+                                <h4 class="value"><span>{{MemPer}}</span>%<span></span></h4>
+                                {{ MemPer|render_html|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 block-space gray-back" style="border-right: 0px">
+                        <div class="panel db mbm">
+                            <div class="panel-body">
+                                <p class="description">CPU</p>
+                                <h4 class="value"><span>{{CpuPer}}</span>%</h4>
+                                {{ CpuPer|render_html|safe }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-md-3 block-space" style="border-right: 0px">
+                        <div class="panel db mbm">
+                            <div class="panel-body">
+                                <p class="description">Swap</p>
+                                <h4 class="value"><span>{{SwapPer}}</span>%</h4>
+                                {{ SwapPer|render_html|safe }}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'assets/libs/jquery-knob/jquery.knob.min.js' %}"></script>
+    <script src="{% static 'js/home_charts.js' %}?{% cache_bust %}"></script>
+{% endblock %}
