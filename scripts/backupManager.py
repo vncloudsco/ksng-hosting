@@ -9,35 +9,38 @@ from phpManager import execute, execute_outputfile
 from datetime import date, datetime
 import re
 import pymysql
+import mysql.connector as MySQLdb
 import tarfile
 
-class backupManager():
 
-    def __init__(self, argv = None):
+class BackupManager:
+
+    def __init__(self, argv=None):
         self.provi = argv
         self.log = '/home/kusanagi/'+argv+'/log/backup.log'
+        self.pwrd = self.get_root_pass()
 
-    def append_log(self, log, message):
+    @staticmethod
+    def append_log(log, message):
         f = open(log, "a+")
         today = datetime.now()
         f.write("%s %s \n" % (today.strftime("%Y-%m-%d %H:%M:%S"), message))
         f.close()
 
+    @staticmethod
     def get_root_pass():
         with open("/root/.my.cnf") as fp: lines = fp.read().splitlines()
         for line in lines:
             grep = re.findall(r'password', line)
             if grep:
-                pwrd = line.split('"')[1]
-        return pwrd
-
-    pwrd = get_root_pass()
+                pwd = line.split('"')[1]
+        return pwd
 
     def get_db_name(self):
         try:
             db = pymysql.connect("localhost", "root", self.pwrd, "secure_vps")
             cursor = db.cursor()
-            cursor.execute("select id,db_name from provision where provision_name='%s'" % self.provi)
+            cursor.execute("select id,db_name from provision where provision_name='%s' and deactive_flg=0 " % self.provi)
             data = cursor.fetchone()
             db.close()
             return data
@@ -157,4 +160,42 @@ class backupManager():
             self.update_backup_record(2, 0)
         os.remove(tarname+'.tar.gz')
 
+    def initial_backup_record(self, backup_type):
 
+        data = self.get_db_name()
+        provi_id = data[0]
+
+        db = MySQLdb.connect("localhost", "root", self.pwrd, "secure_vps")
+        cursor = db.cursor()
+        cursor.execute("insert into logs(provision_id,status,backup_type) values(%d,0,%d)" % (provi_id, backup_type))
+
+        db.commit()
+        db.close()
+
+
+class BackupAllProvision(BackupManager):
+
+    def __init__(self, backup_type=None):
+        self.backup_type = backup_type
+        self.password = self.get_root_pass()
+        self.pro_list = self.list_all_provision()
+
+    def list_all_provision(self):
+        db = MySQLdb.connect("localhost", "root", self.password, "secure_vps")
+        cursor = db.cursor()
+        cursor.execute("select provision_name from provision")
+        data = cursor.fetchall
+        db.close()
+        return data
+
+    def perform_backup(self):
+        pro_list = self.list_all_provision()
+        for k in pro_list:
+            print (k)
+            #self.initial_backup_record(self.backup_type)
+            #if self.backup_type == 0:
+            #    self.local_backup(k)
+            #if self.backup_type == 1:
+            #    pass
+    def getbackuptype(self):
+        return self.backup_type
