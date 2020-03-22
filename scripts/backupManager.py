@@ -173,11 +173,11 @@ class BackupManager:
         db.close()
 
 
-class BackupAllProvision(BackupManager):
+class BackupAllProvision:
 
     def __init__(self, backup_type=None):
         self.backup_type = backup_type
-        self.password = self.get_root_pass()
+        self.password = BackupManager.get_root_pass()
         self.pro_list = self.list_all_provision()
 
     def list_all_provision(self):
@@ -189,8 +189,8 @@ class BackupAllProvision(BackupManager):
         return data
 
     def perform_backup(self):
-        pro_list = self.list_all_provision()
-        for k in pro_list:
+        #pro_list = self.list_all_provision()
+        for k in self.pro_list:
             print (k)
             #self.initial_backup_record(self.backup_type)
             #if self.backup_type == 0:
