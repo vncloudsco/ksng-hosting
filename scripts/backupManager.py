@@ -9,7 +9,7 @@ from phpManager import execute, execute_outputfile
 from datetime import date, datetime
 import re
 import pymysql
-import mysql.connector as MySQLdb
+#import mysql.connector as MySQLdb
 import tarfile
 
 
@@ -104,6 +104,8 @@ class BackupManager:
         self.backup_db()
         tarname = self.compress_provision_dir()
 
+        self.initial_backup_record(0)
+
         tar_file=pathlib.Path(tarname+'.tar.gz')
         if tar_file.exists():
             self.update_backup_record(0, 1)
@@ -142,6 +144,9 @@ class BackupManager:
 
         cmd = 'sshpass -p "'+remote_pass+'" rsync --remove-source-files -azhe \'ssh -p'+remote_port+'\' '+tarname+'.tar.gz '+remote_user+'@'+remote_host+':'+remote_dest+' 2>> '+self.log+' ; echo $?'
         res = execute(cmd)
+
+        self.initial_backup_record(1)
+
         if int(res) == 0:
             self.update_backup_record(1, 1)
         else:
@@ -154,6 +159,9 @@ class BackupManager:
         tarname = self.compress_provision_dir('/home/kusanagi/')
         cmd = 'rclone copy '+tarname+'.tar.gz GGD1:'+drive_dir+ ' 2>> '+self.log+' ; echo $?'
         res = execute(cmd)
+
+        self.initial_backup_record(2)
+
         if int(res) == 0:
             self.update_backup_record(2, 1)
         else:
@@ -165,7 +173,7 @@ class BackupManager:
         data = self.get_db_name()
         provi_id = data[0]
 
-        db = MySQLdb.connect("localhost", "root", self.pwrd, "secure_vps")
+        db = pymysql.connect("localhost", "root", self.pwrd, "secure_vps")
         cursor = db.cursor()
         cursor.execute("insert into logs(provision_id,status,backup_type) values(%d,0,%d)" % (provi_id, backup_type))
 
@@ -175,27 +183,28 @@ class BackupManager:
 
 class BackupAllProvision:
 
-    def __init__(self, backup_type=None):
-        self.backup_type = backup_type
+    def __init__(self):
         self.password = BackupManager.get_root_pass()
         self.pro_list = self.list_all_provision()
 
     def list_all_provision(self):
-        db = MySQLdb.connect("localhost", "root", self.password, "secure_vps")
+        db = pymysql.connect("localhost", "root", self.password, "secure_vps")
         cursor = db.cursor()
         cursor.execute("select provision_name from provision")
         data = cursor.fetchall
         db.close()
         return data
 
-    def perform_backup(self):
-        #pro_list = self.list_all_provision()
-        for k in self.pro_list:
-            print (k)
-            #self.initial_backup_record(self.backup_type)
-            #if self.backup_type == 0:
-            #    self.local_backup(k)
-            #if self.backup_type == 1:
-            #    pass
-    def getbackuptype(self):
-        return self.backup_type
+    def drivebackup(self, drive_dir):
+        for k in self.pro_list():
+            BackupManager(k[0]).drive_backup(drive_dir)
+
+    def localbackup(self):
+        for k in self.pro_list():
+            BackupManager(k[0]).local_backup()
+
+    def remotebackup(self, remote_user, remote_host, remote_port, remote_pass, remote_dest):
+        for k in self.pro_list():
+            BackupManager(k[0]).remote_backup(remote_user, remote_host, remote_port, remote_pass, remote_dest)
+
+
