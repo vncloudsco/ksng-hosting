@@ -15,20 +15,22 @@ os.environ.setdefault("DJANGO_SETTINGS_MODULE", "GmoPanel.settings")
 django.setup()
 from plogical.phpManager import execute, execute_outputfile
 
-class backupManager():
+class BackupManager:
 
-    def __init__(self, argv = None):
+    def __init__(self, argv=None):
         self.provi = argv
         self.log = '/home/kusanagi/'+argv+'/log/backup.log'
         self.pwrd = self.get_root_pass()
-
-    def append_log(self, log, message):
+    
+    @staticmethod
+    def append_log(log, message):
         f = open(log, "a+")
         today = datetime.now()
         f.write("%s %s \n" % (today.strftime("%Y-%m-%d %H:%M:%S"), message))
         f.close()
-
-    def get_root_pass(self):
+    
+    @staticmethod
+    def get_root_pass():
         pwrd = None
         try:
             with open("/root/.my.cnf") as fp: lines = fp.read().splitlines()
@@ -67,7 +69,7 @@ class backupManager():
         except BaseException as error:
             print(error)
 
-        mess = 'Backed up database ' + db_name
+        mess = 'Back up database ' + db_name
         self.append_log(self.log, mess)
 
         cmd = 'mysqldump --single-transaction -p' + self.pwrd + ' --databases ' + db_name + ' | gzip > ' + sqldir + db_name + '.sql.gz'
@@ -95,7 +97,7 @@ class backupManager():
         db.commit()
         db.close()
 
-    def compress_provision_dir(self, chdir=''):
+    def compress_provision_dir(self, chdir=None):
         date = datetime.now()
         today = date.strftime("%Y-%m-%d")
         if chdir:
@@ -106,17 +108,20 @@ class backupManager():
         shutil.make_archive(tarname, "gztar", source_dir)
         return tarname
 
-    def local_backup(self):
+    def local_backup(self, chdir=None):
         self.append_log(self.log, '--- Local backup')
         self.backup_db()
-        tarname = self.compress_provision_dir()
+        tarname = self.compress_provision_dir(chdir)
+
+        self.initial_backup_record(0)
+
         tar_file = pathlib.Path(tarname + '.tar.gz')
         if tar_file.exists():
             self.update_backup_record(0, 1)
-            return {'status': 1, 'msg': 'Backup completed successfully'}
+            #return {'status': 1, 'msg': 'Backup completed successfully'}
         else:
             self.update_backup_record(0, 0)
-            return {'status': 0, 'msg': 'Not found backed up file'}
+            #return {'status': 0, 'msg': 'Not found backed up file'}
 
     def check_ssh_conn(self, remote_user, remote_host, remote_port, remote_pass):
         cmd = 'sshpass -p "' + remote_pass + '" ssh -o StrictHostKeyChecking=no -p ' + remote_port + ' -q ' + remote_user + '@' + remote_host + ' exit;echo $?'
@@ -127,7 +132,7 @@ class backupManager():
         else:
             self.append_log(self.log, 'Remote connection failed. Can not issue remote backup')
             self.update_backup_record(1, 0)
-            return {'status': 0, 'msg': 'Remote connection failed'}
+            #return {'status': 0, 'msg': 'Remote connection failed'}
             sys.exit(1)
 
     def remote_backup(self, remote_user, remote_host, remote_port, remote_pass, remote_dest):
@@ -152,12 +157,15 @@ class backupManager():
 
         cmd = 'sshpass -p "' + remote_pass + '" rsync --remove-source-files -azhe \'ssh -p' + remote_port + '\' ' + tarname + '.tar.gz ' + remote_user + '@' + remote_host + ':' + remote_dest + ' 2>> ' + self.log + ' ; echo $?'
         res = execute(cmd)
+
+        self.initial_backup_record(1)
+
         if int(res) == 0:
             self.update_backup_record(1, 1)
-            return {'status': 1, 'msq': 'Backup completed successfully'}
+            #return {'status': 1, 'msq': 'Backup completed successfully'}
         else:
             self.update_backup_record(1, 0)
-            return {'status': 0, 'msg': 'Check %s for more details' % self.log}
+            #return {'status': 0, 'msg': 'Check %s for more details' % self.log}
 
     def drive_backup(self, drive_dir):
 
@@ -166,12 +174,51 @@ class backupManager():
         tarname = self.compress_provision_dir('/home/kusanagi/')
         cmd = 'rclone copy ' + tarname + '.tar.gz GGD1:' + drive_dir + ' 2>> ' + self.log + ' ; echo $?'
         res = execute(cmd)
+
+        self.initial_backup_record(2)
+
         if int(res) == 0:
             self.update_backup_record(2, 1)
-            return {'status': 1, 'msq': 'Backup completed successfully'}
+            #return {'status': 1, 'msq': 'Backup completed successfully'}
         else:
             self.update_backup_record(2, 0)
-            return {'status': 0, 'msg': 'Check %s for more details' % self.log}
+            #return {'status': 0, 'msg': 'Check %s for more details' % self.log}
         os.remove(tarname + '.tar.gz')
 
+    def initial_backup_record(self, backup_type):
+        
+        data = self.get_db_name()
+        provi_id = data[0]
 
+        db = pymysql.connect("localhost", "root", self.pwrd, "secure_vps")
+        cursor = db.cursor()
+        cursor.execute("insert into logs(provision_id,status,backup_type) values(%d,0,%d)" % (provi_id, backup_type))
+
+        db.commit()
+        db.close()
+
+class BackupAllProvision:
+    
+        def __init__(self):
+            self.password = BackupManager.get_root_pass()
+            self.pro_list = self.list_all_provision()
+
+        def list_all_provision(self):
+            db = pymysql.connect("localhost", "root", self.password, "secure_vps")
+            cursor = db.cursor()
+            cursor.execute("select provision_name from provision")
+            data = cursor.fetchall
+            db.close()
+            return data
+
+        def local_backup(self, chdir=None):
+            for k in self.pro_list():
+                BackupManager(k[0]).local_backup(chdir)
+
+        def remote_backup(self, remote_user, remote_host, remote_port, remote_pass, remote_dest):
+            for k in self.pro_list():
+                BackupManager(k[0]).remote_backup(remote_user, remote_host, remote_port, remote_pass, remote_dest)
+
+        def drive_backup(self, drive_dir):
+            for k in self.pro_list():
+                BackupManager(k[0]).drive_backup(drive_dir)

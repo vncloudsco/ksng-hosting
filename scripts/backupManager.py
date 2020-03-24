@@ -62,7 +62,7 @@ class BackupManager:
         except BaseException as error:
             print(error)
         
-        mess = 'Backed up database '+db_name
+        mess = 'Back up database '+db_name
         self.append_log(self.log, mess)
 
         cmd = 'mysqldump --single-transaction -p'+self.pwrd+' --databases '+db_name+' | gzip > ' + sqldir + db_name + '.sql.gz'
@@ -87,7 +87,7 @@ class BackupManager:
         db.commit()
         db.close()
 
-    def compress_provision_dir(self, chdir=''):
+    def compress_provision_dir(self, chdir=None):
         date = datetime.now()
         today = date.strftime("%Y-%m-%d")
         if chdir:
@@ -98,11 +98,11 @@ class BackupManager:
         shutil.make_archive(tarname, "gztar", source_dir)
         return tarname
 
-    def local_backup(self):
+    def local_backup(self, chdir=None):
 
         self.append_log(self.log, '--- Local backup')
         self.backup_db()
-        tarname = self.compress_provision_dir()
+        tarname = self.compress_provision_dir(chdir)
 
         self.initial_backup_record(0)
 
@@ -166,6 +166,7 @@ class BackupManager:
             self.update_backup_record(2, 1)
         else:
             self.update_backup_record(2, 0)
+        
         os.remove(tarname+'.tar.gz')
 
     def initial_backup_record(self, backup_type):
@@ -195,15 +196,15 @@ class BackupAllProvision:
         db.close()
         return data
 
-    def drivebackup(self, drive_dir):
+    def drive_backup(self, drive_dir):
         for k in self.pro_list():
             BackupManager(k[0]).drive_backup(drive_dir)
 
-    def localbackup(self):
+    def local_backup(self, chdir=None):
         for k in self.pro_list():
-            BackupManager(k[0]).local_backup()
+            BackupManager(k[0]).local_backup(chdir)
 
-    def remotebackup(self, remote_user, remote_host, remote_port, remote_pass, remote_dest):
+    def remote_backup(self, remote_user, remote_host, remote_port, remote_pass, remote_dest):
         for k in self.pro_list():
             BackupManager(k[0]).remote_backup(remote_user, remote_host, remote_port, remote_pass, remote_dest)
 
