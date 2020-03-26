@@ -1,8 +1,14 @@
 #!/usr/bin/env python3
 
 import os
-import phpManager
-from phpManager import execute
+import subprocess
+
+def execute(command):
+    try:
+        res = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
+        return res.stdout
+    except BaseException as error:
+        return error
 
 
 def is_enabled(service):
@@ -18,12 +24,12 @@ def is_active(service):
 
 
 def stop_and_disable_service(service):
-    command = 'systemctl stop %s && systemctl disable %s' % service
+    command = 'systemctl stop %s && systemctl disable %s' % (service, service)
     execute(command)
 
 
 def restart_and_enable_service(service):
-    command = 'systemctl restart %s && systemctl enable %s' % service
+    command = 'systemctl restart %s && systemctl enable %s' % (service, service)
     execute(command)
 
 
@@ -35,7 +41,7 @@ def change_php_bin(change=None):
 
     for i in ('php73', 'php72', 'php71', 'php70', 'php53'):
         if is_active(i+'-fpm') == 0:
-            os.symlink('/usr/local/%s/bin/php', '/usr/local/bin/php' % i)
+            os.symlink('/usr/local/%s/bin/php' % i, '/usr/local/bin/php')
     if is_active('php-fpm') == 0:
         os.symlink('/bin/php', '/usr/local/bin/php')
 
