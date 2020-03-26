@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import os
 import phpManager
 from phpManager import execute
 
@@ -26,6 +27,23 @@ def restart_and_enable_service(service):
     execute(command)
 
 
+def change_php_bin(change=None):
+    if os.path.islink('/usr/local/bin/php'):
+        os.unlink('/usr/local/bin/php')
+    else:
+        change = 1
+
+    for i in ('php73', 'php72', 'php71', 'php70', 'php53'):
+        if is_active(i+'-fpm') == 0:
+            os.symlink('/usr/local/%s/bin/php', '/usr/local/bin/php' % i)
+    if is_active('php-fpm') == 0:
+        os.symlink('/bin/php', '/usr/local/bin/php')
+
+    if change:
+        execute('hash -r')
+        print('Issued "hash -r"')
+
+
 def enable_php(php_version):
     change = 0
     if is_enabled('hhvm') == 0:
@@ -34,6 +52,20 @@ def enable_php(php_version):
     for i in ('php73', 'php72', 'php71', 'php70', 'php', 'php53'):
         if (is_enabled(i+'-fpm') == 0) and (i != php_version):
             stop_and_disable_service(i+'-fpm')
+            change = 1
 
     restart_and_enable_service(php_version+'-fpm')
+    change_php_bin(change)
+
+
+def enable_hhvm():
+    change = 0
+    for i in ('php73', 'php72', 'php71', 'php70', 'php', 'php53'):
+        if is_enabled(i+'-fpm') == 0:
+            stop_and_disable_service(i+'-fpm')
+            change = 1
+
+    restart_and_enable_service('hhvm')
+    change_php_bin(change)
+
 
