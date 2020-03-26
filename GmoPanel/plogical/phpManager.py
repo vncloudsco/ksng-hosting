@@ -1,8 +1,10 @@
 #!/usr/bin/python3
+
 import sys
 import os
-import argparse
 import subprocess
+import functionLib
+
 
 def execute(command):
     try:
@@ -10,6 +12,7 @@ def execute(command):
         return res.stdout
     except BaseException as error:
         return error
+
 
 def execute_outputfile(command,file_name):
     try:
@@ -20,41 +23,16 @@ def execute_outputfile(command,file_name):
         print (' ---Error: ',error)
         #return error
 
+
 class phpManager():
 
     @staticmethod
     def get_current_ver():
-        try:
-            command = 'kusanagi which_php'
-            execute(command)
-        except BaseException as error:
-            return error
+        for i in ('php', 'php53', 'php70', 'php71', 'php72', 'php73'):
+            if functionLib.is_active(i+'-fpm') == 0:
+                return i
+
     @staticmethod
-    def switch_php(phpver):
-        try:
-            command = 'kusanagi '+phpver
-            execute(command)
-        except BaseException as error:
-            return error
+    def switch_php(php_version):
+        functionLib.enable_php(php_version)
 
-
-def main():
-
-    tasks=phpManager()
-    parse=argparse.ArgumentParser()
-    parse.add_argument('-v', '--current_version', default='', action='store_true')
-    parse.add_argument('-s', '--switch', default='')
-    args=parse.parse_args()
-    show_ver=args.current_version
-    sw=args.switch
-    if show_ver:
-        tasks.get_current_ver()
-    if args.switch:
-        print(sw)
-        tasks.switch_php(sw)
-        
-
-if __name__ == '__main__':
-    main()
-
-        
