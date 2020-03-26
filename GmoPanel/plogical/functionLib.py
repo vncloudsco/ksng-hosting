@@ -3,6 +3,7 @@
 import os
 import subprocess
 
+
 def execute(command):
     try:
         res = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
@@ -21,6 +22,16 @@ def is_active(service):
     command = 'systemctl is-active ' + service + ' 2> /dev/null | grep ^active > /dev/null ; echo $?'
     res = execute(command)
     return int(res)
+
+
+def restart_service(service):
+    command = 'systemctl restart %s' % service
+    execute(command)
+
+
+def reload_service(service):
+    command = 'systemctl reload %s' % service
+    execute(command)
 
 
 def stop_and_disable_service(service):

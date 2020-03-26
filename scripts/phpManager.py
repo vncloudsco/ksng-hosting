@@ -3,7 +3,7 @@
 import sys
 import os
 import subprocess
-import functionLib
+import functionLib as fLib
 
 
 def execute(command):
@@ -29,10 +29,24 @@ class phpManager():
     @staticmethod
     def get_current_ver():
         for i in ('php', 'php53', 'php70', 'php71', 'php72', 'php73'):
-            if functionLib.is_active(i+'-fpm') == 0:
+            if fLib.is_active(i+'-fpm') == 0:
                 return i
 
     @staticmethod
     def switch_php(php_version):
-        functionLib.enable_php(php_version)
+        fLib.enable_php(php_version)
+        if fLib.is_active(php_version+'-fpm') == 0:
+            return True
+        else:
+            return False
+
+    @staticmethod
+    def restart_php(php_version):
+        if fLib.is_enabled(php_version+'-fpm') == 0:
+            fLib.restart_service(php_version+'-fpm')
+        if fLib.is_active(php_version+'-fpm') == 0:
+            return True
+        else:
+            return False
+
 
