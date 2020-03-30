@@ -3,14 +3,12 @@
 import argparse
 import os
 import sys, shutil
-from shutil import make_archive
 import pathlib
 from phpManager import execute, execute_outputfile
-from datetime import date, datetime
+from datetime import datetime
 import re
 import pymysql
-#import mysql.connector as MySQLdb
-import tarfile
+# import mysql.connector as MySQLdb
 
 
 class BackupManager:
@@ -29,6 +27,7 @@ class BackupManager:
 
     @staticmethod
     def get_root_pass():
+        pwd = None
         with open("/root/.my.cnf") as fp: lines = fp.read().splitlines()
         for line in lines:
             grep = re.findall(r'password', line)
@@ -124,7 +123,8 @@ class BackupManager:
             sys.exit(1)
 
     def remote_backup(self, remote_user, remote_host, remote_port, remote_pass, remote_dest):
-
+        
+        self.initial_backup_record(1)
         self.append_log(self.log, '--- Remote backup')
         self.check_ssh_conn(remote_user, remote_host, remote_port, remote_pass)
         self.backup_db()
@@ -144,8 +144,6 @@ class BackupManager:
 
         cmd = 'sshpass -p "'+remote_pass+'" rsync --remove-source-files -azhe \'ssh -p'+remote_port+'\' '+tarname+'.tar.gz '+remote_user+'@'+remote_host+':'+remote_dest+' 2>> '+self.log+' ; echo $?'
         res = execute(cmd)
-
-        self.initial_backup_record(1)
 
         if int(res) == 0:
             self.update_backup_record(1, 1)
@@ -180,6 +178,21 @@ class BackupManager:
 
         db.commit()
         db.close()
+
+    def delete_old_local_backup(self, chdir=None, number=0):
+        count = 0
+        pattern = chdir+self.provi+'\.\d+'
+        regex = re.compile(pattern)
+        filelist = []
+        for root, dirs, files in os.walk(chdir):
+            for name in files:
+                if regex.match(os.path.join(root, name)):
+                    count = count + 1
+                    filelist.append(os.path.join(root, name))
+        left = count - number
+        filelist.sort(key=os.path.getmtime)
+        for i in range(left):
+            os.remove(filelist[i])
 
 
 class BackupAllProvision:
