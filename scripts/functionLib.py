@@ -12,6 +12,15 @@ def execute(command):
         return error
 
 
+def execute_outputfile(command, file_name):
+    try:
+        fout = open(file_name, "a+")
+        res = subprocess.run(command, shell=True, check=True, stdout=fout, stderr=fout, universal_newlines=True)
+        fout.close()
+    except FileNotFoundError as error:
+        print(' ---Error:', error)
+
+
 def is_enabled(service):
     command = 'systemctl is-enabled ' + service + ' 2> /dev/null | grep ^enabled > /dev/null ; echo $?'
     res = execute(command)
