@@ -57,7 +57,6 @@ class SettingManager:
                     sys.exit(0)
 
     def backup_nginx_conf(self):
-        # path = '/etc/nginx/conf.d/%s_*.conf' % self.provision
         for fi in glob.glob(self.path):
             shutil.copy(fi, '/etc/backup_restric/')
 
@@ -75,6 +74,27 @@ class SettingManager:
         for fi in glob.glob(bk_path):
             shutil.copy(fi, '/etc/nginx/conf.d/')
 
+    @staticmethod
+    def replace_multiple(input_file=None, output_file=None, pattern=None, replacement=None):
+        f = open(input_file, 'rt')
+        g = open(output_file, 'wt')
+        for line in f:
+            for pat, rep in zip(pattern, replacement):
+                line = line.replace(pat, rep)
+            g.write(line)
+        f.close()
+        g.close()
+
+    def inject_rule_to_nginx(self, anchor_string=None, file_included=None):
+        for fi in glob.glob(self.path):
+            f = open(fi, 'rt')
+            data = f.read()
+            data.replace(anchor_string, '%s \n\t\tinclude %s;' % (anchor_string, file_included))
+            f.close()
+            f = open(fi, 'wt')
+            f.write(data)
+            f.close()
+
     def add_authentication(self, url=None, user=None, password=None, rule_id=None):
         fLib.verify_prov_existed(self.provision)
         fLib.verify_nginx_prov_existed(self.provision)
@@ -87,35 +107,13 @@ class SettingManager:
         output_file = '/etc/nginx/restrict_access/au_%s_%s' % (self.provision, rule_id)
 
         if url == 'wp-admin':
-            f = open(self.template_file, 'rt')
-            g = open(output_file, 'wt')
             pattern = ('location', '#auth_basic', '#auth_basic_user_file', 'provision_name', '}')
             replacement = ('#location', 'auth_basic', 'auth_basic_user_file', 'user_%s_%s' % (self.provision, rule_id), '#}')
-            for line in f:
-                for pat, rep in zip(pattern, replacement):
-                    line = line.replace(pat, rep)
-                g.write(line)
-            f.close()
-            g.close()
-
+            self.replace_multiple(self.template_file, output_file, pattern, replacement)
+            # create credential file
             fLib.execute('htpasswd -nb  %s %s > /etc/nginx/restrict_access/user_%s_%s' % (user, password, self.provision, rule_id))
-
-            for fi in glob.glob(self.path):
-                f = open(fi, 'rt')
-                data = f.read()
-                data.replace('#Restric filter here', '#Restric filter here \n\t\tinclude %s;' % output_file)
-                f.close()
-                f = open(fi, 'wt')
-                f.write(data)
-                f.close()
-
-            # nginx_check = fLib.check_nginx_valid()
-            # if nginx_check == 0:
-            #    fLib.reload_service('nginx')
-            #    print('Done')
-            #    return True
-            #    sys.exit(0)
-            # self.rollback(rule_id)
+            # configure nginx
+            self.inject_rule_to_nginx('#Restric filter here', output_file)
 
         if url == 'wp-login':
             print('can not add restriction rule to wp-login url')
@@ -136,24 +134,11 @@ class SettingManager:
 
             pattern = ('url', '#auth_basic', '#auth_basic_user_file', 'provision_name')
             replacement = (url, 'auth_basic', 'auth_basic_user_file', 'user_%s_%s' % (self.provision, rule_id))
-            f = open(self.template_file, 'rt')
-            g = open(output_file, 'wt')
-            for line in f:
-                for pat, rep in zip(pattern, replacement):
-                    line = line.replace(pat, rep)
-                g.write(line)
-            f.close()
-            g.close()
-
+            self.replace_multiple(self.template_file, output_file, pattern, replacement)
+            # create credential file
             fLib.execute('htpasswd -nb  %s %s > /etc/nginx/restrict_access/user_%s_%s' % (user, password, self.provision, rule_id))
-            for fi in glob.glob(self.path):
-                f = open(fi, 'rt')
-                data = f.read()
-                data.replace('#Addnew Restrict Filter', '#Addnew Restrict Filter \n\t\tinclude %s;' % output_file)
-                f.close()
-                f = open(fi, 'wt')
-                f.write(data)
-                f.close()
+            # configure nginx
+            self.inject_rule_to_nginx('#Addnew Restrict Filter', output_file)
 
         nginx_check = fLib.check_nginx_valid()
         if nginx_check == 0:
@@ -173,33 +158,12 @@ class SettingManager:
         output_file = '/etc/nginx/restrict_rule/filter_%s_%s' % (self.provision, rule_id)
 
         if url == 'wp-admin':
-            f = open(self.template_file, 'rt')
-            g = open(output_file, 'wt')
+
             pattern = ('location', '#deny all', '#allow ipas', '}')
             replacement = ('#location', 'deny all', 'allow %s' % ip_address, '#}')
-            for line in f:
-                for pat, rep in zip(pattern, replacement):
-                    line = line.replace(pat, rep)
-                g.write(line)
-            f.close()
-            g.close()
-
-            for fi in glob.glob(self.path):
-                f = open(fi, 'rt')
-                data = f.read()
-                data.replace('#Restric filter here', '#Restric filter here \n\t\tinclude %s;' % output_file)
-                f.close()
-                f = open(fi, 'wt')
-                f.write(data)
-                f.close()
-
-            # nginx_check = fLib.check_nginx_valid()
-            # if nginx_check == 0:
-            #    fLib.reload_service('nginx')
-            #    print('Done')
-            #    sys.exit(0)
-
-            #self.rollback(rule_id)
+            self.replace_multiple(self.template_file, output_file, pattern, replacement)
+            # configure nginx
+            self.inject_rule_to_nginx('#Restric filter here', output_file)
 
         if url == 'wp-login':
             print('can not add restriction rule to wp-login url')
@@ -220,23 +184,9 @@ class SettingManager:
 
             pattern = ('url', '#deny all', '#allow ipas')
             replacement = (url, 'deny all', 'allow $IP' % ip_address)
-            f = open(self.template_file, 'rt')
-            g = open(output_file, 'wt')
-            for line in f:
-                for pat, rep in zip(pattern, replacement):
-                    line = line.replace(pat, rep)
-                g.write(line)
-            f.close()
-            g.close()
-
-            for fi in glob.glob(self.path):
-                f = open(fi, 'rt')
-                data = f.read()
-                data.replace('#Addnew Restrict Filter', '#Addnew Restrict Filter \n\t\tinclude %s;' % output_file)
-                f.close()
-                f = open(fi, 'wt')
-                f.write(data)
-                f.close()
+            self.replace_multiple(self.template_file, output_file, pattern, replacement)
+            # configure nginx
+            self.inject_rule_to_nginx('#Addnew Restrict Filter', output_file)
 
         nginx_check = fLib.check_nginx_valid()
         if nginx_check == 0:
@@ -282,20 +232,6 @@ class SettingManager:
         if url == 'wp-admin':
             self.remove_conf_related_nginx('au_%s_%s' % (self.provision, rule_id))
 
-            #nginx_check = fLib.check_nginx_valid()
-            #if nginx_check == 0:
-            #    os.remove('/etc/nginx/restrict_access/user_%s_%s' % (self.provision, rule_id))
-            #    os.remove('/etc/nginx/restrict_access/au_%s_%s' % (self.provision, rule_id))
-            #   fLib.reload_service('nginx')
-            #    print('Done')
-            #    return True
-            #    sys.exit(0)
-            #else:
-            #    print('NGINX config check failed')
-            #    self.rollback_nginx_only()
-            #    return False
-            #    sys.exit(1)
-
         if url == 'wp-login':
             print('can not configure wp-login url')
             return False
@@ -304,12 +240,12 @@ class SettingManager:
         if url != 'wp-login':
             existed = re.search(url, '/etc/nginx/conf.d/%s_http.conf' % self.provision)
             if not bool(existed):
-                print('%s not available in http nginx conf' % url)
+                print('Not found %s location in http nginx conf' % url)
                 return False
                 sys.exit(0)
             existed = re.search(url, '/etc/nginx/conf.d/%s_ssl.conf' % self.provision)
             if not bool(existed):
-                print('%s not available in ssl nginx conf' % url)
+                print('Not found %s location in ssl nginx conf' % url)
                 return False
                 sys.exit(0)
 
@@ -350,27 +286,16 @@ class SettingManager:
                         exist_rule = 1
 
             if exist == 0:
-                print('Not found the %s in NGINX config' % url)
+                print('Not found the %s location in NGINX config' % url)
                 return False
                 sys.exit(0)
 
             if exist_rule == 0:
-                print('Not found the %s in NGINX config' % rule_id)
+                print('Not found the rule ID as %s in NGINX config' % rule_id)
                 return False
                 sys.exit(0)
 
             self.remove_conf_related_nginx('filter_%s_%s' % (self.provision, rule_id))
-
-            #nginx_check = fLib.check_nginx_valid()
-            #if nginx_check == 0:
-            #    os.remove('/etc/nginx/restrict_access/filter_%s_%s' % (self.provision, rule_id))
-            #    print('Done')
-            #    fLib.reload_service('nginx')
-            #    sys.exit(0)
-            #else:
-            #    print('NGINX config check failed')
-            #    self.rollback_nginx_only()
-            #    sys.exit(1)
 
         if url != 'wp-login':
             exist_rule = 0
@@ -383,7 +308,7 @@ class SettingManager:
                         break
 
             if exist_rule == 0:
-                print('Not found the %s in NGINX config' % rule_id)
+                print('Not found the rule ID as %s in NGINX config' % rule_id)
                 return False
                 sys.exit(0)
 
@@ -401,5 +326,3 @@ class SettingManager:
             self.rollback_nginx_only()
             return False
             sys.exit(1)
-
-
