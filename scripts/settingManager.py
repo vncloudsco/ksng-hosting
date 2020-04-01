@@ -15,6 +15,7 @@ class SettingManager:
         self.provision = provision
         self.path = '/etc/nginx/conf.d/%s_*.conf' % self.provision
         self.template_file = '/etc/nginx/restrict_access/rule.template'
+        self.tmp_file = '/tpm/userdefined_rule.txt'
 
     def check_authid_existed(self, rule_id):
         string = 'au_%s_%s' % (self.provision, rule_id)
@@ -63,6 +64,11 @@ class SettingManager:
         os.remove('/etc/nginx/restrict_access/user_%s_%s' % (self.provision, rule_id))
         os.remove('/etc/nginx/restrict_access/au_%s_%s' % (self.provision, rule_id))
 
+    def rollback_nginx_only(self):
+        bk_path = '/etc/backup_restric/%s_*' % self.provision
+        for fi in glob.glob(bk_path):
+            shutil.copy(fi, '/etc/nginx/conf.d/')
+
     def add_authentication(self, url=None, user=None, password=None, rule_id=None):
         fLib.verify_prov_existed(self.provision)
         fLib.verify_nginx_prov_existed(self.provision)
@@ -72,7 +78,6 @@ class SettingManager:
         self.backup_nginx_conf()
         self.check_filterid_existed(rule_id)
 
-        # template_file = '/etc/nginx/restrict_access/rule.template'
         output_file = '/etc/nginx/restrict_access/au_%s_%s' % (self.provision, rule_id)
 
         if url == 'wp-admin':
@@ -227,3 +232,147 @@ class SettingManager:
             sys.exit(0)
 
         self.rollback(rule_id)
+
+    def remove_conf_related_nginx(self, pat=None):
+        for fi in glob.glob(self.path):
+            f = open(fi, 'rt')
+            g = open(self.tmp_file, 'wt')
+            for line in f:
+                if pat not in line:
+                    g.write(line)
+            f.close()
+            g.close()
+            shutil.copy(self.tmp_file, fi)
+        os.remove(self.tmp_file)
+
+    def delete_authentication(self, url=None, rule_id=None):
+
+        fLib.verify_prov_existed(self.provision)
+        fLib.verify_nginx_prov_existed(self.provision)
+        self.backup_nginx_conf()
+
+        string = 'au_%s_%s' % (self.provision, rule_id)
+        regex = re.compile(string)
+        exist = 0
+        for fi in glob.glob(self.path):
+            with open(fi, 'r') as fp: lines = fp.read().splitlines()
+            for line in lines:
+                if regex.search(line):
+                    exist = 1
+                    break
+        if exist == 0:
+            print('Not found the rule authentication ID as %s' % rule_id)
+            sys.exit(0)
+
+        if url == 'wp-admin':
+            self.remove_conf_related_nginx('au_%s_%s' % (self.provision, rule_id))
+
+            nginx_check = fLib.check_nginx_valid()
+            if nginx_check == 0:
+                os.remove('/etc/nginx/restrict_access/user_%s_%s' % (self.provision, rule_id))
+                os.remove('/etc/nginx/restrict_access/au_%s_%s' % (self.provision, rule_id))
+                fLib.reload_service('nginx')
+                print('Done')
+                sys.exit(0)
+            else:
+                print('NGINX config check failed')
+                self.rollback_nginx_only()
+                sys.exit(1)
+
+        if url == 'wp-login':
+            print('can not configure wp-login url')
+            sys.exit(1)
+
+        if url != 'wp-login':
+            existed = re.search(url, '/etc/nginx/conf.d/%s_http.conf' % self.provision)
+            if not bool(existed):
+                print('%s not available in http nginx conf' % url)
+                sys.exit(0)
+            existed = re.search(url, '/etc/nginx/conf.d/%s_ssl.conf' % self.provision)
+            if not bool(existed):
+                print('%s not available in ssl nginx conf' % url)
+                sys.exit(0)
+
+            self.remove_conf_related_nginx('au_%s_%s' % (self.provision, rule_id))
+
+        nginx_check = fLib.check_nginx_valid()
+        if nginx_check == 0:
+            os.remove('/etc/nginx/restrict_access/user_%s_%s' % (self.provision, rule_id))
+            os.remove('/etc/nginx/restrict_access/au_%s_%s' % (self.provision, rule_id))
+            print('Done')
+            fLib.reload_service('nginx')
+            sys.exit(0)
+        else:
+            print('NGINX config check failed')
+            self.rollback_nginx_only()
+            sys.exit(1)
+
+    def delete_filterip(self, url=None, rule_id=None):
+        fLib.verify_prov_existed(self.provision)
+        fLib.verify_nginx_prov_existed(self.provision)
+        self.backup_nginx_conf()
+
+        rule_regex = re.compile('filter_%s_%s' % (self.provision, rule_id))
+
+        if url == 'wp-admin':
+            regex = re.compile(url)
+            exist = 0
+            exist_rule = 0
+            for fi in glob.glob(self.path):
+                with open(fi, 'r') as fp:
+                    lines = fp.read().splitlines()
+                for line in lines:
+                    if regex.search(line):
+                        exist = 1
+                    if rule_regex.search(line):
+                        exist_rule = 1
+
+            if exist == 0:
+                print('Not found the %s in NGINX config' % url)
+                sys.exit(0)
+
+            if exist_rule == 0:
+                print('Not found the %s in NGINX config' % rule_id)
+                sys.exit(0)
+
+            self.remove_conf_related_nginx('filter_%s_%s' % (self.provision, rule_id))
+
+            nginx_check = fLib.check_nginx_valid()
+            if nginx_check == 0:
+                os.remove('/etc/nginx/restrict_access/filter_%s_%s' % (self.provision, rule_id))
+                print('Done')
+                fLib.reload_service('nginx')
+                sys.exit(0)
+            else:
+                print('NGINX config check failed')
+                self.rollback_nginx_only()
+                sys.exit(1)
+
+        if url != 'wp-login':
+            exist_rule = 0
+            for fi in glob.glob(self.path):
+                with open(fi, 'r') as fp:
+                    lines = fp.read().splitlines()
+                for line in lines:
+                    if rule_regex.search(line):
+                        exist_rule = 1
+                        break
+
+            if exist_rule == 0:
+                print('Not found the %s in NGINX config' % rule_id)
+                sys.exit(0)
+
+            self.remove_conf_related_nginx('filter_%s_%s' % (self.provision, rule_id))
+
+            nginx_check = fLib.check_nginx_valid()
+            if nginx_check == 0:
+                os.remove('/etc/nginx/restrict_access/filter_%s_%s' % (self.provision, rule_id))
+                print('Done')
+                fLib.reload_service('nginx')
+                sys.exit(0)
+            else:
+                print('NGINX config check failed')
+                self.rollback_nginx_only()
+                sys.exit(1)
+
+
