@@ -182,15 +182,6 @@ class SettingManager:
         else:
             self.remove_conf_related_nginx('au_%s_%s' % (self.provision, rule_id))
 
-        # if url == 'wp-admin':
-        #    self.remove_conf_related_nginx('au_%s_%s' % (self.provision, rule_id))
-
-        # if url != 'wp-login':
-            # if not self.check_existence_in_file(url, self.path):
-            #    print('Not found the %s location in nginx conf' % url)
-            #    return False
-        #   self.remove_conf_related_nginx('au_%s_%s' % (self.provision, rule_id))
-
         nginx_check = fLib.check_nginx_valid()
         if nginx_check == 0:
             os.remove('/etc/nginx/restrict_access/user_%s_%s' % (self.provision, rule_id))
@@ -209,7 +200,7 @@ class SettingManager:
         if not fLib.verify_nginx_prov_existed(self.provision):
             return False
         self.backup_nginx_conf()
-        
+
         if url == 'wp-login':
             print('can not configure wp-login url')
             return False
@@ -219,23 +210,6 @@ class SettingManager:
                 return False
             else:
                 self.remove_conf_related_nginx('filter_%s_%s' % (self.provision, rule_id))
-
-        #if url == 'wp-admin':
-            # if not self.check_existence_in_file(url, self.path):
-            #    print('Not found the %s location in nginx config' % url)
-            #    return False
-        #    if not self.check_existence_in_file('filter_%s_%s' % (self.provision, rule_id), self.path):
-        #        print('Not found the rule ID as %s in nginx config' % rule_id)
-        #        return False
-
-        #    self.remove_conf_related_nginx('filter_%s_%s' % (self.provision, rule_id))
-
-        #if url != 'wp-login':
-        #    if not self.check_existence_in_file('filter_%s_%s' % (self.provision, rule_id), self.path):
-        #        print('Not found the rule ID as %s in nginx config' % rule_id)
-        #        return False
-
-        #    self.remove_conf_related_nginx('filter_%s_%s' % (self.provision, rule_id))
 
         nginx_check = fLib.check_nginx_valid()
         if nginx_check == 0:
@@ -248,3 +222,20 @@ class SettingManager:
             self.rollback_nginx_only()
             return False
 
+    def before_edit_nginx(self):
+        if not fLib.verify_prov_existed(self.provision):
+            return False
+        nginx_check = fLib.check_nginx_valid()
+        if nginx_check > 0:
+            print('nginx config check failed. Please abort')
+            return False
+        else:
+            if not fLib.verify_nginx_prov_existed(self.provision):
+                return False
+            else:
+                for fi in glob.glob(self.path):
+                    shutil.copy(fi, '/etc/nginx/bk_nginx_conf/')
+                    shutil.copy(fi, '/etc/temp_nginx_conf/')
+                for root, dirs, files in os.walk('/etc/temp_nginx_conf/'):
+                    for name in files:
+                        shutil.chown(name, 'httpd', 'www')
