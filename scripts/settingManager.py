@@ -57,7 +57,7 @@ class SettingManager:
         for fi in glob.glob(self.path):
             f = open(fi, 'rt')
             data = f.read()
-            data.replace(anchor_string, '%s \n\t\tinclude %s;' % (anchor_string, file_included))
+            data = data.replace(anchor_string, '%s \n\tinclude %s;' % (anchor_string, file_included))
             f.close()
             f = open(fi, 'wt')
             f.write(data)
