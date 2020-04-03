@@ -14,7 +14,7 @@ class SettingManager:
         self.provision = provision
         self.path = '/etc/nginx/conf.d/%s_*.conf' % self.provision
         self.template_file = '/etc/nginx/restrict_access/rule.template'
-        self.tmp_file = '/tpm/user_defined_rule.txt'
+        self.tmp_file = '/opt/user_defined_rule.txt'
 
     @staticmethod
     def check_existence_in_file(pattern, source_files):
@@ -228,7 +228,7 @@ class SettingManager:
 
         nginx_check = fLib.check_nginx_valid()
         if nginx_check == 0:
-            os.remove('/etc/nginx/restrict_access/filter_%s_%s' % (self.provision, rule_id))
+            os.remove('/etc/nginx/restrict_rule/filter_%s_%s' % (self.provision, rule_id))
             print('Done')
             fLib.reload_service('nginx')
             return True
