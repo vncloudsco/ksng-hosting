@@ -236,6 +236,35 @@ class SettingManager:
                 for fi in glob.glob(self.path):
                     shutil.copy(fi, '/etc/nginx/bk_nginx_conf/')
                     shutil.copy(fi, '/etc/temp_nginx_conf/')
+                shutil.chown('/etc/temp_nginx_conf/', 'httpd', 'www')
                 for root, dirs, files in os.walk('/etc/temp_nginx_conf/'):
                     for name in files:
-                        shutil.chown(name, 'httpd', 'www')
+                        shutil.chown(os.path.join(root, name), 'httpd', 'www')
+
+    def edit_nginx(self, domain_name):
+        if not fLib.verify_prov_existed(self.provision) or not fLib.verify_prov_existed(domain_name):
+            return False
+        if not os.path.isfile('/etc/temp_nginx_conf/%s_http.conf' % self.provision) or not os.path.isfile('/etc/temp_nginx_conf/%s_ssl.conf' % self.provision):
+            print('No temporary nginx file exists. Please backup firstly')
+            return False
+        # check new nginx conf right after editing
+        for fi in glob.glob('/etc/temp_nginx_conf/%s_*.conf' % self.provision):
+            shutil.copy(fi, '/etc/nginx/conf.d/')
+        nginx_check = fLib.check_nginx_valid()
+        if nginx_check > 0:
+            # rollback
+            for fi in glob.glob('/etc/nginx/bk_nginx_conf/%s_*.conf' % self.provision):
+                shutil.copy(fi, '/etc/nginx/conf.d/')
+            # fLib.reload_service('nginx')
+            print('Insert failed. Might your conf is invalid')
+            return False
+        else:
+            # if editing nginx okie, apply new conf
+            nginx_check = fLib.check_nginx_valid()
+            if nginx_check == 0:
+                fLib.reload_service('nginx')
+                return True
+            else:
+                print('nginx conf check failed. Please run nginx -t for more details')
+                return False
+
