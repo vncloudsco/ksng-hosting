@@ -2,7 +2,8 @@
 
 import argparse
 import os
-import sys, shutil
+import sys
+import shutil
 import pathlib
 from phpManager import execute, execute_outputfile
 from datetime import datetime
@@ -103,7 +104,7 @@ class BackupManager:
         self.backup_db()
         tarname = self.compress_provision_dir(chdir)
 
-        self.initial_backup_record(0)
+        # self.initial_backup_record(0)
 
         tar_file=pathlib.Path(tarname+'.tar.gz')
         if tar_file.exists():
@@ -115,7 +116,7 @@ class BackupManager:
         cmd = 'sshpass -p "'+remote_pass+'" ssh -o StrictHostKeyChecking=no -p '+remote_port+' -q '+remote_user+'@'+remote_host+' exit;echo $?'
         res = execute(cmd)
         if int(res) == 0:
-            #print('Connect OK \n')
+            # print('Connect OK \n')
             pass
         else:
             self.append_log(self.log, 'Remote connection failed. Can not issue remote backup')
@@ -124,7 +125,7 @@ class BackupManager:
 
     def remote_backup(self, remote_user, remote_host, remote_port, remote_pass, remote_dest):
         
-        self.initial_backup_record(1)
+        # self.initial_backup_record(1)
         self.append_log(self.log, '--- Remote backup')
         self.check_ssh_conn(remote_user, remote_host, remote_port, remote_pass)
         self.backup_db()
@@ -137,7 +138,7 @@ class BackupManager:
             if grep:
                 break
         if not grep:
-            #configure stricthostkey ssh
+            # configure stricthostkey ssh
             f = open(conf_ssh,"a+")
             f.write('Host %s\n\tStrictHostKeyChecking no\n' % remote_host)
             f.close()
@@ -158,7 +159,7 @@ class BackupManager:
         cmd = 'rclone copy '+tarname+'.tar.gz GGD1:'+drive_dir+ ' 2>> '+self.log+' ; echo $?'
         res = execute(cmd)
 
-        self.initial_backup_record(2)
+        # self.initial_backup_record(2)
 
         if int(res) == 0:
             self.update_backup_record(2, 1)
@@ -220,5 +221,4 @@ class BackupAllProvision:
     def remote_backup(self, remote_user, remote_host, remote_port, remote_pass, remote_dest):
         for k in self.pro_list():
             BackupManager(k[0]).remote_backup(remote_user, remote_host, remote_port, remote_pass, remote_dest)
-
 
