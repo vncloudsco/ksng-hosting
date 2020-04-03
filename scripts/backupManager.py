@@ -210,15 +210,18 @@ class BackupAllProvision:
         db.close()
         return data
 
-    def drive_backup(self, drive_dir):
-        for k in self.pro_list():
-            BackupManager(k[0]).drive_backup(drive_dir)
-
     def local_backup(self, chdir=None):
         for k in self.pro_list():
+            BackupManager(k[0]).initial_backup_record(0)
             BackupManager(k[0]).local_backup(chdir)
 
     def remote_backup(self, remote_user, remote_host, remote_port, remote_pass, remote_dest):
         for k in self.pro_list():
+            BackupManager(k[0]).initial_backup_record(1)
             BackupManager(k[0]).remote_backup(remote_user, remote_host, remote_port, remote_pass, remote_dest)
+
+    def drive_backup(self, drive_dir):
+        for k in self.pro_list():
+            BackupManager(k[0]).initial_backup_record(2)
+            BackupManager(k[0]).drive_backup(drive_dir)
 
