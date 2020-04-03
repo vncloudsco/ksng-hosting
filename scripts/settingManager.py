@@ -209,23 +209,33 @@ class SettingManager:
         if not fLib.verify_nginx_prov_existed(self.provision):
             return False
         self.backup_nginx_conf()
+        
+        if url == 'wp-login':
+            print('can not configure wp-login url')
+            return False
+        else:
+            if not self.check_existence_in_file('filter_%s_%s' % (self.provision, rule_id), self.path):
+                print('Not found the rule ID as %s in nginx config' % rule_id)
+                return False
+            else:
+                self.remove_conf_related_nginx('filter_%s_%s' % (self.provision, rule_id))
 
-        if url == 'wp-admin':
+        #if url == 'wp-admin':
             # if not self.check_existence_in_file(url, self.path):
             #    print('Not found the %s location in nginx config' % url)
             #    return False
-            if not self.check_existence_in_file('filter_%s_%s' % (self.provision, rule_id), self.path):
-                print('Not found the rule ID as %s in nginx config' % rule_id)
-                return False
+        #    if not self.check_existence_in_file('filter_%s_%s' % (self.provision, rule_id), self.path):
+        #        print('Not found the rule ID as %s in nginx config' % rule_id)
+        #        return False
 
-            self.remove_conf_related_nginx('filter_%s_%s' % (self.provision, rule_id))
+        #    self.remove_conf_related_nginx('filter_%s_%s' % (self.provision, rule_id))
 
-        if url != 'wp-login':
-            if not self.check_existence_in_file('filter_%s_%s' % (self.provision, rule_id), self.path):
-                print('Not found the rule ID as %s in nginx config' % rule_id)
-                return False
+        #if url != 'wp-login':
+        #    if not self.check_existence_in_file('filter_%s_%s' % (self.provision, rule_id), self.path):
+        #        print('Not found the rule ID as %s in nginx config' % rule_id)
+        #        return False
 
-            self.remove_conf_related_nginx('filter_%s_%s' % (self.provision, rule_id))
+        #    self.remove_conf_related_nginx('filter_%s_%s' % (self.provision, rule_id))
 
         nginx_check = fLib.check_nginx_valid()
         if nginx_check == 0:
@@ -237,3 +247,4 @@ class SettingManager:
             print('NGINX config check failed')
             self.rollback_nginx_only()
             return False
+
