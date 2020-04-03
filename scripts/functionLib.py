@@ -121,7 +121,7 @@ def verify_nginx_prov_existed(profile):
 def check_nginx_valid():
     command = 'nginx -t > /dev/null 2>&1;echo $?'
     res = execute(command)
-    return res
+    return int(res)
 
 
 
