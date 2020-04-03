@@ -87,21 +87,20 @@ class SettingManager:
             self.replace_multiple(self.template_file, output_file, pattern, replacement)
             fLib.execute('htpasswd -nb  %s %s > /etc/nginx/restrict_access/user_%s_%s' % (user, password, self.provision, rule_id))
             self.inject_rule_to_nginx('#Restric filter here', output_file)
-
-        if url == 'wp-login':
+        elif url == 'wp-login':
             print('can not add restriction rule to wp-login url')
             return False
-
-        if url != 'wp-login':
+        else:
+            # url != 'wp-login':
             if self.check_existence_in_file(url, self.path):
                 print(' the %s location has been added' % url)
                 return False
-
-            pattern = ('url', '#auth_basic', '#auth_basic_user_file', 'provision_name')
-            replacement = (url, 'auth_basic', 'auth_basic_user_file', 'user_%s_%s' % (self.provision, rule_id))
-            self.replace_multiple(self.template_file, output_file, pattern, replacement)
-            fLib.execute('htpasswd -nb  %s %s > /etc/nginx/restrict_access/user_%s_%s' % (user, password, self.provision, rule_id))
-            self.inject_rule_to_nginx('#Addnew Restrict Filter', output_file)
+            else:
+                pattern = ('url', '#auth_basic', '#auth_basic_user_file', 'provision_name')
+                replacement = (url, 'auth_basic', 'auth_basic_user_file', 'user_%s_%s' % (self.provision, rule_id))
+                self.replace_multiple(self.template_file, output_file, pattern, replacement)
+                fLib.execute('htpasswd -nb  %s %s > /etc/nginx/restrict_access/user_%s_%s' % (user, password, self.provision, rule_id))
+                self.inject_rule_to_nginx('#Addnew Restrict Filter', output_file)
 
         nginx_check = fLib.check_nginx_valid()
         if nginx_check == 0:
@@ -125,25 +124,23 @@ class SettingManager:
         output_file = '/etc/nginx/restrict_rule/filter_%s_%s' % (self.provision, rule_id)
 
         if url == 'wp-admin':
-
             pattern = ('location', '#deny all', '#allow ipas', '}')
             replacement = ('#location', 'deny all', 'allow %s' % ip_address, '#}')
             self.replace_multiple(self.template_file, output_file, pattern, replacement)
             self.inject_rule_to_nginx('#Restric filter here', output_file)
-
-        if url == 'wp-login':
+        elif url == 'wp-login':
             print('can not add restriction rule to wp-login url')
             return False
-
-        if url != 'wp-login':
+        else:
+            # url != 'wp-login':
             if self.check_existence_in_file(url, self.path):
                 print(' the %s location has been added' % url)
                 return False
-
-            pattern = ('url', '#deny all', '#allow ipas')
-            replacement = (url, 'deny all', 'allow %s' % ip_address)
-            self.replace_multiple(self.template_file, output_file, pattern, replacement)
-            self.inject_rule_to_nginx('#Addnew Restrict Filter', output_file)
+            else:
+                pattern = ('url', '#deny all', '#allow ipas')
+                replacement = (url, 'deny all', 'allow %s' % ip_address)
+                self.replace_multiple(self.template_file, output_file, pattern, replacement)
+                self.inject_rule_to_nginx('#Addnew Restrict Filter', output_file)
 
         nginx_check = fLib.check_nginx_valid()
         if nginx_check == 0:
@@ -178,18 +175,20 @@ class SettingManager:
             print('Not found the rule authentication ID as %s' % rule_id)
             return False
 
-        if url == 'wp-admin':
-            self.remove_conf_related_nginx('au_%s_%s' % (self.provision, rule_id))
-
         if url == 'wp-login':
             print('can not configure wp-login url')
             return False
-
-        if url != 'wp-login':
-            if not self.check_existence_in_file(url, self.path):
-                print('Not found the %s location in nginx conf' % url)
-                return False
+        else:
             self.remove_conf_related_nginx('au_%s_%s' % (self.provision, rule_id))
+
+        # if url == 'wp-admin':
+        #    self.remove_conf_related_nginx('au_%s_%s' % (self.provision, rule_id))
+
+        # if url != 'wp-login':
+            # if not self.check_existence_in_file(url, self.path):
+            #    print('Not found the %s location in nginx conf' % url)
+            #    return False
+        #   self.remove_conf_related_nginx('au_%s_%s' % (self.provision, rule_id))
 
         nginx_check = fLib.check_nginx_valid()
         if nginx_check == 0:
