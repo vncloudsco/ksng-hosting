@@ -14,6 +14,7 @@ class SettingManager:
         self.provision = provision
         self.path = '/etc/nginx/conf.d/%s_*.conf' % self.provision
         self.template_file = '/etc/nginx/restrict_access/rule.template'
+        self.filter_template_file = '/etc/nginx/restrict_rule/rule.template'
         self.tmp_file = '/opt/user_defined_rule.txt'
 
     @staticmethod
@@ -126,7 +127,7 @@ class SettingManager:
         if url == 'wp-admin':
             pattern = ('location', '#deny all', '#allow ipas', '}')
             replacement = ('#location', 'deny all', 'allow %s' % ip_address, '#}')
-            self.replace_multiple(self.template_file, output_file, pattern, replacement)
+            self.replace_multiple(self.filter_template_file, output_file, pattern, replacement)
             self.inject_rule_to_nginx('#Restric filter here', output_file)
         elif url == 'wp-login':
             print('can not add restriction rule to wp-login url')
@@ -139,7 +140,7 @@ class SettingManager:
             else:
                 pattern = ('url', '#deny all', '#allow ipas')
                 replacement = (url, 'deny all', 'allow %s' % ip_address)
-                self.replace_multiple(self.template_file, output_file, pattern, replacement)
+                self.replace_multiple(self.filter_template_file, output_file, pattern, replacement)
                 self.inject_rule_to_nginx('#Addnew Restrict Filter', output_file)
 
         nginx_check = fLib.check_nginx_valid()
@@ -210,9 +211,9 @@ class SettingManager:
         self.backup_nginx_conf()
 
         if url == 'wp-admin':
-            if not self.check_existence_in_file(url, self.path):
-                print('Not found the %s location in nginx config' % url)
-                return False
+            # if not self.check_existence_in_file(url, self.path):
+            #    print('Not found the %s location in nginx config' % url)
+            #    return False
             if not self.check_existence_in_file('filter_%s_%s' % (self.provision, rule_id), self.path):
                 print('Not found the rule ID as %s in nginx config' % rule_id)
                 return False
