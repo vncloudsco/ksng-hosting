@@ -8,7 +8,6 @@ import shutil
 import pathlib
 from datetime import datetime
 import re
-import pymysql
 import django
 from plogical.phpSetting import execute, execute_outputfile
 
@@ -87,8 +86,6 @@ class BackupManager:
         self.backup_db()
         tarname = self.compress_provision_dir(chdir)
 
-        # self.initial_backup_record(0)
-
         tar_file = pathlib.Path(tarname + '.tar.gz')
         if tar_file.exists():
             self.update_backup_record(0, 1)
@@ -110,8 +107,6 @@ class BackupManager:
             sys.exit(1)
 
     def remote_backup(self, remote_user, remote_host, remote_port, remote_pass, remote_dest):
-
-        # self.initial_backup_record(1)
 
         self.append_log(self.log, '--- Remote backup')
         self.check_ssh_conn(remote_user, remote_host, remote_port, remote_pass)
@@ -149,8 +144,6 @@ class BackupManager:
         cmd = 'rclone copy ' + tarname + '.tar.gz GGD1:' + drive_dir + ' 2>> ' + self.log + ' ; echo $?'
         res = execute(cmd)
 
-        # self.initial_backup_record(2)
-
         if int(res) == 0:
             self.update_backup_record(2, 1)
             # return {'status': 1, 'msq': 'Backup completed successfully'}
@@ -184,29 +177,19 @@ class BackupAllProvision:
 
     def __init__(self):
         self.password = BackupManager.get_root_pass()
-        # self.pro_list = self.list_all_provision()
         self.pro_list = Provision.objects.filter(deactive_flg="0")
 
-    def list_all_provision(self):
-        db = pymysql.connect("localhost", "root", self.password, "secure_vps")
-        cursor = db.cursor()
-        cursor.execute("select provision_name from provision")
-        data = cursor.fetchall
-        db.close()
-        return data
-
     def local_backup(self, chdir=None):
-        for k in self.pro_list():
+        for k in self.pro_list:
             BackupManager(k.provision_name).initial_backup_record(0)
             BackupManager(k.provision_name).local_backup(chdir)
 
     def remote_backup(self, remote_user, remote_host, remote_port, remote_pass, remote_dest):
-        for k in self.pro_list():
+        for k in self.pro_list:
             BackupManager(k.provision_name).initial_backup_record(1)
             BackupManager(k.provision_name).remote_backup(remote_user, remote_host, remote_port, remote_pass, remote_dest)
 
     def drive_backup(self, drive_dir):
-        for k in self.pro_list():
+        for k in self.pro_list:
             BackupManager(k.provision_name).initial_backup_record(2)
             BackupManager(k.provision_name).drive_backup(drive_dir)
-
