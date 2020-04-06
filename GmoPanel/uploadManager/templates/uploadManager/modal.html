@@ -1,0 +1,86 @@
+{% load static %}
+{% if type == 'wordpress' %}
+    {% if not provisions %}
+        <p class="text-center">
+            No domain is available.
+        </p>
+    {% else %}
+        <p class="text-center">
+            <select class="" style="width: 100%" id="wordpress-upload-domain">
+                {% for item in provisions %}
+                    <option value="{{item.domain}}">{{item.domain}}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <hr>
+        <p class="text-right">
+            <a href="javascript:void(0)" id="continue-wordpress-upload" class="btn btn-success md-close">Continue</a>
+        </p>
+    {% endif %}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#continue-wordpress-upload').click(function(event) {
+                var id = $('#wordpress-upload-domain').val();
+                var url = '/uploads/wordpress/'+id;
+                window.open(url);
+            });
+        });
+    </script>
+{% elif type == 'source' %}
+    {% if not provisions %}
+        <p class="text-center">
+            No website is available.
+        </p>
+    {% else %}
+        <p class="text-center">
+            <select class="" style="width: 100%" id="source-upload-domain">
+                {% for item in provisions %}
+                    <option value="{{item.domain}}">{{item.domain}}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <hr>
+        <p class="text-right">
+            <a href="javascript:void(0)" id="continue-source-upload" class="btn btn-success md-close">Continue</a>
+        </p>
+    {% endif %}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#continue-source-upload').click(function(event) {
+                var id = $('#source-upload-domain').val();
+                var url = '/uploads/source/'+id;
+                window.open(url);
+            });
+        });
+    </script>
+{% elif type == 'database' %}
+    {% if not provisions %}
+        <p class="text-center">
+            No website is available.
+        </p>
+    {% else %}
+        <p class="text-center">
+            <select class="" style="width: 100%" id="database-upload-domain">
+                {% for item in provisions %}
+                    <option value="{{item.domain}}">{{item.domain}}</option>
+                {% endfor %}
+            </select>
+        </p>
+        <hr>
+        <p class="text-right">
+            <a href="javascript:void(0)" id="continue-database-upload" class="btn btn-success md-close">Continue</a>
+        </p>
+    {% endif %}
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('#continue-database-upload').click(function(event) {
+                var id = $('#database-upload-domain').val();
+                var url = '/uploads/database/'+id;
+                window.open(url);
+            });
+        });
+    </script>
+{% endif %}

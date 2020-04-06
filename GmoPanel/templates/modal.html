@@ -178,6 +178,7 @@
 <div class="md-modal md-fade-in-scale-up" id="md-fade-in-scale-up" style="top:30%;width: 60%;max-width: 800px">
     <div class="md-content">
         <h3>DNS CONFIG SETTING</h3>
+        <span type="button" class="md-close" data-dismiss="modal" aria-hidden="true" style="display:none">&times;</span>
         <div>
             <div class="text-center" style="color:#ed5564 !important;">
                 - You need to add the DNS records below:<br/>
@@ -197,12 +198,12 @@
                 <tr>
                     <td>@</td>
                     <td>A</td>
-                    <td></td>
+                    <td>{{ipServer}}</td>
                 </tr>
                 <tr>
                     <td>@</td>
                     <td>MX</td>
-                    <td></td>
+                    <td>{{ipServer}}</td>
                 </tr>
                 </tbody>
             </table>

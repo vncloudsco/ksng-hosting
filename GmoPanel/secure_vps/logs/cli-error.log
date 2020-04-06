@@ -1,0 +1,129 @@
+2019-12-31 07:15:28 Error: Fatal Error (1): Allowed memory size of 134217728 bytes exhausted (tried to allocate 1062037920 bytes) in [/Users/quanle/Sites/secure_vps/src/Command/GoogleDriverCommand.php, line 50]
+Trace:
+Cake\Error\BaseErrorHandler::handleFatalError() - CORE/src/Error/BaseErrorHandler.php, line 248
+Cake\Error\BaseErrorHandler::Cake\Error\{closure}() - CORE/src/Error/BaseErrorHandler.php, line 122
+[main] - [internal], line ??
+
+
+
+2019-12-31 07:15:28 Error: [Cake\Error\FatalErrorException] Allowed memory size of 134217728 bytes exhausted (tried to allocate 1062037920 bytes) in /Users/quanle/Sites/secure_vps/src/Command/GoogleDriverCommand.php on line 50
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/BaseErrorHandler.php:122
+- [main] - [internal], line ??
+
+
+2019-12-31 07:18:49 Error: Fatal Error (1): Allowed memory size of 1287651328 bytes exhausted (tried to allocate 1416039632 bytes) in [/Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/MediaFileUpload.php, line 248]
+Trace:
+Cake\Error\BaseErrorHandler::handleFatalError() - CORE/src/Error/BaseErrorHandler.php, line 248
+Cake\Error\BaseErrorHandler::Cake\Error\{closure}() - CORE/src/Error/BaseErrorHandler.php, line 122
+[main] - [internal], line ??
+
+
+
+2019-12-31 07:18:49 Error: [Cake\Error\FatalErrorException] Allowed memory size of 1287651328 bytes exhausted (tried to allocate 1416039632 bytes) in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/MediaFileUpload.php on line 248
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/BaseErrorHandler.php:122
+- [main] - [internal], line ??
+
+
+2019-12-31 07:19:38 Error: Fatal Error (1): Allowed memory size of 2336227328 bytes exhausted (tried to allocate 1416039632 bytes) in [/Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/MediaFileUpload.php, line 248]
+Trace:
+Cake\Error\BaseErrorHandler::handleFatalError() - CORE/src/Error/BaseErrorHandler.php, line 248
+Cake\Error\BaseErrorHandler::Cake\Error\{closure}() - CORE/src/Error/BaseErrorHandler.php, line 122
+[main] - [internal], line ??
+
+
+
+2019-12-31 07:19:38 Error: [Cake\Error\FatalErrorException] Allowed memory size of 2336227328 bytes exhausted (tried to allocate 1416039632 bytes) in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/MediaFileUpload.php on line 248
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/BaseErrorHandler.php:122
+- [main] - [internal], line ??
+
+
+2019-12-31 07:21:01 Error: Fatal Error (1): Allowed memory size of 2336227328 bytes exhausted (tried to allocate 1416039632 bytes) in [/Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/MediaFileUpload.php, line 248]
+Trace:
+Cake\Error\BaseErrorHandler::handleFatalError() - CORE/src/Error/BaseErrorHandler.php, line 248
+Cake\Error\BaseErrorHandler::Cake\Error\{closure}() - CORE/src/Error/BaseErrorHandler.php, line 122
+[main] - [internal], line ??
+
+
+
+2019-12-31 07:21:01 Error: [Cake\Error\FatalErrorException] Allowed memory size of 2336227328 bytes exhausted (tried to allocate 1416039632 bytes) in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/MediaFileUpload.php on line 248
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/BaseErrorHandler.php:122
+- [main] - [internal], line ??
+
+
+2019-12-31 07:32:38 Error: Fatal Error (1): Allowed memory size of 2336227328 bytes exhausted (tried to allocate 1416039632 bytes) in [/Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/MediaFileUpload.php, line 248]
+Trace:
+Cake\Error\BaseErrorHandler::handleFatalError() - CORE/src/Error/BaseErrorHandler.php, line 248
+Cake\Error\BaseErrorHandler::Cake\Error\{closure}() - CORE/src/Error/BaseErrorHandler.php, line 122
+[main] - [internal], line ??
+
+
+
+2019-12-31 07:32:38 Error: [Cake\Error\FatalErrorException] Allowed memory size of 2336227328 bytes exhausted (tried to allocate 1416039632 bytes) in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/MediaFileUpload.php on line 248
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/BaseErrorHandler.php:122
+- [main] - [internal], line ??
+
+
+2019-12-31 07:34:51 Warning: Warning (2): file_get_contents(/Users/quanle/Sites/secure_vps/webroot/ahihi.rip): failed to open stream: No such file or directory in [/Users/quanle/Sites/secure_vps/src/Command/GoogleDriverCommand.php, line 50]
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+file_get_contents - [internal], line ??
+App\Command\GoogleDriverCommand::execute() - APP/Command/GoogleDriverCommand.php, line 50
+Cake\Console\BaseCommand::run() - CORE/src/Console/BaseCommand.php, line 175
+Cake\Console\CommandRunner::runCommand() - CORE/src/Console/CommandRunner.php, line 336
+Cake\Console\CommandRunner::run() - CORE/src/Console/CommandRunner.php, line 171
+[main] - ROOT/bin/cake.php, line 12
+
+
+
+2019-12-31 07:48:48 Warning: Warning (2): file_get_contents(/Users/quanle/Sites/secure_vps/webroot/ahihi.zip): failed to open stream: No such file or directory in [/Users/quanle/Sites/secure_vps/src/Command/GoogleDriverCommand.php, line 50]
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+file_get_contents - [internal], line ??
+App\Command\GoogleDriverCommand::execute() - APP/Command/GoogleDriverCommand.php, line 50
+Cake\Console\BaseCommand::run() - CORE/src/Console/BaseCommand.php, line 175
+Cake\Console\CommandRunner::runCommand() - CORE/src/Console/CommandRunner.php, line 336
+Cake\Console\CommandRunner::run() - CORE/src/Console/CommandRunner.php, line 171
+[main] - ROOT/bin/cake.php, line 12
+
+
+
+2019-12-31 07:48:48 Error: [Error] Call to undefined method App\Command\GoogleDriverCommand::out() in /Users/quanle/Sites/secure_vps/src/Command/GoogleDriverCommand.php on line 51
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Console/BaseCommand.php:175
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Console/CommandRunner.php:336
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Console/CommandRunner.php:171
+- /Users/quanle/Sites/secure_vps/bin/cake.php:12
+
+
+
+2019-12-31 07:49:13 Warning: Warning (2): file_get_contents(/Users/quanle/Sites/secure_vps/webroot/ahihi.zip): failed to open stream: No such file or directory in [/Users/quanle/Sites/secure_vps/src/Command/GoogleDriverCommand.php, line 50]
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+file_get_contents - [internal], line ??
+App\Command\GoogleDriverCommand::execute() - APP/Command/GoogleDriverCommand.php, line 50
+Cake\Console\BaseCommand::run() - CORE/src/Console/BaseCommand.php, line 175
+Cake\Console\CommandRunner::runCommand() - CORE/src/Console/CommandRunner.php, line 336
+Cake\Console\CommandRunner::run() - CORE/src/Console/CommandRunner.php, line 171
+[main] - ROOT/bin/cake.php, line 12
+
+
+
+2019-12-31 07:50:05 Error: Fatal Error (1): Allowed memory size of 2336227328 bytes exhausted (tried to allocate 1416330696 bytes) in [/Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/MediaFileUpload.php, line 248]
+Trace:
+Cake\Error\BaseErrorHandler::handleFatalError() - CORE/src/Error/BaseErrorHandler.php, line 248
+Cake\Error\BaseErrorHandler::Cake\Error\{closure}() - CORE/src/Error/BaseErrorHandler.php, line 122
+[main] - [internal], line ??
+
+
+
+2019-12-31 07:50:05 Error: [Cake\Error\FatalErrorException] Allowed memory size of 2336227328 bytes exhausted (tried to allocate 1416330696 bytes) in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/MediaFileUpload.php on line 248
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/BaseErrorHandler.php:122
+- [main] - [internal], line ??
+
+

@@ -1,0 +1,19 @@
+<form id="rebi-edit-form">
+    <div class="form-group">
+        <div class="input text required"><label for="url">URL</label><input value="{{waf.url}}" type="text" class="form-control" disabled></div>
+    </div>
+    <div class="form-group">
+        <div class="input text required">
+            <label for="ip">Ip</label>
+            <input class="form-control" id="new-ip" name="new_ip" value="{{waf.ip}}" placeholder="Enter IP" required="required" />
+        </div>
+    </div>
+
+    <input type="hidden" id="config-id" value="{{waf.id}}"/>
+    <button style="display:none;" id="reset-form-edit-rebi" type="reset"></button>
+</form>
+</div>
+<div class="modal-footer">
+    <button type="button" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Saving" id="save-new-ip-btn" class="btn btn-primary">Save</button>
+    <button type="button" id="close-edit-rebi-modal" class="btn btn-danger" data-dismiss="modal">Close</button>
+</div>

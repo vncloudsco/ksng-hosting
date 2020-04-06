@@ -20,4 +20,7 @@ urlpatterns = [
     path('', include('loginSys.urls')),
     path('websites/', include('websiteManager.urls')),
     path('backups/', include('backupManager.urls')),
+    path('uploads/', include('uploadManager.urls')),
+    path('settings/', include('phpManager.urls')),
+    path('securitys/', include('securityManager.urls')),
 ]

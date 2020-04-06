@@ -1,0 +1,82 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <style>
+        .switchery {
+            width: 60px;
+        }
+        div.error-message{
+            position: absolute;
+            top: 26px;
+            color: #fc5844;
+        }
+        #security-code{
+            height: 29.43px !important;
+        }
+    </style>
+    <div class="content">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }} alert-dismissible" role="alert">
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                {{ message | safe }}
+            </div>
+        {% endfor %}
+        <div class="box-info animated fadeInDown">
+            <form method="post" action="">
+                {% csrf_token %}
+                <div class="widget">
+                    <div class="widget-header">
+                        <h2>Google Authenticator Setting</h2>
+                        <div class="additional-btn">
+                            <a href="#" class="hidden reload"><i class="icon-ccw-1"></i></a>
+                        </div>
+                    </div>
+                    <div class="widget-content padding">
+                        <table class="table table-condensed table-striped">
+                            <tbody>
+                            <tr>
+                                <td colspan="3" class="text-left"><strong>Active</strong></td>
+                                <td>
+                                    {{form.security_status}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td colspan="3" class="text-left"><strong>Security</strong></td>
+                                <td>
+                                    <div class="row">
+                                        <div class="col-lg-5 mx-md-auto paper-card">
+                                            <div class="form-group">
+
+                                                <div class="input-group">
+                                                    {{form.security_code}}
+                                                    <div class="input-group-btn">
+                                                        <button class="btn btn-default change_security" type="button">Create new security</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                {% if qrCodeUrl %}
+                                                    <img id="img_security" src="{{qrCodeUrl}}" name="qr"/>
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="widget-footer">
+                        <button style="margin-top: 10px;" type="submit" class="btn btn-primary"><i class="glyphicon glyphicon-saved"></i> Save </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script src="{% static 'js/authenticator.js' %}?{% cache_bust %}"></script>
+{% endblock %}
+

@@ -15,4 +15,7 @@ urlpatterns=[
     path('modal/',views.modal,name='modal'),
     path('websiteBuilder/<int:pro_id>',views.listTheme,name='websiteBuilder'),
     path('activeTheme/',views.activeTheme,name='activeTheme'),
+    path('fileManager/',views.fileManager,name='fileManager'),
+    path('listMysql/',views.listMysql,name='listMysql'),
+    path('emailServer/',views.emailServer,name='emailServer'),
 ]

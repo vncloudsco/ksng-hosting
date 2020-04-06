@@ -1,0 +1,27 @@
+{% if not data %}
+<tr>
+    <td colspan="5" class="text-center">No config found. Click Add new to create a new config.</td>
+</tr>
+{% else %}
+    {% for item in data %}
+    <tr>
+        <td>{{ forloop.counter }}</td>
+        <td>{{item.url}}</td>
+        <td>{{item.ip}}</td>
+        <td>{{ item.created|date:"Y-m-d H:i" }}</td>
+        <td>
+            <div class="btn-group btn-group-xs">
+                <button data-toggle="modal" data-target="#edit-ip-modal" title="Change password" class="btn btn-primary change-ip-btn" myId="{{item.id}}"><i class="icon-cog-1"></i></button>
+            </div>
+            <div class="btn-group btn-group-xs">
+                <a data-toggle="tooltip" title="Delete" myId="{{item.id}}" href="javascript:void(0)" class="btn btn-danger btn-delete-rebi"><i class="icon-trash"></i></a>
+            </div>
+        </td>
+    </tr>
+    {% endfor %}
+    <tr>
+        <td colspan="5">
+            <span>Showing 1 to {{count}} of {{count}} entries</span>
+        </td>
+    </tr>
+{% endif %}

@@ -1,0 +1,67 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <!-- Start right content -->
+    <div class="content animated fadeInDown" >
+        <div class="widget">
+            <div class="widget-header">
+                <h2>Email Server IRED</h2>
+                <div class="additional-btn" style="top:2px !important;">
+                    <button data-modal="md-fade-in-scale-up" class="btn btn-blue-1 btn-sm md-trigger">Guild DNS</button>
+                </div>
+            </div>
+            <div class="widget-content padding">
+                <div class="box-body table-responsive">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <!-- LINE CHART -->
+                            <div class="box box-danger">
+                                <div class="box-body table-responsive">
+                                    <h5 class="box-title">Admin Console :</h5>
+                                    <table id="email-server" class="table table-hover table-striped" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th width="20%" style="text-align: center">URL</th>
+                                            <th style="text-align: center">User/Password</th>
+                                            <th style="text-align: center">Document</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="text-align: center"><a target="_blank" href="https://{$ipServer}/iredadmin/">https://{{ipServer}}/iredadmin/</a></td>
+                                                <td style="text-align: center">admin@changeme.com/{{pass}}</td>
+                                                <td style="text-align: center"><a target="_blank" href="https://docs.iredmail.org/index.html"> iRedMail</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.box-body -->
+                                <div class="box-body table-responsive">
+                                    <h5 class="box-title">Web Mail :</h5>
+                                    <table id="email-server_2" class="table table-hover table-striped" cellspacing="0" width="100%">
+                                        <thead>
+                                        <tr>
+                                            <th width="20%" style="text-align: center">URL</th>
+                                            <th style="text-align: center">User/Password</th>
+                                            <th style="text-align: center">Document</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td style="text-align: center"><a target="_blank" href="https://{{ipServer}}/mail/">https://{{ipServer}}/mail/</a></td>
+                                                <td style="text-align: center">admin@changeme.com/{{pass}}</td>
+                                                <td style="text-align: center"><a target="_blank" href="https://docs.iredmail.org/index.html"> iRedMail</a></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div><!-- /.box-body -->
+                            </div><!-- /.box -->
+                        </div>
+                    </div>
+                </div><!-- /.box-body -->
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

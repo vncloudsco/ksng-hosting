@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         backupGlobals="false"
+         backupStaticAttributes="false"
+         colors="true"
+         convertErrorsToExceptions="true"
+         convertNoticesToExceptions="true"
+         convertWarningsToExceptions="true"
+         processIsolation="false"
+         stopOnFailure="false"
+         bootstrap="tests/bootstrap.php"
+>
+    <testsuites>
+        <testsuite name="Composer Test Suite">
+            <directory>./tests/Composer/</directory>
+        </testsuite>
+    </testsuites>
+
+    <groups>
+        <exclude>
+            <group>slow</group>
+            <group>legacy</group>
+        </exclude>
+    </groups>
+
+    <filter>
+        <whitelist>
+            <directory>./src/Composer/</directory>
+            <exclude>
+                <file>./src/Composer/Autoload/ClassLoader.php</file>
+            </exclude>
+        </whitelist>
+    </filter>
+</phpunit>

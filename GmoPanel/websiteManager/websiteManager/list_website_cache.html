@@ -1,0 +1,99 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <style>
+        .group-btn-margin{
+            margin-right: 5px;
+        }
+        .btn-primary[disabled]{
+            background-color: #0083c1 !important;
+            border-color: #0083c1 !important;
+        }
+        .btn-danger[disabled]{
+            background-color: #ff1c00 !important;
+            border-color: #ff1c00 !important;
+        }
+        .bg-grey {
+            background-color: #9b9b9b !important;
+            border-color: #9b9b9b !important;
+        }
+    </style>
+    <div class="content animated fadeInDown">
+        <div class="widget">
+            <div class="widget-header">
+                <h2>Enable or disable cache</h2>
+                <div class="additional-btn">
+                    <a href="#" class="hidden reload"><i class="icon-ccw-1"></i></a>
+                </div>
+            </div>
+            <div class="widget-content padding">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Domain</th>
+                                <th>CMS Application</th>
+                                <th>Created date</th>
+                                <th>Fcache</th>
+                                <th>Bcache</th>
+                            </tr>
+                        </thead>
+                        <tbody id="domain_list">
+                            {% if not provisions %}
+                                <tr>
+                                    <td colspan="7" style="text-align: center;">
+                                        No domain is available.
+                                    </td>
+                                </tr>
+                            {% else %}
+                                {% for item in provisions %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ item.domain }}</td>
+                                        <td>
+                                            {% if item.app_id == 1 %}
+                                                Wordpress Website
+                                            {% elif item.app_id == 2 %}
+                                                Wordpress Ecommercial
+                                            {% elif item.app_id == 3 %}
+                                                Drupal 8
+                                            {% elif item.app_id == 4}
+                                                Concrete 5
+                                            {% else %}
+                                                Another PHP frame
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ item.created_date|date:'Y-m-d H:i' }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs">
+                                                <a data-toggle="tooltip" title="Show {{ item.domain }} Fcache" href="javascript:void(0)" class="btn btn-primary show-cache" data-type="1" id="show-{{ item.id }}" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Fcache..." data-id="{{item.id}}">Show Fcache</a>
+                                            </div>
+                                        </td>
+                                        <td>
+                                        {% if item.app_id == 1 or item.app_id == 2 %}
+                                            <div class="btn-group btn-group-xs">
+                                                <a data-toggle="tooltip" title="Show {{item.domain}} Bcache" href="javascript:void(0)" class="btn btn-primary show-cache" data-type="2" id="show-{{ item.id }}" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Bcache..." data-id="{{item.id}}">Show Bcache</a>
+                                            </div>
+                                        {% else %}
+                                            Not available
+                                        {% endif %}
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="8">
+                                        <span>Showing 1 to {{count}} of {{count}} entries</span>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/cache_manager.js' %}"></script>
+{% endblock %}

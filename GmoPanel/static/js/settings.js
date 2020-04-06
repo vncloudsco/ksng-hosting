@@ -12,16 +12,16 @@ $(document).ready(function () {
         $('.notifyjs-metro-base .d_yes').click(function(event) {
             event.preventDefault();
             $(this).trigger('notify-hide');
-            let url = "/cPanel/Settings/changePhp";
+            let url = "/settings/changePhp";
             let method = 'POST';
             $.ajax({
                 url: url,
                 headers : {
-                    'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                    'X-CSRFToken': getCookie('csrftoken')
                 },
                 type: method,
                 data: {
-                    phpVer: phpVer,
+                    php_version: phpVer,
                 },
                 dataType: "json",
                 beforeSend: function(){
@@ -64,12 +64,12 @@ $(document).ready(function () {
         $('.notifyjs-metro-base .d_yes').click(function(event) {
             event.preventDefault();
             $(this).trigger('notify-hide');
-            let url = "/cPanel/Settings/restartPhp";
-            let method = 'POST';
+            let url = "/settings/restartPhp";
+            let method = 'GET';
             $.ajax({
                 url: url,
                 headers : {
-                    'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                    'X-CSRFToken': getCookie('csrftoken')
                 },
                 type: method,
                 data: {

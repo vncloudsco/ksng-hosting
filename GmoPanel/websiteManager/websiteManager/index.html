@@ -1,0 +1,49 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <div class="content animated fadeInDown">
+        <div class="widget">
+            <div class="widget-header">
+                <h2>Domain List</h2>
+                <div class="additional-btn">
+                    <a href="#" class="hidden reload"><i class="icon-ccw-1"></i></a>
+                </div>
+            </div>
+            <div class="widget-content padding">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Domain</th>
+                                <th>DocumentRoot</th>
+                                <th>Email</th>
+                                <th>CMS Application</th>
+                                <th>Created date</th>
+                                <th>Usage</th>
+                                <th>PHP Version</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="domain_list">
+                            <tr>
+                                <td colspan="7" id="loading-zone">
+                                    <div class="lds-css ng-scope">
+                                        <div style="width:100% !important;height:100%" class="lds-facebook">
+                                            <div></div>
+                                            <div></div>
+                                            <div></div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/domain.js' %}?{% cache_bust %}"></script>
+{% endblock %}

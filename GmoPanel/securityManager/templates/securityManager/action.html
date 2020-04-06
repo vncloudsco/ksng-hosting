@@ -1,0 +1,329 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <script src="{% static 'assets/libs/jquery-validation/jquery.validate.min.js' %}"></script>
+    <style>
+        .btn-primary[disabled]{
+            background-color: #0083c1 !important;
+            border-color: #0083c1 !important;
+        }
+        .btn-danger[disabled]{
+            background-color: #ff1c00 !important;
+            border-color: #ff1c00 !important;
+        }
+        .bg-grey {
+            background-color: #9b9b9b !important;
+            border-color: #9b9b9b !important;
+        }
+        .error{
+            color: #fc5844;
+        }
+    </style>
+    <div class="content">
+        <div class="box-info animated fadeInDown">
+            <div class="widget">
+                <div class="widget-header">
+                    <h2>WAF & Restriction Settings</h2>
+                    <div class="additional-btn">
+                        <a href="#" class="hidden reload"><i class="icon-ccw-1"></i></a>
+                    </div>
+                </div>
+                <div class="widget-content padding">
+                    <ul id="demo2" class="nav nav-tabs">
+                        <li class="active" id="waf-tab">
+                            <a href="#firewall" data-toggle="tab">Web Application Firewall</a>
+                        </li>
+                        <li class="" id="reba-tab">
+                            <a href="#authen" data-toggle="tab">Restrict access by authentication</a>
+                        </li>
+                        <li class="" id="rebi-tab">
+                            <a href="#ip-filter" data-toggle="tab">Restrict access by IP filter</a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content tab-boxed">
+                        <div class="tab-pane fade active in" id="firewall">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <h5>WAF <strong>{{provision.domain}}</strong> is currently turned <strong id="on-off-pos">{{onOff}}</strong> </h5>
+                                    <div class="widget">
+                                        <div class="widget-content padding">
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Domain</th>
+                                                            <th>CMS Application</th>
+                                                            <th>Created date</th>
+                                                            <th>Turn on/off</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="domain_list_waf">
+                                                        {% if not provision %}
+                                                            <tr>
+                                                                <td colspan="7" style="text-align: center;">
+                                                                    No website is available.
+                                                                </td>
+                                                            </tr>
+                                                        {% else %}
+                                                            <tr>
+                                                                <td>{{provision.domain}}</td>
+                                                                <td>
+                                                                    {% if provision.app_id == 1 %}
+                                                                        Wordpress Website
+                                                                    {% elif provision.app_id == 2 %}
+                                                                        Wordpress Ecommercial
+                                                                    {% elif provision.app_id == 3 %}
+                                                                        Drupal 8
+                                                                    {% elif provision.app_id == 4}
+                                                                        Concrete 5
+                                                                    {% else %}
+                                                                        Another PHP frame
+                                                                    {% endif %}
+                                                                </td>
+                                                                <td>{{ provision.created_date|date:"Y-m-d H:i" }}</td>
+                                                                <td>
+                                                                    <div class="btn-group btn-group-xs group-btn-margin">
+                                                                        {% if onOff == 'on' %}
+                                                                            <button status="1" data-toggle="tooltip" myId="{{provision.id}}" title="Currently turned on" class="btn btn-primary btn-change" disabled>On</button>
+                                                                            <button status="0" data-toggle="tooltip" myId="{{provision.id}}" title="Click to turn off" class="btn btn-danger btn-change bg-grey">Off</button>
+                                                                        {% elif onOff == 'off' %}
+                                                                            <button status="1" data-toggle="tooltip" myId="{{provision.id}}" title="Click to turn on" class="btn btn-primary btn-change bg-grey" >On</button>
+                                                                            <button status="0" data-toggle="tooltip" myId="{{provision.id}}" title="Currently turned off" class="btn btn-danger btn-change" disabled>Off</button>
+                                                                        {% else %}
+                                                                            <p>Unknown WAF status</p>
+                                                                        {% endif %}
+                                                                    </div>
+                                                                </td>
+                                                            </tr>
+                                                        {% endif %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- / .tab-pane -->
+                        <div class="tab-pane fade" id="authen">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-info" data-toggle="modal" data-target="#add-new-authen-modal">Add new</button>
+                                    <div class="widget">
+                                        <div class="widget-content padding">
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>URL</th>
+                                                            <th>USER</th>
+                                                            <th>Created date</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="list-reba">
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- / .tab-pane -->
+                        <div class="tab-pane fade" id="ip-filter">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <button class="btn btn-info" data-toggle="modal" data-target="#add-new-ip-modal">Add new</button>
+                                    <div class="widget">
+                                        <div class="widget-content padding">
+                                            <div class="table-responsive">
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>URL</th>
+                                                            <th>IP</th>
+                                                            <th>Created date</th>
+                                                            <th>Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id="list-rebi">
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> <!-- / .tab-pane -->
+                    </div> <!-- / .tab-content -->
+                </div>
+                {% if onOff == "on" %}
+                    <div class="widget-content padding" id="logWafShow">
+                        <ul id="demo1" class="nav nav-tabs">
+                            <li class="active">
+                                <a href="#waf-log" data-toggle="tab">WAF Logs</a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content tab-boxed">
+                            <div class="tab-pane fade active in" id="waf-log">
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <h5>WAF log <strong>{{provision.domain}}</strong></h5>
+                                        <div class="widget">
+                                            <div class="widget-content padding">
+                                                <div class="table-responsive">
+                                                    <table class="table">
+                                                        <thead>
+                                                            <tr>
+                                                                <th>ATTACK IP </th>
+                                                                <th>ATTACK URL</th>
+                                                                <th>TIME</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody id="domain_list">
+                                                            {% if not provision %}
+                                                                <tr>
+                                                                    <td colspan="7" style="text-align: center;">
+                                                                        No website is available.
+                                                                    </td>
+                                                                </tr>
+                                                            {% else %}
+                                                                {% for log in listLog %}
+                                                                    <tr>
+                                                                        <td>{{log.attack_ip}}</td>
+                                                                        <td>{{log.attack_url}}</td>
+                                                                        <td>{{log.time}}</td>
+                                                                    </tr>
+                                                                {% endfor %}
+                                                            {% endif %}
+                                                        </tbody>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div id="add-new-authen-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Add new URL</h4>
+            </div>
+            <div class="modal-body">
+                <form method="post" id="reba-save-form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <div class="input text required">
+                            {{form_auth.url.label_tag}}
+                            {{form_auth.url}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input text required">
+                            {{form_auth.user.label_tag}}
+                            {{form_auth.user}}
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input text required">
+                            {{form_auth.password.label_tag}}
+                            {{form_auth.password}}
+                        </div>
+                    </div>
+                    <button style="display:none;" id="reset-form-reba" type="reset"></button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Saving" id="btn-save-reba" class="btn btn-primary">Save</button>
+                <button type="button" id="close-reba-modal" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-authen-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Change password</h4>
+                </div>
+                <div class="modal-body" id="change-pass-pos">
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="add-new-ip-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Add new IP</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="rebi-save-form">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="input text required">
+                                {{form_ip.url.label_tag}}
+                                {{form_ip.url}}
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="input text required">
+                                <div class="input text required">
+                                    {{form_ip.ip.label_tag}}
+                                    {{form_ip.ip}}
+                                </div>
+                            </div>
+                        </div>
+                        <button style="display:none;" id="reset-form-rebi" type="reset"></button>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="btn-save-rebi" class="btn btn-primary">Save</button>
+                    <button type="button" id="close-rebi-modal" class="btn btn-danger" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="edit-ip-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+        <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title">Edit IP</h4>
+                </div>
+                <div class="modal-body" id="change-ip-pos">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="pro_id" value="{{provision.id}}"/>
+    <script type="text/javascript" src="{% static 'js/waf.js' %}?{% cache_bust %}"></script>
+{% endblock %}
+

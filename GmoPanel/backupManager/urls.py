@@ -12,5 +12,10 @@ urlpatterns=[
     path('config',views.config,name='config'),
     path('getTokenGoogle',views.getTokenGoogle,name='getTokenGoogle'),
     path('cronJob',views.cronJob,name='cronJob'),
+    path('addCron',views.addCron,name='addCron'),
+    path('editCron/<int:cron_id>',views.editCron,name='editCron'),
+    path('deleteCron/<int:cron_id>',views.deleteCron,name='deleteCron'),
+    path('addRetention',views.addRetention,name='addRetention'),
+    path('deleteRetention',views.deleteRetention,name='deleteRetention'),
 
 ]

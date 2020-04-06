@@ -7,7 +7,7 @@ $(document).on('click', '.notifyjs-metro-base .d_no', function() {
 $(document).on('click','.btn-change',function (event) {
     let myId = ($(this).attr('myId') != '') ? $(this).attr('myId') : '';
     let status = ($(this).attr('status') != '') ? $(this).attr('status') : '';
-    let url = '/cPanel/Waf/changeStatus';
+    let url = '/securitys/changeStatus/'+myId;
     let method = 'POST';
     let thisBtn = $(this);
     $('.tooltip ').hide();
@@ -27,11 +27,10 @@ $(document).on('click','.btn-change',function (event) {
             $.ajax({
                 url: url,
                 headers : {
-                    'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                    'X-CSRFToken': getCookie('csrftoken')
                 },
                 type: method,
                 data: {
-                    myId: myId,
                     status: status,
                 },
                 dataType: "json",
@@ -79,19 +78,16 @@ $(document).on('click','.btn-change',function (event) {
  * load restrict access by authentication list
  */
 function loadReba(){
-    let provisionId = ($('#provision-id').val() != '') ? $('#provision-id').val() : '';
-    let url = '/cPanel/Waf/listReba';
+    let provisionId = ($('#pro_id').val() != '') ? $('#pro_id').val() : '';
+    let url = '/securitys/listReba/'+provisionId;
     let method = 'POST';
     if(provisionId != ''){
         $.ajax({
             url: url,
             headers : {
-                'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                'X-CSRFToken': getCookie('csrftoken')
             },
             type: method,
-            data: {
-                provisionId: provisionId
-            },
             dataType: "text",
             beforeSend: function(){
                 $('#loader').modal({backdrop: 'static', keyboard: false});
@@ -177,12 +173,15 @@ $(document).ready(function () {
         let validationResult = $('#reba-save-form').valid();
 
         if(validationResult){
-            let provisionId = ($('#provision-id').val() != '') ? $('#provision-id').val() : '';
+            let provisionId = ($('#pro_id').val() != '') ? $('#pro_id').val() : '';
             let dataForm = $('#reba-save-form').serializeArray();
-            let url = "/cPanel/Waf/saveReba/"+provisionId;
+            let url = "/securitys/saveReba/"+provisionId;
             let method = 'POST';
             $.ajax({
                 url: url,
+                headers : {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
                 type: method,
                 data: dataForm,
                 dataType: 'json',
@@ -212,7 +211,7 @@ $(document).ready(function () {
 
 $(document).on('click','.btn-delete-reba',function (event) {
     let myId = ($(this).attr('myId') != '') ? $(this).attr('myId') : '';
-    let url = '/cPanel/Waf/deleteReba/'+myId;
+    let url = '/securitys/deleteReba/'+myId;
     let method = 'GET';
     $('.tooltip ').hide();
     $('.notifyjs-wrapper').remove();
@@ -223,7 +222,7 @@ $(document).on('click','.btn-delete-reba',function (event) {
             $.ajax({
                 url: url,
                 headers : {
-                    'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                    'X-CSRFToken': getCookie('csrftoken')
                 },
                 type: method,
                 data: {},
@@ -255,15 +254,15 @@ $(document).on('click','.btn-delete-reba',function (event) {
 
 $(document).on('click','.change-password-btn',function (event) {
     let myId = ($(this).attr('myId') != '') ? $(this).attr('myId') : '';
-    let provisionId = ($('#provision-id').val() != '') ? $('#provision-id').val() : '';
-    let url = '/cPanel/Waf/getChangePassword';
+    let provisionId = ($('#pro_id').val() != '') ? $('#pro_id').val() : '';
+    let url = '/securitys/getChangePassword/'+myId;
     let method = 'POST';
     $('#change-pass-pos').html('');
     if(myId != '' && provisionId != ''){
         $.ajax({
             url: url,
             headers : {
-                'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                'X-CSRFToken': getCookie('csrftoken')
             },
             type: method,
             data: {
@@ -316,12 +315,12 @@ $(document).on('click','#save-new-password-btn',function (event) {
     if(validationResult){
         let newPassword = ($('#new-password').val() != '') ? $('#new-password').val() : '';
         let configId = ($('#config-id').val() != '') ? $('#config-id').val() : '';
-        let url = "/cPanel/Waf/changePassword/"+configId;
+        let url = "/securitys/changePassword/"+configId;
         let method = 'POST';
         $.ajax({
             url: url,
             headers : {
-                'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                'X-CSRFToken': getCookie('csrftoken')
             },
             type: method,
             data: {
@@ -352,19 +351,16 @@ $(document).on('click','#save-new-password-btn',function (event) {
 
 
 function loadRebi(){
-    let provisionId = ($('#provision-id').val() != '') ? $('#provision-id').val() : '';
-    let url = '/cPanel/Waf/listRebi';
+    let provisionId = ($('#pro_id').val() != '') ? $('#pro_id').val() : '';
+    let url = '/securitys/listRebi/'+provisionId;
     let method = 'POST';
     if(provisionId != ''){
         $.ajax({
             url: url,
             headers : {
-                'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                'X-CSRFToken': getCookie('csrftoken')
             },
             type: method,
-            data: {
-                provisionId: provisionId
-            },
             dataType: "text",
             beforeSend: function(){
                 $('#loader').modal({backdrop: 'static', keyboard: false});
@@ -410,13 +406,16 @@ $(document).ready(function () {
         let validationResult = $('#rebi-save-form').valid();
 
         if(validationResult){
-            let provisionId = ($('#provision-id').val() != '') ? $('#provision-id').val() : '';
+            let provisionId = ($('#pro_id').val() != '') ? $('#pro_id').val() : '';
             let dataForm = $('#rebi-save-form').serializeArray();
-            let url = "/cPanel/Waf/saveRebi/"+provisionId;
+            let url = "/securitys/saveRebi/"+provisionId;
             let method = 'POST';
             $.ajax({
                 url: url,
                 type: method,
+                headers : {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
                 data: dataForm,
                 dataType: 'json',
                 beforeSend: function(){
@@ -445,7 +444,7 @@ $(document).ready(function () {
 
 $(document).on('click','.btn-delete-rebi',function (event) {
     let myId = ($(this).attr('myId') != '') ? $(this).attr('myId') : '';
-    let url = '/cPanel/Waf/deleteRebi/'+myId;
+    let url = '/securitys/deleteRebi/'+myId;
     let method = 'POST';
     $('.tooltip ').hide();
     $('.notifyjs-wrapper').remove();
@@ -456,7 +455,7 @@ $(document).on('click','.btn-delete-rebi',function (event) {
             $.ajax({
                 url: url,
                 headers : {
-                    'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                    'X-CSRFToken': getCookie('csrftoken')
                 },
                 type: method,
                 data: {},
@@ -488,20 +487,19 @@ $(document).on('click','.btn-delete-rebi',function (event) {
 
 $(document).on('click','.change-ip-btn',function (event) {
     let myId = ($(this).attr('myId') != '') ? $(this).attr('myId') : '';
-    let provisionId = ($('#provision-id').val() != '') ? $('#provision-id').val() : '';
-    let url = '/cPanel/Waf/getChangeIp';
+    let provisionId = ($('#pro_id').val() != '') ? $('#pro_id').val() : '';
+    let url = '/securitys/getChangeIp/'+myId;
     let method = 'POST';
     $('#change-ip-pos').html('');
     if(myId != '' && provisionId != ''){
         $.ajax({
             url: url,
             headers : {
-                'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                'X-CSRFToken': getCookie('csrftoken')
             },
             type: method,
             data: {
                 provision_id: provisionId,
-                rebi_id: myId
             },
             dataType: "text",
             beforeSend: function(){
@@ -534,12 +532,12 @@ $(document).on('click','#save-new-ip-btn',function (event) {
     if(validationResult){
         let newIp = ($('#new-ip').val() != '') ? $('#new-ip').val() : '';
         let configId = ($('#config-id').val() != '') ? $('#config-id').val() : '';
-        let url = "/cPanel/Waf/changeIp/"+configId;
+        let url = "/securitys/changeIp/"+configId;
         let method = 'POST';
         $.ajax({
             url: url,
             headers : {
-                'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                'X-CSRFToken': getCookie('csrftoken')
             },
             type: method,
             data: {

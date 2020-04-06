@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<files psalm-version="3.7.2@d9cae720c1af31db9ba27c2bc1fcf9b0dd092fb0">
+  <file src="src/Command/CompletionCommand.php">
+    <DeprecatedClass occurrences="1">
+      <code>\Cake\Console\Shell</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Console/CommandCollection.php">
+    <DeprecatedClass occurrences="1">
+      <code>string|\Cake\Console\Shell|\Cake\Console\CommandInterface</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Console/CommandFactoryInterface.php">
+    <DeprecatedClass occurrences="1">
+      <code>\Cake\Console\Shell|\Cake\Console\CommandInterface</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Console/CommandRunner.php">
+    <DeprecatedClass occurrences="3">
+      <code>\Cake\Console\Shell|\Cake\Console\CommandInterface</code>
+      <code>\Cake\Console\Shell</code>
+      <code>\Cake\Console\Shell|\Cake\Console\CommandInterface</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Console/ShellDispatcher.php">
+    <DeprecatedClass occurrences="5">
+      <code>Shell</code>
+      <code>\Cake\Console\Shell</code>
+      <code>Shell</code>
+      <code>\Cake\Console\Shell</code>
+      <code>$instance</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Console/TaskRegistry.php">
+    <DeprecatedClass occurrences="5">
+      <code>TaskRegistry</code>
+      <code>\Cake\Console\Shell</code>
+      <code>\Cake\Console\Shell</code>
+      <code>Shell</code>
+      <code>\Cake\Console\Shell</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Datasource/ModelAwareTrait.php">
+    <DeprecatedClass occurrences="1">
+      <code>$this</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/ORM/Locator/LocatorAwareTrait.php">
+    <DeprecatedClass occurrences="1">
+      <code>$this</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/Shell/Task/CommandTask.php">
+    <DeprecatedClass occurrences="1">
+      <code>Shell</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/TestSuite/Constraint/EventFired.php">
+    <InternalClass occurrences="1"/>
+  </file>
+  <file src="src/TestSuite/Constraint/EventFiredWith.php">
+    <InternalClass occurrences="2"/>
+  </file>
+  <file src="src/TestSuite/Constraint/Response/ResponseBase.php">
+    <InternalClass occurrences="1">
+      <code>new AssertionFailedError('No response set, cannot assert content.')</code>
+    </InternalClass>
+  </file>
+  <file src="src/TestSuite/Constraint/Session/FlashParamEquals.php">
+    <InternalClass occurrences="1">
+      <code>new AssertionFailedError($message)</code>
+    </InternalClass>
+  </file>
+  <file src="src/TestSuite/Constraint/Session/SessionEquals.php">
+    <InternalClass occurrences="1">
+      <code>new AssertionFailedError('There is no stored session data. Perhaps you need to run a request?')</code>
+    </InternalClass>
+  </file>
+  <file src="src/TestSuite/Fixture/FixtureInjector.php">
+    <DeprecatedInterface occurrences="1">
+      <code>FixtureInjector</code>
+    </DeprecatedInterface>
+  </file>
+  <file src="src/TestSuite/LegacyShellDispatcher.php">
+    <DeprecatedClass occurrences="5">
+      <code>ShellDispatcher</code>
+      <code>parent::__construct($args, $bootstrap)</code>
+      <code>Shell</code>
+      <code>\Cake\Console\Shell</code>
+      <code>$instance</code>
+    </DeprecatedClass>
+  </file>
+  <file src="src/TestSuite/TestSuite.php">
+    <InternalClass occurrences="1">
+      <code>BaseTestSuite</code>
+    </InternalClass>
+    <InternalMethod occurrences="2">
+      <code>addTestFile</code>
+      <code>addTestFile</code>
+    </InternalMethod>
+  </file>
+  <file src="src/View/Helper/NumberHelper.php">
+    <DeprecatedMethod occurrences="1">
+      <code>defaultCurrency</code>
+    </DeprecatedMethod>
+  </file>
+</files>

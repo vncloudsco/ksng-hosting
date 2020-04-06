@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $.each($('input[name="backup_type"]:checked'), function( key, value ) {
-        if($(this).val() == 2) {
+        if($(this).val() == 1) {
             $(this).parents('.cron-form').find('.ssh_config').show();
             $(this).parents('.cron-form').find('.ssh_config').find('input').attr('disabled', false);
         }
@@ -71,10 +71,10 @@ $(document).on('ifToggled','.check_all_day',function (event) {
 });
 $(document).on('ifToggled','.backup_type label',function (event) {
     event.preventDefault();
-    if($(this).find('input').is(':checked') && $(this).find('input').val() == 2){
+    if($(this).find('input').is(':checked') && $(this).find('input').val() == 1){
         $(this).parents('.cron-form').find('.ssh_config').show();
         $(this).parents('.cron-form').find('.ssh_config').find('input').attr('disabled',false);
-    }else if($(this).find('input').prop('checked')==false && $(this).find('input').val() == 2){
+    }else if($(this).find('input').prop('checked')==false && $(this).find('input').val() == 1){
         $(this).parents('.cron-form').find('.ssh_config').hide();
         $(this).parents('.cron-form').find('.ssh_config').find('input').attr('disabled',true);
     }
@@ -92,8 +92,11 @@ $(document).on('click','.delete_cronjob',function (event) {
         $(this).trigger('notify-hide');
         if(id){
             $.ajax({
-                url: "/cPanel/BackUps/deleteCronJob/"+id,
+                url: "/backups/deleteCron/"+id,
                 type: "GET",
+                headers : {
+                    'X-CSRFToken': getCookie('csrftoken')
+                },
                 dataType: "json",
                 beforeSend: function () {
                     $('#loader').modal({backdrop: 'static', keyboard: false});
@@ -159,11 +162,11 @@ $(document).on('click','.add_block',function (event) {
 
 $(document).on('click','.add_cronjob',function (event) {
     event.preventDefault();
-    if($(this).parents('form.cron-form').find('input[name="id"]').length){
+    if($(this).parents('form.cron-form').find('input[name="id"]').val()){
         var id = $(this).parents('form.cron-form').find('input[name="id"]').val();
-        var url = "/cPanel/BackUps/addCron/"+id
+        var url = "/backups/editCron/"+id
     }else{
-        var url = "/cPanel/BackUps/addCron"
+        var url = "/backups/addCron"
     }
     var formData = $(this).parents('.cron-form').serializeArray();
     var form = $(this).parents('form.cron-form');
@@ -171,6 +174,9 @@ $(document).on('click','.add_cronjob',function (event) {
     form.find('.error-input-ssh').remove();
     $.ajax({
         url: url,
+        headers : {
+            'X-CSRFToken': getCookie('csrftoken')
+        },
         type: "POST",
         dataType: "json",
         data: formData,
@@ -186,7 +192,7 @@ $(document).on('click','.add_cronjob',function (event) {
         success: function (result) {
             if (result.status) {
                 autohidenotify2('success', 'top right', 'Notification', result.msg, 8000);
-                form.append('<input type="hidden" name="id" id="id" value="'+result.data.id+'">');
+                form.find('input[name="id"]').val(result.data.id);
                 form.find('.add_cronjob').html('Edit');
             } else {
                 autohidenotify2('error', 'top right', 'Notification', result.msg, 8000);
@@ -220,8 +226,11 @@ $(document).on('click','.add_retention',function (event) {
     form.find('.error-schedule-re').hide();
     form.find('.error-input-re').remove();
     $.ajax({
-        url: "/cPanel/BackUps/addRetention",
+        url: "/backups/addRetention",
         type: "POST",
+        headers : {
+            'X-CSRFToken': getCookie('csrftoken')
+        },
         dataType: "json",
         data:dataForm,
         beforeSend:function(){
@@ -244,9 +253,7 @@ $(document).on('click','.add_retention',function (event) {
                         delete result.errors['backup_schedu'];
                     }
                     $.each( result.errors, function( key, value ) {
-                        $.each( value, function( k, v ){
-                            form.find('input[name="'+key+'"]').parent().append('<div class="error-message error-input-re" >'+v+'</div>');
-                        });
+                        form.find('input[name="'+key+'"]').parent().append('<div class="error-message error-input-re" >'+value[0]+'</div>');
                     });
                 }
 
@@ -291,7 +298,10 @@ $(document).on('click','.delete_retention',function (event) {
         e.preventDefault();
         $(this).trigger('notify-hide');
         $.ajax({
-            url: "/cPanel/BackUps/deleteRetention/",
+            url: "/backups/deleteRetention",
+            headers : {
+            'X-CSRFToken': getCookie('csrftoken')
+            },
             type: "GET",
             dataType: "json",
             beforeSend: function () {

@@ -1,0 +1,2 @@
+[2020-04-06 02:47:04] ERROR [django.security.DisallowedHost:77] Invalid HTTP_HOST header: '112.35.88.28:8088'. You may need to add '112.35.88.28' to ALLOWED_HOSTS.
+[2020-04-06 02:47:04] ERROR [django.server:154] "GET http://112.35.88.28:8088/index.php HTTP/1.1" 500 59

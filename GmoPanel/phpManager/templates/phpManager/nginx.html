@@ -1,0 +1,145 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <style>
+        /* Customize the label (the container) */
+        .container-ssl {
+            display: block;
+            position: relative;
+            padding-left: 35px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            font-size: 14px;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        /* Hide the browser's default checkbox */
+        .container-ssl input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+        }
+
+        /* Create a custom checkbox */
+        .checkmark {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            height: 22px;
+            width: 22px;
+            background-color: #eee;
+        }
+
+        /* On mouse-over, add a grey background color */
+        .container-ssl:hover input ~ .checkmark {
+            background-color: #ccc;
+        }
+
+        /* When the checkbox is checked, add a blue background */
+        .container-ssl input:checked ~ .checkmark {
+            background-color: #2196F3;
+        }
+
+        /* Create the checkmark/indicator (hidden when not checked) */
+        .checkmark:after {
+            content: "";
+            position: absolute;
+            display: none;
+        }
+
+        /* Show the checkmark when checked */
+        .container-ssl input:checked ~ .checkmark:after {
+            display: block;
+        }
+
+        /* Style the checkmark/indicator */
+        .container-ssl .checkmark:after {
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+        }
+    </style>
+    <div class="content">
+        <div class="box-info animated fadeInDown">
+            <div class="widget">
+                <div class="widget-header">
+                    <h2>Edit Nginx config {{provision.domain}}</h2>
+                    <div class="additional-btn">
+                        <a href="#" class="hidden reload"><i class="icon-ccw-1"></i></a>
+                    </div>
+                </div>
+                <div class="widget-content padding">
+                    <ul id="demo2" class="nav nav-tabs">
+                        <li class="active">
+                            <a href="#http-content" data-toggle="tab">Config http </a>
+                        </li>
+                        <li class="">
+                            <a href="#https-content" data-toggle="tab">Config https </a>
+                        </li>
+                    </ul>
+
+                    <div class="tab-content tab-boxed">
+                        <div class="tab-pane fade active in" id="http-content">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <form id="config-ngnix-http">
+                                        {% for hidden_field in form_http.hidden_fields %}
+                                            {{ hidden_field }}
+                                        {% endfor %}
+                                        <div class="form-group">
+                                            {{form_http.config_content}}
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="container-ssl">You definitely want to edit the nginx http
+                                                <input type="checkbox" name="icheck_ssl" id="icheck-http">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                    </form>
+                                    <button style="margin-top: 10px;" class="btn btn-blue-1 add-http" disabled><i class="icon-ok-2"></i> Change </button>
+                                </div>
+                            </div>
+                        </div> <!-- / .tab-pane -->
+                        <div class="tab-pane fade" id="https-content">
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <form id="config-ngnix-https">
+                                        {% for hidden_field in form_ssl.hidden_fields %}
+                                            {{ hidden_field }}
+                                        {% endfor %}
+                                        <div class="form-group">
+                                            {{form_ssl.config_content}}
+                                        </div>
+                                        <div class="form-group">
+                                            <label class="container-ssl">You definitely want to edit the nginx https
+                                                <input type="checkbox" name="icheck_ssl" id="icheck-ssl">
+                                                <span class="checkmark"></span>
+                                            </label>
+                                        </div>
+                                    </form>
+                                    <button style="margin-top: 10px;" class="btn btn-blue-1 add-https" disabled><i class="icon-ok-2"></i> Change </button>
+                                </div>
+                            </div>
+                        </div> <!-- / .tab-pane -->
+                    </div> <!-- / .tab-content -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="{% static 'js/config_nginx.js' %}?{% cache_bust %}"></script>
+{% endblock %}
+

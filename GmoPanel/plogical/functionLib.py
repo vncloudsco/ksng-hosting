@@ -2,6 +2,7 @@
 
 import os
 import subprocess
+import re
 
 
 def execute(command):
@@ -10,6 +11,15 @@ def execute(command):
         return res.stdout
     except BaseException as error:
         return error
+
+
+def execute_outputfile(command, file_name):
+    try:
+        fout = open(file_name, "a+")
+        res = subprocess.run(command, shell=True, check=True, stdout=fout, stderr=fout, universal_newlines=True)
+        fout.close()
+    except FileNotFoundError as error:
+        print(' ---Error: ', error)
 
 
 def is_enabled(service):
@@ -84,5 +94,33 @@ def enable_hhvm():
 
     restart_and_enable_service('hhvm')
     change_php_bin(change)
+
+
+def verify_prov_existed(profile):
+    profile_config = "/etc/kusanagi.d/profile.conf"
+    string = "\["+profile+"\]"
+    regex = re.compile(string)
+    with open(profile_config) as fp: lines = fp.read().splitlines()
+    for line in lines:
+        if regex.match(line):
+            return True
+    print('No such provision in the profile conf')
+    return False
+
+
+def verify_nginx_prov_existed(profile):
+    http_file = os.path.isfile('/etc/nginx/conf.d/%s_http.conf' % profile)
+    ssl_file = os.path.isfile('/etc/nginx/conf.d/%s_ssl.conf' % profile)
+    if http_file and ssl_file:
+        return True
+    else:
+        print("nginx configuration files don't exist")
+        return False
+
+
+def check_nginx_valid():
+    command = 'nginx -t > /dev/null 2>&1;echo $?'
+    res = execute(command)
+    return int(res)
 
 

@@ -6,10 +6,13 @@ from plogical import hashPassword,website
 import json
 from .forms import CreateWebsiteForm
 import urllib.request
-import re
+import websiteManager.define as define
+import bcrypt
+import re,socket
 from django.utils import timezone
 from django.core import serializers
 from django.conf import settings
+import mysql.connector as MySQLdb
 
 def createWebsite(request):
     try:
@@ -198,6 +201,33 @@ def activeTheme(request):
     return HttpResponse(json.dumps(data_result))
 
 
+def fileManager(request):
+    """
+    ajax create link filemanager
+    :param request:
+    :return:
+    """
+    data_result = {'status': 0, 'msg': ''}
+    try:
+        userId = request.session['userID']
+        account = Account.objects.get(pk=userId)
+        password = hashPassword.generate_pass(16)
+        pass_hash = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode('utf-8').replace('$2b','$2y')
+        db = MySQLdb.connect(host=define.DB_HOST_RUN, user=define.DB_USERNAME_RUN, passwd=define.DB_PASS_RUN, database=define.DB_NAME_RUN)
+        cursor = db.cursor()
+        cursor.execute("UPDATE df_users SET password='{}', username='kusanagi', require_password_change = 0 WHERE id = 1".format(pass_hash))
+        cursor.execute("UPDATE df_users_permissions SET homefolder='/home/kusanagi' WHERE uid = 1")
+        db.commit()
+        db.close()
+        ip = socket.gethostbyname(socket.gethostname())
+        return HttpResponseRedirect("http://{}/FileManager/?page=login&action=login&nonajax=1&username=kusanagi&password={}".format(ip, password))
+    except KeyError:
+        return HttpResponseRedirect('/login')
+    except ConnectionError:
+        data_result['msg'] = 'Can not connect MYSQL'
+
+    return HttpResponse(json.dumps(data_result))
+
 def generateProvision(domain=None):
     """
     generate random provision name
@@ -215,3 +245,31 @@ def generateProvision(domain=None):
         return pro.lower()
     else:
         return domain.lower()
+
+def listMysql(request):
+    """
+    list info mysql manager
+    :param request:
+    :return:
+    """
+    try:
+        userId = request.session['userID']
+        provisions = Provision.objects.filter(account_id=userId, deactive_flg=0)
+    except KeyError:
+        return HttpResponseRedirect('/login')
+
+    return render(request, 'websiteManager/list_mysql.html', {'data': provisions,'count': len(provisions),'page_title': 'Mysql Manager','ipServer': settings.GOOGLEAUTH})
+
+def emailServer(request):
+    """
+    EmailServer
+    :param request:
+    :return:
+    """
+    try:
+        userId = request.session['userID']
+        provisions = Provision.objects.filter(account_id=userId, deactive_flg=0)
+    except KeyError:
+        return HttpResponseRedirect('/login')
+
+    return render(request, 'websiteManager/email_server.html', {'data': provisions,'count': len(provisions),'page_title': 'Mysql Manager','ipServer': settings.GOOGLEAUTH})

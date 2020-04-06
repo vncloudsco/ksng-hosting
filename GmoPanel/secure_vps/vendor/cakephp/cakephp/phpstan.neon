@@ -1,0 +1,19 @@
+includes:
+    - phpstan-baseline.neon
+
+parameters:
+    level: 5
+    autoload_files:
+        - tests/bootstrap.php
+    ignoreErrors:
+        - '#Access to undefined constant NumberFormatter::CURRENCY_ACCOUNTING#'
+    earlyTerminatingMethodCalls:
+        Cake\Console\Shell:
+            - abort
+
+services:
+    -
+        class: Cake\PHPStan\AssociationTableMixinClassReflectionExtension
+        tags:
+            - phpstan.broker.methodsClassReflectionExtension
+            - phpstan.broker.propertiesClassReflectionExtension

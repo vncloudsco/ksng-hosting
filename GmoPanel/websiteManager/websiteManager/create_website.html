@@ -1,0 +1,74 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <script src="{% static 'assets/libs/jquery-validation/jquery.validate.min.js' %}"></script>
+    <style type="text/css">
+        .error{
+            color: #fc5844;
+        }
+    </style>
+    <div class="content">
+        <div class="box-info animated fadeInDown">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="widget">
+                        <div class="widget-header">
+                        <h2>Create</h2>
+                        <div class="additional-btn">
+                            <a href="#" class="hidden reload"><i class="icon-ccw-1"></i></a>
+                        </div>
+                        </div>
+                        <div class="widget-content padding">
+                            <h3>Select your website CMS and fill fields below.</h3>
+                            <ul id="cms_select" class="nav nav-tabs">
+                                <li myId="1" class="cms_tab active">
+                                    <a href="#demo1-home" data-toggle="tab" aria-expanded="true">Wordpress Website</a>
+                                </li>
+                                <li myId="2" class="cms_tab">
+                                    <a href="#demo1-home" data-toggle="tab" aria-expanded="false">Wordpress Ecommercial</a>
+                                </li>
+                                <li myId="3" class="cms_tab">
+                                    <a href="#demo1-home" data-toggle="tab" aria-expanded="false">Drupal 8</a>
+                                </li>
+                                <li myId="4" class="cms_tab">
+                                    <a href="#demo1-home" data-toggle="tab" aria-expanded="false">Concrete 5</a>
+                                </li>
+                                <li myId="5" class="cms_tab">
+                                    <a href="#demo1-home" data-toggle="tab" aria-expanded="false">Another PHP frame</a>
+                                </li>
+                            </ul>
+                            <div class="tab-content">
+                                <div class="tab-pane fade active in" id="demo1-home">
+                                    <form id="saveForm" role="form" >
+                                        {% csrf_token %}
+                                        {% for field in form.visible_fields %}
+                                            {% if field.name == "username" or field.name == "provision_name" %}
+
+                                            {% else %}
+                                                <div class="form-group">
+                                                    <label> {{field.label_tag}} </label>
+                                                    {{ field }}
+                                                    {{ field.errors }}
+                                                </div>
+                                            {% endif %}
+                                        {% endfor %}
+                                        {% for hidden_field in form.hidden_fields %}
+                                            {{ hidden_field }}
+                                        {% endfor %}
+                                        <div class="form-group text-right">
+                                            <a class="btn btn-green-3" id="submit-btn" href="javascript:void(0)" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Creating...">Submit</a>
+                                            <input type="reset" style="display: none;" name="" id="reset_form">
+                                        </div>
+                                    </form>
+                                </div> <!-- / .tab-pane -->
+                            </div> <!-- / .tab-content -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="{% static 'js/create_website.js' %}?{% cache_bust %}"></script>
+{% endblock %}

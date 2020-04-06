@@ -1,0 +1,72 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <div class="content animated fadeInDown">
+        <div class="widget">
+            <div class="widget-header">
+                <h2>Click to Settings to continue</h2>
+                <div class="additional-btn">
+                    <a href="#" class="hidden reload"><i class="icon-ccw-1"></i></a>
+                </div>
+            </div>
+            <div class="widget-content padding">
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Domain</th>
+                                <th>CMS Application</th>
+                                <th>Created date</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody id="domain_list">
+                            {% if not data %}
+                                <tr>
+                                    <td colspan="7" style="text-align: center;">
+                                        No domain is available.
+                                    </td>
+                                </tr>
+                            {% else %}
+                                {% for item in  data %}
+                                    <tr>
+                                        <td>{{ forloop.counter }}</td>
+                                        <td>{{ item.domain }}</td>
+                                        <td>
+                                            {% if item.app_id == 1 %}
+                                                Wordpress Website
+                                            {% elif item.app_id == 2 %}
+                                                Wordpress Ecommercial
+                                            {% elif item.app_id == 3 %}
+                                                Drupal 8
+                                            {% elif item.app_id == 4}
+                                                Concrete 5
+                                            {% else %}
+                                                Another PHP frame
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ item.created_date|date:"Y-m-d H:i" }}</td>
+                                        <td>
+                                            <div class="btn-group btn-group-xs">
+                                                <a data-toggle="tooltip" title="WAF settings" href="/securitys/action/{{item.domain}}" class="btn btn-primary" data-type="1" id="show-{{item.id}}" myDomain="{}"><i class="icon-cog-1"></i></a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                {% endfor %}
+                                <tr>
+                                    <td colspan="8">
+                                        <span>Showing 1 to {{count}} of {{count}} entries</span>
+                                    </td>
+                                </tr>
+                            {% endif %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+

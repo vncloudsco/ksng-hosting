@@ -5,18 +5,21 @@ from django.contrib.auth import authenticate, login, logout
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.contrib.auth.decorators import login_required
-from loginSys.models import Account
+from .models import Account
+from .forms import ChangePassForm
 from plogical import hashPassword
 import psutil
 import math
 import subprocess
+from django.contrib import messages
+from django.conf import settings
 
 def index(request):
     try:
         userId = request.session['userID']
         context = {
             'userId': userId,
-            'ipServer': request.META.get('REMOTE_ADDR'),
+            'ipServer': settings.GOOGLEAUTH,
             'CpuPer': psutil.cpu_percent(),
             'CpuCore': psutil.cpu_count(),
             'MemToltal': math.ceil(float(psutil.virtual_memory()[0])/float(1024*1024)),
@@ -31,6 +34,11 @@ def index(request):
     return render(request, 'index.html',context)
 
 def login(request):
+    """
+    login account
+    :param request:
+    :return:
+    """
     try:
         userId = request.session['userID']
         return HttpResponseRedirect('/')
@@ -53,6 +61,11 @@ def login(request):
     return render(request,'loginSys/login.html')
 
 def logout(request):
+    """
+    logout account
+    :param request:
+    :return:
+    """
     try:
         del request.session['userID']
         return HttpResponseRedirect('/login')
@@ -60,6 +73,11 @@ def logout(request):
         return HttpResponseRedirect('/login')
 
 def load_chart(request):
+    """
+    load chart ajax
+    :param request:
+    :return:
+    """
     try:
         userId = request.session['userID']
         context = {
@@ -78,3 +96,28 @@ def load_chart(request):
         return HttpResponseRedirect('/login')
 
     return render(request, 'chart.html',context)
+
+def changePassword(request):
+    """
+    change password
+    :param request:
+    :return:
+    """
+    try:
+        userId = request.session['userID']
+        account = Account.objects.get(pk=userId)
+
+        if request.POST:
+            data = request.POST.copy()
+            data['user_id'] = userId
+            form = ChangePassForm(data)
+            if form.is_valid():
+                account = Account.objects.get(pk=userId)
+                account.password = hashPassword.hash_password(data['password'])
+                account.save()
+                messages.success(request, "Your password changed successfully!")
+        else:
+            form = ChangePassForm()
+    except KeyError:
+        return HttpResponseRedirect('/login')
+    return render(request, 'loginSys/change_password.html',{'page_title': 'Change Password','form': form})

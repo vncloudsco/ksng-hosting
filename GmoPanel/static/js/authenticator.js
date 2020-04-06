@@ -6,9 +6,9 @@ $(document).ready(function () {
 $(document).on('click','.change_security',function (event) {
     event.preventDefault();
     $.ajax({
-        url: '/cPanel/Securitys/getSecurityCode',
+        url: '/securitys/getSecuriryCode',
         headers : {
-            'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+            'X-CSRFToken': getCookie('csrftoken')
         },
         type: 'POST',
         data: null,

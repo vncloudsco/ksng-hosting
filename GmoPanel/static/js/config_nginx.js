@@ -67,7 +67,10 @@ $(document).on('click','.add-http',function (event) {
     $('#config-ngnix-http').find('textarea[name="config_content"]').val(textareaValue);
     var dataForm = $('#config-ngnix-http').serializeArray();
     $.ajax({
-        url: "/cPanel/Settings/configNginx/",
+        url: "/settings/configNginx",
+        headers : {
+            'X-CSRFToken': getCookie('csrftoken')
+        },
         type: "POST",
         dataType: "json",
         data:dataForm,
@@ -100,7 +103,10 @@ $(document).on('click','.add-https',function (event) {
     $('#config-ngnix-https').find('textarea[name="config_content"]').val(textareaValue);
     var dataForm = $('#config-ngnix-https').serializeArray();
     $.ajax({
-        url: "/cPanel/Settings/configNginx/",
+        url: "/settings/configNginx",
+        headers : {
+            'X-CSRFToken': getCookie('csrftoken')
+        },
         type: "POST",
         dataType: "json",
         data:dataForm,

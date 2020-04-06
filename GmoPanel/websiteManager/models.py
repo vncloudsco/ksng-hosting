@@ -19,7 +19,7 @@ class Provision(models.Model):
     created_date = models.DateTimeField(default=timezone.now)
 
     class Meta:
-        db_table='prosivions'
+        db_table='provisions'
 
     def __str__(self):
         return self.provision_name

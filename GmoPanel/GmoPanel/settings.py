@@ -34,7 +34,10 @@ ALLOWED_HOSTS = ['localhost', '150.95.111.177', '[::1]']
 # Application definition
 
 INSTALLED_APPS = [
+    'securityManager.apps.SecuritymanagerConfig',
+    'phpManager.apps.PhpmanagerConfig',
     'backupManager.apps.BackupmanagerConfig',
+    'uploadManager.apps.UploadmanagerConfig',
     'loginSys.apps.LoginsysConfig',
     'websiteManager.apps.WebsitemanagerConfig',
     'django.contrib.admin',
@@ -82,11 +85,29 @@ TEMPLATES = [
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%Y-%m-%d %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
     'handlers': {
-        'file': {
+        'file_debug': {
             'level': 'DEBUG',
-            'class': 'logging.FileHandler',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
             'filename': os.path.join(BASE_DIR, 'debug.log'),
+            'backupCount': 10, # how many backup file to keep, 10 days
+            'formatter': 'verbose',
+        },
+        'file_error': {
+            'level': 'ERROR',
+            'class': 'logging.handlers.TimedRotatingFileHandler',
+            'filename': os.path.join(BASE_DIR, 'error.log'),
+            'backupCount': 10, # how many backup file to keep, 10 days
+            'formatter': 'verbose',
         },
         'file_database': {
             'level': 'DEBUG',
@@ -98,8 +119,13 @@ LOGGING = {
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
+            'handlers': ['file_debug'],
             'level': 'DEBUG',
+            'propagate': True,
+        },
+        'django': {
+            'handlers': ['file_error'],
+            'level': 'ERROR',
             'propagate': True,
         },
     },
@@ -164,3 +190,19 @@ MEDIA_ROOT = MEDIA_DIR
 MEDIA_URL = '/media/'
 BASE_URL_WB = 'http://163.44.192.108/secureweb/'
 PATH_LOG_AUTHEN_GG = '/var/log/drive_link.log'
+URL_NGINX_TEMP = '/etc/temp_nginx_conf/'
+URL_NGINX = '/etc/nginx/conf.d/'
+URL_GOOGLE_AUTHEN = 'https://chart.googleapis.com/chart?chs=200x200&chld=M|0&cht=qr&chl='
+import socket
+GOOGLEAUTH = socket.gethostbyname(socket.gethostname())
+try:
+    from django.contrib.messages import constants as messages
+    MESSAGE_TAGS = {
+        messages.DEBUG: 'alert-info',
+        messages.INFO: 'alert-info',
+        messages.SUCCESS: 'alert-success',
+        messages.WARNING: 'alert-warning',
+        messages.ERROR: 'alert-danger',
+    }
+except Exception as e:
+    pass

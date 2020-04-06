@@ -1,0 +1,65 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <div class="content">
+        <div class="box-info animated fadeInDown">
+            <h2><strong>Select</strong> your template</h2>
+            <hr>
+            <div class="gallery-wrap">
+                {% for item in data %}
+                    <div class="column-3">
+                        <div class="inner">
+                            <a class="zooming" href="{{ base_theme_url }}thumbnail/{{item.img}}"  title="{{item.name}}">
+                            <div class="img-wrap">
+                                <img src="{{ base_theme_url }}thumbnail/{{item.img}}" alt="Image gallery" title="{{item.name}}" class="mfp-fade">
+                            </div>
+
+                            </a>
+                            <div class="caption-hover">
+                                <a style="text-decoration: none;" target="_blank" href="{{item.preview_url}}"><i class="fa fa-eye"></i> Preview</a>
+                            </div>
+                        </div>
+                        <div class="inner">
+                            <button class="btn btn-green-1 active_theme btn-block" myId="{{item.id}}" type="button" data-toggle="modal" data-target="#myModal">Active</button>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <hr>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div id="myModal" class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <!-- Modal content-->
+            <div class="modal-content">
+                    <div class="modal-header" style="background-color: #337ab7; color:#FFF;">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h4 class="modal-title"><i class="icon-home-1"></i>Website builder</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="text-left" style="font-size: 12px"><strong>{{pro.domain}}</strong> may lose data depended on your selection.</p>
+                    <p class="text-left" style="font-size: 12px">Make sure the backup was created and all your choice are correct.</p>
+                    <p class="text-left" style="font-size: 12px">Chọn New Active để khởi tạo website mới. </p>
+                    <p class="text-left" style="font-size: 12px">Chọn Change Theme để thay đổi theme với website builder đã cài đặt trước đó.</p>
+                    <hr>
+                    <p class="text-center">
+                        <a href="javascript:void(0)" id="delete_all_wb" class="btn btn-red-1 btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing..."><strong>[New Active]</strong></a>
+                        <a href="javascript:void(0)" id="keep_all_wb" class="btn btn-blue-1 btn-block" data-loading-text="<i class='fa fa-circle-o-notch fa-spin'></i> Processing..."><strong>[Change Theme]</strong></a>
+                    </p>
+                    <p class="text-left " id="result_zone">
+                    </p>
+                </div>
+                <div class="modal-footer">
+
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <input type="hidden" id="theme_id" value="">
+    <input type="hidden" id="domain_id" value="{{pro.id}}">
+    <script type="text/javascript" src="{% static 'js/website_builder.js' %}?{% cache_bust %}"></script>
+{% endblock %}

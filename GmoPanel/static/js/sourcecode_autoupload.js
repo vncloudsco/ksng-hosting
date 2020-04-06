@@ -4,24 +4,21 @@ $(document).ready(function() {
     });
 
     $('#execute-btn').click(function(){
-        let upload_domain = ($('#domain').val() != '') ? $('#domain').val() : '';
-        var url = "/cPanel/Upload/executeSource";
-        var method = 'POST';
+        let upload_domain = ($('#pro_id').val() != '') ? $('#pro_id').val() : '';
+        var url = "/uploads/executeSource/"+upload_domain;
+        var method = 'GET';
         if(upload_domain != ''){
             $.ajax({
                 url: url,
                 headers : {
-                    'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                    'X-CSRFToken': getCookie('csrftoken')
                 },
                 type: method,
-                data: {
-                    upload_domain: upload_domain,
-                },
+                dataType: "json",
                 beforeSend: function(){
                     $('#execute-btn').button('loading');            
                 },
-                success: function(result) {                        
-                    var data = JSON.parse(result);
+                success: function(data) {
                     if(data.status == 1){
                         $('#container-main').hide().html('<div class="alert alert-info"><strong>Success!</strong> The source code is uploaded successfully to your website. Click <a target=_blank href=http://'+upload_domain+'>HERE</a> to checkout or <a href="/cPanel"> go back homepage.</a></div>').fadeIn( "slow");
                     }else{
@@ -62,7 +59,7 @@ $(function () {
     });
     
     let _csrfToken = $('#form-get-token').find('input[name="_csrfToken"]').val();
-    let domain_name = ($('#domain').val() != '') ? $('#domain').val() : '';
+    let domain_name = ($('#pro_id').val() != '') ? $('#pro_id').val() : '';
     $('#fileupload').fileupload({
         // dataType: 'json',
         add: function (e, data) {
@@ -83,10 +80,6 @@ $(function () {
         },
         maxChunkSize: 10000000 , //10MB
         dropZone: $('#dropzone'),
-        formData: {
-            domain_name: domain_name,
-            _csrfToken: _csrfToken,
-        },
         progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
             $('.progress-bar').css(

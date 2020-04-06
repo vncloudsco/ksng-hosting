@@ -35,108 +35,120 @@
                         <div class="tab-pane fade active in" id="scheduling">
                             <div class="row" >
                                 <div class="col-sm-12" id="content_blok">
-                                    {if !empty($forms)}
-                                        {foreach $forms as $key => $form}
-                                            {$this->Form->create($form['form'],['class' => 'form-horizontal cron-form','role' => 'form'])}
-                                            <div class="widget">
-                                                <div class="widget-header" style="border-bottom:0px">
-                                                    <h2 class="title_blok">CronTab #{$key+1}</h2>
-                                                    <div class="additional-btn">
-                                                        <button type="button" class="btn btn-primary add_cronjob" style="margin-left: 15pt">Edit</button>
-                                                        <button type="button" class="btn btn-danger delete_cronjob" >Delete</button>
-                                                        <button type="button" class="btn btn-success add_block" ><span class="glyphicon glyphicon-plus"></span></button>
-                                                        <a href="#" class="widget-toggle closed"><i class="icon-down-open-2"></i></a>
+                                    {% if jobs %}
+                                        {% for form in forms %}
+                                            <form class="form-horizontal cron-form" role="form">
+                                                <div class="widget">
+                                                    <div class="widget-header" style="border-bottom:0px">
+                                                        <h2 class="title_blok">CronTab #{{ forloop.counter }}</h2>
+                                                        <div class="additional-btn">
+                                                            <button type="button" class="btn btn-primary add_cronjob" style="margin-left: 15pt">Edit</button>
+                                                            <button type="button" class="btn btn-danger delete_cronjob" >Delete</button>
+                                                            <button type="button" class="btn btn-success add_block" ><span class="glyphicon glyphicon-plus"></span></button>
+                                                            <a href="#" class="widget-toggle closed"><i class="icon-down-open-2"></i></a>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="widget-content" style="display: none;">
-                                                    {$this->Form->input('id',['type' => 'hidden'])}
-                                                    <div class="form-group">
-                                                        <div class="col-sm-12">
-                                                            <div class="checkbox">
-                                                                <label class="backup_daily">
-                                                                    <input type="checkbox" name="backup_schedu[]" value="daily" {if !empty($form['data']['backup_schedu']) && in_array('daily',$form['data']['backup_schedu'])}checked{/if}>
-                                                                    Backup Daily
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-group backup_daily_setting" style="margin-left: 40pt;display: none">
-                                                                <div class="col-sm-12">
-                                                                    {$this->CustomForm->select('backup_day',$optionsDay, ['hiddenField' => false,'multiple' => 'checkbox','label' => ['class' => 'checkbox-inline icheckbox'],'value' => $form['data']['backup_day']])}
-                                                                    <label class="checkbox-inline icheckbox check_all_day" >
-                                                                        <input type="checkbox" id="inlineCheckbox01" value=""> Check All
+                                                    <div class="widget-content" style="display: none;">
+                                                        {{form.id}}
+                                                        <div class="form-group">
+                                                            <div class="col-sm-12">
+                                                                <div class="checkbox">
+                                                                    <label class="backup_daily">
+                                                                        {{ form.backup_schedu.0.tag }}
+                                                                        {{ form.backup_schedu.0.choice_label }}
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-group backup_daily_setting" style="margin-left: 40pt;display: none">
+                                                                    <div class="col-sm-12">
+                                                                        {% for choice in form.backup_day %}
+                                                                            <label for="{{ choice.id_for_label  }}" class="checkbox-inline icheckbox">{{ choice.tag }}{{ choice.choice_label }}</label>
+                                                                        {% endfor %}
+                                                                        <label class="checkbox-inline icheckbox check_all_day" >
+                                                                            <input type="checkbox" id="inlineCheckbox01" value=""> Check All
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                                <br/>
+                                                                <div class="checkbox">
+                                                                    <label class="backup_week">
+                                                                       {{ form.backup_schedu.1.tag }}
+                                                                        {{ form.backup_schedu.1.choice_label }}
+                                                                    </label>
+                                                                </div>
+                                                                <div class="form-group backup_weekly_setting" style="margin-left: 40pt;display: none;margin-right: ">
+                                                                    <div class="col-sm-12">
+                                                                        {% for choice in form.backup_week %}
+                                                                            <label for="{{ choice.id_for_label  }}" class="checkbox-inline icheckbox">{{ choice.tag }}{{ choice.choice_label }}</label>
+                                                                        {% endfor %}
+                                                                    </div>
+                                                                </div>
+                                                                <br/>
+                                                                <div class="checkbox">
+                                                                    <label>
+                                                                        {{ form.backup_schedu.2.tag }}
+                                                                        {{ form.backup_schedu.2.choice_label }}
                                                                     </label>
                                                                 </div>
                                                             </div>
-                                                            <br/>
-                                                            <div class="checkbox">
-                                                                <label class="backup_week">
-                                                                    <input type="checkbox" name="backup_schedu[]" value="weekly" {if !empty($form['data']['backup_schedu']) && in_array('weekly',$form['data']['backup_schedu'])}checked{/if}>
-                                                                    Backup Weekly
-                                                                </label>
-                                                            </div>
-                                                            <div class="form-group backup_weekly_setting" style="margin-left: 40pt;display: none;margin-right: ">
-                                                                <div class="col-sm-12">
-                                                                    {$this->CustomForm->radio('backup_week',$optionsDay, ['hiddenField' => false,'label' => ['class' => 'checkbox-inline icheckbox'],'value' => $form['data']['backup_week']])}
-                                                                </div>
-                                                            </div>
-                                                            <br/>
-                                                            <div class="checkbox">
-                                                                <label>
-                                                                    <input type="checkbox" name="backup_schedu[]" value="monthly" {if !empty($data['backup_schedu']) && in_array('monthly',$form['data']['backup_schedu'])}checked{/if}>
-                                                                    Backup Monthly
-                                                                </label>
-                                                            </div>
-                                                        </div>
 
-                                                    </div>
-                                                    <div class="error-message error-schedule" style="margin-left: 12pt;display: none;">You need to choose a data backup schedule!</div>
-                                                    <label class="control-label" style="margin-left: 15pt">Backup Type:</label>
-                                                    <div class="form-group" style="margin-left: 6pt">
-                                                        <div class="col-sm-8 backup_type">
-                                                            {$this->CustomForm->radio('backup_type',$optionType, ['hiddenField' => false,'multiple' => 'checkbox','label' => ['class' => 'checkbox-inline icheckbox'],'value' => $form['data']['backup_type']])}
                                                         </div>
-                                                        <br/>
-                                                    </div>
-                                                    <div class="error-message error-backup-type" style="margin-left: 12pt;display: none;">You need to choose a backup type!</div>
-                                                    <div class="form-group ssh_config" style="display: none">
-                                                        <div class="col-sm-6 " style="margin-left: 40pt;">
-                                                            <label class="control-label" style="margin-left: -15pt">Remote SSH Config:</label>
-                                                            <div class="form-group">
-                                                                <div class="row">
-                                                                    <div class="col-sm-9">
-                                                                        <label>Host</label>
-                                                                        {$this->Form->input('host',['type' => 'text','class' => 'form-control','label' => false,'div' => false,'disabled' => true,'required' => true])}
-                                                                    </div>
-                                                                    <div class="col-sm-3">
-                                                                        <label>Port</label>
-                                                                        {$this->Form->input('port',['type' => 'number','class' => 'form-control','label' => false,'div' => false,'disabled' => true,'required' => true])}
+                                                        <div class="error-message error-schedule" style="margin-left: 12pt;display: none;">You need to choose a data backup schedule!</div>
+                                                        <label class="control-label" style="margin-left: 15pt">Backup Type:</label>
+                                                        <div class="form-group" style="margin-left: 6pt">
+                                                            <div class="col-sm-8 backup_type">
+                                                                {% for choice in form.backup_type %}
+                                                                    <label for="{{ choice.id_for_label  }}" class="checkbox-inline icheckbox">{{ choice.tag }}{{ choice.choice_label }}</label>
+                                                                {% endfor %}
+                                                            </div>
+                                                            <br/>
+                                                        </div>
+                                                        <div class="error-message error-backup-type" style="margin-left: 12pt;display: none;">You need to choose a backup type!</div>
+                                                        <div class="form-group ssh_config" style="display: none">
+                                                            <div class="col-sm-6 " style="margin-left: 40pt;">
+                                                                <label class="control-label" style="margin-left: -15pt">Remote SSH Config:</label>
+                                                                <div class="form-group">
+                                                                    <div class="row">
+                                                                        <div class="col-sm-9">
+                                                                            <label>{{form.host.label_tag}}</label>
+                                                                            {{form.host}}
+                                                                            {{form.host.errors}}
+                                                                        </div>
+                                                                        <div class="col-sm-3">
+                                                                            <label>{{form.port.label_tag}}</label>
+                                                                            {{form.port}}
+                                                                            {{form.port.errors}}
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>User name</label>
-                                                                {$this->Form->input('user',['type' => 'text','class' => 'form-control','label' => false,'div' => false,'disabled' => true,'required' => true])}
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>Password</label>
-                                                                {$this->Form->input('password',['type' => 'password','class' => 'form-control','label' => false,'div' => false,'disabled' => true,'required' => true])}
-                                                            </div>
-                                                            <div class="form-group">
-                                                                <label>Root Path</label>
-                                                                {$this->Form->input('path',['type' => 'text','class' => 'form-control','label' => false,'div' => false,'disabled' => true,'required' => true])}
+                                                                <div class="form-group">
+                                                                    <label>{{form.user.label_tag}}</label>
+                                                                    {{form.user}}
+                                                                    {{form.user.errors}}
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>{{form.password.label_tag}}</label>
+                                                                    {{form.password}}
+                                                                    {{form.password.errors}}
+                                                                </div>
+                                                                <div class="form-group">
+                                                                    <label>{{form.path.label_tag}}</label>
+                                                                    {{form.path}}
+                                                                    {{form.path.errors}}
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            {$this->Form->end()}
-                                        {/foreach}
-                                    {else}
-                                        {$this->Form->create($form['form'],['class' => 'form-horizontal cron-form','role' => 'form'])}
+                                            </form>
+                                        {% endfor %}
+                                    {% else %}
+                                        <form class="form-horizontal cron-form" role="form">
+                                            {% csrf_token %}
+                                            {{form.id}}
                                             <div class="widget">
                                                 <div class="widget-header" style="border-bottom:0px">
-                                                    <h2 class="title_blok">CronTab #{$key+1}</h2>
+                                                    <h2 class="title_blok">CronTab #1</h2>
                                                     <div class="additional-btn">
-                                                        {*<a href="#" class="hidden reload"><i class="icon-ccw-1"></i></a>*}
                                                         <button type="button" class="btn btn-primary add_cronjob" style="margin-left: 15pt">Save</button>
                                                         <button type="button" class="btn btn-danger delete_cronjob" >Delete</button>
                                                         <button type="button" class="btn btn-success add_block" ><span class="glyphicon glyphicon-plus"></span></button>
@@ -148,13 +160,15 @@
                                                         <div class="col-sm-12">
                                                             <div class="checkbox">
                                                                 <label class="backup_daily">
-                                                                    <input type="checkbox" name="backup_schedu[]" value="daily" {if !empty($form['data']['backup_schedu']) && in_array('daily',$form['data']['backup_schedu'])}checked{/if}>
-                                                                    Backup Daily
+                                                                    {{ form.backup_schedu.0.tag }}
+                                                                    {{ form.backup_schedu.0.choice_label }}
                                                                 </label>
                                                             </div>
                                                             <div class="form-group backup_daily_setting" style="margin-left: 40pt;display: none">
                                                                 <div class="col-sm-12">
-                                                                    {$this->CustomForm->select('backup_day',$optionsDay, ['hiddenField' => false,'multiple' => 'checkbox','label' => ['class' => 'checkbox-inline icheckbox'],'value' => $form['data']['backup_day']])}
+                                                                    {% for choice in form.backup_day %}
+                                                                        <label for="{{ choice.id_for_label  }}" class="checkbox-inline icheckbox">{{ choice.tag }}{{ choice.choice_label }}</label>
+                                                                    {% endfor %}
                                                                     <label class="checkbox-inline icheckbox check_all_day" >
                                                                         <input type="checkbox" id="inlineCheckbox01" value=""> Check All
                                                                     </label>
@@ -163,28 +177,22 @@
                                                             <br/>
                                                             <div class="checkbox">
                                                                 <label class="backup_week">
-                                                                    <input type="checkbox" name="backup_schedu[]" value="weekly" {if !empty($form['data']['backup_schedu']) && in_array('weekly',$form['data']['backup_schedu'])}checked{/if}>
-                                                                    Backup Weekly
+                                                                    {{ form.backup_schedu.1.tag }}
+                                                                    {{ form.backup_schedu.1.choice_label }}
                                                                 </label>
                                                             </div>
                                                             <div class="form-group backup_weekly_setting" style="margin-left: 40pt;display: none;margin-right: ">
                                                                 <div class="col-sm-12">
-                                                                    {$this->CustomForm->radio('backup_week',$optionsDay, ['hiddenField' => false,'label' => ['class' => 'checkbox-inline icheckbox'],'value' => $form['data']['backup_week']])}
+                                                                    {% for choice in form.backup_week %}
+                                                                        <label for="{{ choice.id_for_label  }}" class="checkbox-inline icheckbox">{{ choice.tag }}{{ choice.choice_label }}</label>
+                                                                    {% endfor %}
                                                                 </div>
-                                                                {*<div class="col-sm-8">*}
-                                                                {*<label class="control-label">Retention:</label>*}
-                                                                {*<div class="input-group">*}
-                                                                {*{$this->Form->input('backup_week_retention',['type' => 'text','class' => 'form-control','label' => false,'div' => false,'disabled' => true])}*}
-                                                                {*<span class="input-group-addon">Backups</span>*}
-                                                                {*</div>*}
-                                                                {*<i>Weekly retention must be between 1 and 59.</i>*}
-                                                                {*</div>*}
                                                             </div>
                                                             <br/>
                                                             <div class="checkbox">
                                                                 <label>
-                                                                    <input type="checkbox" name="backup_schedu[]" value="monthly" {if !empty($data['backup_schedu']) && in_array('monthly',$form['data']['backup_schedu'])}checked{/if}>
-                                                                    Backup Monthly
+                                                                    {{ form.backup_schedu.2.tag }}
+                                                                    {{ form.backup_schedu.2.choice_label }}
                                                                 </label>
                                                             </div>
                                                         </div>
@@ -194,7 +202,9 @@
                                                     <label class="control-label" style="margin-left: 15pt">Backup Type:</label>
                                                     <div class="form-group" style="margin-left: 6pt">
                                                         <div class="col-sm-8 backup_type">
-                                                            {$this->CustomForm->radio('backup_type',$optionType, ['hiddenField' => false,'multiple' => 'checkbox','label' => ['class' => 'checkbox-inline icheckbox'],'value' => $form['data']['backup_type']])}
+                                                            {% for choice in form.backup_type %}
+                                                                <label for="{{ choice.id_for_label  }}" class="checkbox-inline icheckbox">{{ choice.tag }}{{ choice.choice_label }}</label>
+                                                            {% endfor %}
                                                         </div>
                                                         <br/>
                                                     </div>
@@ -205,34 +215,39 @@
                                                             <div class="form-group">
                                                                 <div class="row">
                                                                     <div class="col-sm-9">
-                                                                        <label>Host</label>
-                                                                        {$this->Form->input('host',['type' => 'text','class' => 'form-control','label' => false,'div' => false,'disabled' => true,'required' => true])}
+                                                                        <label>{{form.host.label_tag}}</label>
+                                                                        {{form.host}}
+                                                                        {{form.host.errors}}
                                                                     </div>
                                                                     <div class="col-sm-3">
-                                                                        <label>Port</label>
-                                                                        {$this->Form->input('port',['type' => 'number','class' => 'form-control','label' => false,'div' => false,'disabled' => true,'required' => true])}
+                                                                        <label>{{form.port.label_tag}}</label>
+                                                                        {{form.port}}
+                                                                        {{form.port.errors}}
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group">
-                                                                <label>User name</label>
-                                                                {$this->Form->input('user',['type' => 'text','class' => 'form-control','label' => false,'div' => false,'disabled' => true,'required' => true])}
+                                                                <label>{{form.user.label_tag}}</label>
+                                                                {{form.user}}
+                                                                {{form.user.errors}}
                                                             </div>
                                                             <div class="form-group">
-                                                                <label>Password</label>
-                                                                {$this->Form->input('password',['type' => 'password','class' => 'form-control','label' => false,'div' => false,'disabled' => true,'required' => true])}
+                                                                <label>{{form.password.label_tag}}</label>
+                                                                {{form.password}}
+                                                                {{form.password.errors}}
                                                             </div>
                                                             <div class="form-group">
-                                                                <label>Root Path</label>
-                                                                {$this->Form->input('path',['type' => 'text','class' => 'form-control','label' => false,'div' => false,'disabled' => true,'required' => true])}
+                                                                <label>{{form.path.label_tag}}</label>
+                                                                {{form.path}}
+                                                                {{form.path.errors}}
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
-                                        {$this->Form->end()}
-                                    {/if}
-                                    {$this->Flash->render()}
+                                        </form>
+                                    {% endif %}
+<!--                                    {$this->Flash->render()}-->
                                 </div>
                             </div>
                         </div>
@@ -240,69 +255,69 @@
                         <div class="tab-pane fade" id="retention">
                             <div class="row">
                                 <div class="col-sm-12">
-                                    {$this->Form->create($reForm,['class' => 'form-horizontal retention-form','role' => 'form'])}
-                                    <div class="widget">
-                                        <div class="widget-header" style="border-bottom:0px">
-                                            <h2 class="title_blok">RETENTION SETTING</h2>
-                                            <div class="additional-btn">
+                                    <form class="form-horizontal retention-form" role="form">
+                                        <div class="widget">
+                                            <div class="widget-header" style="border-bottom:0px">
+                                                <h2 class="title_blok">RETENTION SETTING</h2>
+                                                <div class="additional-btn">
 
-                                            </div>
-                                        </div>
-                                        <div class="widget-content">
-                                            <div class="form-group">
-                                                <div class="col-sm-12">
-                                                    <div class="checkbox">
-                                                        <label class="backup_daily">
-                                                            <input type="checkbox" name="backup_schedu[]" value="daily" {if !empty($dataRetention['backup_schedu']) && in_array('daily',$dataRetention['backup_schedu'])}checked{/if}>
-                                                            Backup Daily
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-group backup_daily_setting" style="margin-left: 40pt;display: none">
-                                                        <div class="col-sm-6">
-                                                            <label class="control-label">Retention:</label>
-                                                            {$this->Form->input('backup_daily_retention',['type' => 'text','class' => 'form-control','label' => false,'div' => false,'disabled' => true])}
-                                                            <i>Daily retention must be between 1 and 9999.</i>
-                                                        </div>
-                                                    </div>
-                                                    <br/>
-                                                    <div class="checkbox">
-                                                        <label class="backup_week">
-                                                            <input type="checkbox" name="backup_schedu[]" value="weekly" {if !empty($dataRetention['backup_schedu']) && in_array('weekly',$dataRetention['backup_schedu'])}checked{/if}>
-                                                            Backup Weekly
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-group backup_weekly_setting" style="margin-left: 40pt;display: none;margin-right: ">
-                                                        <div class="col-sm-6">
-                                                            <label class="control-label">Retention:</label>
-                                                            {$this->Form->input('backup_weekly_retention',['type' => 'text','class' => 'form-control','label' => false,'div' => false,'disabled' => true])}
-                                                            <i>Weekly retention must be between 1 and 9999.</i>
-                                                        </div>
-                                                    </div>
-                                                    <br/>
-                                                    <div class="checkbox">
-                                                        <label class="backup_monthly">
-                                                            <input type="checkbox" name="backup_schedu[]" value="monthly" {if !empty($dataRetention['backup_schedu']) && in_array('monthly',$dataRetention['backup_schedu'])}checked{/if}>
-                                                            Backup Monthly
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-group backup_monthly_setting" style="margin-left: 40pt;display: none">
-                                                        <div class="col-sm-6">
-                                                            <label class="control-label">Retention:</label>
-                                                            {$this->Form->input('backup_monthly_retention',['type' => 'text','class' => 'form-control','label' => false,'div' => false,'disabled' => true])}
-                                                            <i>Monthly retention must be between 1 and 9999.</i>
-                                                        </div>
-                                                    </div>
                                                 </div>
-
                                             </div>
-                                            <div class="error-message error-schedule-re" style="margin-left: 12pt;display: none;">You need to choose a data backup schedule!</div>
-                                            <div class="form-group">
-                                                <button type="button" class="btn btn-primary add_retention" style="margin-left: 25pt">Save</button>
-                                                <button type="button" class="btn btn-danger delete_retention">Delete</button>
+                                            <div class="widget-content">
+                                                <div class="form-group">
+                                                    <div class="col-sm-12">
+                                                        <div class="checkbox">
+                                                            <label class="backup_daily">
+                                                                {{ form_retention.backup_schedu.0.tag }}
+                                                                {{ form_retention.backup_schedu.0.choice_label }}
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-group backup_daily_setting" style="margin-left: 40pt;display: none">
+                                                            <div class="col-sm-6">
+                                                                <label class="control-label">Retention:</label>
+                                                                {{ form_retention.backup_daily_retention }}
+                                                                <i>Daily retention must be between 1 and 9999.</i>
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+                                                        <div class="checkbox">
+                                                            <label class="backup_week">
+                                                                {{ form_retention.backup_schedu.1.tag }}
+                                                                {{ form_retention.backup_schedu.1.choice_label }}
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-group backup_weekly_setting" style="margin-left: 40pt;display: none;margin-right: ">
+                                                            <div class="col-sm-6">
+                                                                <label class="control-label">Retention:</label>
+                                                                {{ form_retention.backup_weekly_retention }}
+                                                                <i>Weekly retention must be between 1 and 9999.</i>
+                                                            </div>
+                                                        </div>
+                                                        <br/>
+                                                        <div class="checkbox">
+                                                            <label class="backup_monthly">
+                                                                {{ form_retention.backup_schedu.2.tag }}
+                                                                {{ form_retention.backup_schedu.2.choice_label }}
+                                                            </label>
+                                                        </div>
+                                                        <div class="form-group backup_monthly_setting" style="margin-left: 40pt;display: none">
+                                                            <div class="col-sm-6">
+                                                                <label class="control-label">Retention:</label>
+                                                                {{ form_retention.backup_monthly_retention }}
+                                                                <i>Monthly retention must be between 1 and 9999.</i>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="error-message error-schedule-re" style="margin-left: 12pt;display: none;">You need to choose a data backup schedule!</div>
+                                                <div class="form-group">
+                                                    <button type="button" class="btn btn-primary add_retention" style="margin-left: 25pt">Save</button>
+                                                    <button type="button" class="btn btn-danger delete_retention">Delete</button>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    {$this->Form->end()}
+                                    </form>
                                 </div>
                             </div>
                         </div> <!-- / .tab-pane -->
@@ -311,5 +326,5 @@
             </div>
         </div>
     </div>
-    <script src="{% static 'webroot/js/cron_job.js' %}"></script>
+    <script src="{% static 'js/cron_job.js' %}?{% cache_bust %}"></script>
 {% endblock %}

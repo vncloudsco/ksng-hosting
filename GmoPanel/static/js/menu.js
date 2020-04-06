@@ -1,10 +1,17 @@
 var url = $(location).attr('href').split("/").splice(3, 1).join("/");
+var action = $(location).attr('href').split("/").splice(4, 1).join("/");
 if(url == ''){
     $('.my-menu').children().eq(0).children().eq(0).addClass('active');
 }
 switch(url){
     case 'websites':
-        $('.my-menu').children().eq(1).children().eq(0).addClass('active');
+        if (action == 'listMysql'){
+            $('.my-menu').children().eq(5).children().eq(0).addClass('active');
+        }else if(action == 'emailServer'){
+            $('.my-menu').children().eq(6).children().eq(0).addClass('active');
+        }else{
+            $('.my-menu').children().eq(1).children().eq(0).addClass('active');
+        }
         break;
     case 'backups':
         $('.my-menu').children().eq(2).children().eq(0).addClass('active');
@@ -24,13 +31,13 @@ switch(url){
     case 'Accounts':
         $('.my-menu').children().eq(7).children().eq(0).addClass('active');
         break;
-    case 'Settings':
+    case 'settings':
         $('.my-menu').children().eq(7).children().eq(0).addClass('active');
         break;
-    case 'Waf':
+    case 'waf':
         $('.my-menu').children().eq(8).children().eq(0).addClass('active');
         break;
-    case 'Securitys':
+    case 'securitys':
         $('.my-menu').children().eq(8).children().eq(0).addClass('active');
         break;
     default:
@@ -38,7 +45,7 @@ switch(url){
 }
 
 $('#goto').click(function(event) {
-    var url = "/cPanel/FileManager/goToFileManager";
+    var url = "/websites/fileManager";
     var method = 'POST';
     $.ajax({
         url: url,
@@ -100,17 +107,14 @@ $('#wb-button').click(function(event) {
 $('#wordpress-upload').click(function(event) {
     $('#wp_u_result').html('<div style="width:100% !important;height:100%" class="lds-facebook"><div style="left:42% !important;"></div><div></div><div style="left:58% !important;"></div></div>');
     setTimeout(function(){
-        var url = "/cPanel/Upload/modal";
-        var method = 'POST';
+        var url = "/uploads/modal/wordpress";
+        var method = 'GET';
         $.ajax({
             url: url,
             headers : {
-                'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                'X-CSRFToken': getCookie('csrftoken')
             },
             type: method,
-            data: {
-                wp_flag: 1,
-            },
             beforeSend: function(){
                 
             },
@@ -128,17 +132,14 @@ $('#wordpress-upload').click(function(event) {
 $('#database-upload').click(function(event) {
     $('#database_u_result').html('<div style="width:100% !important;height:100%" class="lds-facebook"><div style="left:42% !important;"></div><div></div><div style="left:58% !important;"></div></div>');
     setTimeout(function(){
-        var url = "/cPanel/Upload/modal";
-        var method = 'POST';
+        var url = "/uploads/modal/database";
+        var method = 'GET';
         $.ajax({
             url: url,
             headers : {
-                'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                'X-CSRFToken': getCookie('csrftoken')
             },
             type: method,
-            data: {
-                database_flag: 1,
-            },
             beforeSend: function(){
                 
             },
@@ -156,17 +157,14 @@ $('#database-upload').click(function(event) {
 $('#source-upload').click(function(event) {
     $('#source_u_result').html('<div style="width:100% !important;height:100%" class="lds-facebook"><div style="left:42% !important;"></div><div></div><div style="left:58% !important;"></div></div>');
     setTimeout(function(){
-        var url = "/cPanel/Upload/modal";
-        var method = 'POST';
+        var url = "/uploads/modal/source";
+        var method = 'GET';
         $.ajax({
             url: url,
             headers : {
-                'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                'X-CSRFToken': getCookie('csrftoken')
             },
             type: method,
-            data: {
-                source_flag: 1,
-            },
             beforeSend: function(){
                 
             },

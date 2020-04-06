@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<phpunit
+    colors="true"
+    bootstrap="tests/bootstrap.php"
+    backupGlobals="true"
+    >
+
+    <testsuites>
+        <testsuite name="cakephp">
+            <directory>tests/TestCase/</directory>
+            <!-- Excludes are required in order to let DatabaseSuite decorate the tests -->
+            <exclude>tests/TestCase/Database/</exclude>
+            <exclude>tests/TestCase/ORM/</exclude>
+        </testsuite>
+        <testsuite name="database">
+            <file>tests/TestCase/DatabaseSuite.php</file>
+        </testsuite>
+    </testsuites>
+
+    <listeners>
+        <listener class="Cake\TestSuite\Fixture\FixtureInjector">
+            <arguments>
+                <object class="Cake\TestSuite\Fixture\FixtureManager"/>
+            </arguments>
+        </listener>
+    </listeners>
+
+    <!-- Prevent coverage reports from looking in tests, vendors, config folders -->
+    <filter>
+        <whitelist>
+            <directory suffix=".php">src/</directory>
+        </whitelist>
+    </filter>
+
+    <php>
+        <ini name="memory_limit" value="-1"/>
+        <!-- E_ALL & ~E_USER_DEPRECATED (16383)-->
+        <!-- E_ALL (32767) -->
+        <ini name="error_reporting" value="32767"/>
+
+        <!-- SQLite
+        <env name="DB_DSN" value="sqlite:///:memory:"/>
+        -->
+        <!-- Postgres
+        <env name="DB_DSN" value="postgres://localhost/cake_test?timezone=UTC"/>
+        -->
+        <!-- Mysql
+        <env name="DB_DSN" value="mysql://localhost/cake_test?timezone=UTC"/>
+        -->
+        <!-- SQL Server
+        <env name="DB_DSN" value="sqlserver://localhost/cake_test?timezone=UTC"/>
+        -->
+    </php>
+</phpunit>

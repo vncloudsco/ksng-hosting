@@ -39,9 +39,9 @@ class Account(models.Model):
         ),
     )
     security_status = models.BooleanField(default=False)
-    security_code = models.CharField(max_length=16, default='None')
-    token = models.CharField(max_length=500, default='None')
-    token_login = models.CharField(max_length=500, default='None')
+    security_code = models.CharField(max_length=16, default='None',blank=True)
+    token = models.CharField(max_length=500, default='None',blank=True)
+    token_login = models.CharField(max_length=500, default='None',blank=True)
     created_date = models.DateTimeField(_('date joined'), default=timezone.now)
 
     EMAIL_FIELD = 'email'

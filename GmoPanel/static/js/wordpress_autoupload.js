@@ -4,19 +4,16 @@ $(document).ready(function() {
     });
 
     $('#execute-btn').click(function(){
-        let upload_domain = ($('#domain').val() != '') ? $('#domain').val() : '';
-        var url = '/cPanel/Upload/execute';
-        var method = 'POST';
+        let upload_domain = ($('#pro_id').val() != '') ? $('#pro_id').val() : '';
+        var url = '/uploads/execute/'+upload_domain;
+        var method = 'GET';
         if(upload_domain != ''){
             $.ajax({
                 url: url,
                 headers : {
-                    'X-CSRF-Token': $('#form-get-token').find('input[name="_csrfToken"]').val()
+                    'X-CSRFToken': getCookie('csrftoken')
                 },
                 type: method,
-                data: {
-                    upload_domain: upload_domain,
-                },
                 dataType: "json",
                 beforeSend: function(){
                     $('#execute-btn').button('loading');            
@@ -64,9 +61,9 @@ $(function () {
     });
     
     let _csrfToken = $('#form-get-token').find('input[name="_csrfToken"]').val();
-    let domain_name = ($('#domain').val() != '') ? $('#domain').val() : '';
+    let id = ($('#pro_id').val() != '') ? $('#pro_id').val() : '';
     $('#fileupload').fileupload({
-        dataType: 'html',
+        dataType: 'json',
         add: function (e, data) {
             $('#loading_position').append('<div class="alert alert-warning" id="'+ data.files[0].size +'"><i class="fa fa-refresh fa-spin"></i> Uploading <strong>'+ data.files[0].name +'</strong></div>');
             $('.progress-bar').css(
@@ -83,10 +80,10 @@ $(function () {
             $('#' + data.files[0].size).addClass('alert alert-info');
             $('#' + data.files[0].size).html('Finished upload <strong>'+ data.files[0].name +'</strong>');
         },
-        maxChunkSize: 10000000 , //10MB
+        maxChunkSize: 100000000 , //10MB
         dropZone: $('#dropzone'),
         formData: {
-            domain_name: domain_name,
+            pro_id: id,
             _csrfToken: _csrfToken,
         },
         progressall: function (e, data) {

@@ -1,0 +1,1437 @@
+2019-12-31 02:40:06 Error: [TypeError] Argument 1 passed to Cake\Utility\Security::setSalt() must be of the type string, null given, called in /Users/quanle/Sites/secure_vps/config/bootstrap.php on line 164 in /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Utility/Security.php on line 306
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/config/bootstrap.php:164
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:139
+- /Users/quanle/Sites/secure_vps/src/Application.php:43
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:110
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:79
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+
+
+2019-12-31 02:40:09 Error: [TypeError] Argument 1 passed to Cake\Utility\Security::setSalt() must be of the type string, null given, called in /Users/quanle/Sites/secure_vps/config/bootstrap.php on line 164 in /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Utility/Security.php on line 306
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/config/bootstrap.php:164
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:139
+- /Users/quanle/Sites/secure_vps/src/Application.php:43
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:110
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:79
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+
+
+2019-12-31 02:40:10 Error: [TypeError] Argument 1 passed to Cake\Utility\Security::setSalt() must be of the type string, null given, called in /Users/quanle/Sites/secure_vps/config/bootstrap.php on line 164 in /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Utility/Security.php on line 306
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/config/bootstrap.php:164
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:139
+- /Users/quanle/Sites/secure_vps/src/Application.php:43
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:110
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:79
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+
+
+2019-12-31 02:40:30 Error: [TypeError] Argument 1 passed to Cake\Utility\Security::setSalt() must be of the type string, null given, called in /Users/quanle/Sites/secure_vps/config/bootstrap.php on line 164 in /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Utility/Security.php on line 306
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/config/bootstrap.php:164
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:139
+- /Users/quanle/Sites/secure_vps/src/Application.php:43
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:110
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:79
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+
+
+2019-12-31 02:42:29 Error: [Cake\Http\Exception\NotFoundException] Please replace templates/Pages/home.php with your own version or re-enable debug mode. in /Users/quanle/Sites/secure_vps/templates/Pages/home.php on line 26
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/View/View.php:1164
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/View/View.php:1125
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/View/View.php:750
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:691
+- /Users/quanle/Sites/secure_vps/src/Controller/PagesController.php:65
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /
+Client IP: 127.0.0.1
+
+
+2019-12-31 02:42:30 Error: [Cake\Http\Exception\NotFoundException] Please replace templates/Pages/home.php with your own version or re-enable debug mode. in /Users/quanle/Sites/secure_vps/templates/Pages/home.php on line 26
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/View/View.php:1164
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/View/View.php:1125
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/View/View.php:750
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:691
+- /Users/quanle/Sites/secure_vps/src/Controller/PagesController.php:65
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /
+Client IP: 127.0.0.1
+
+
+2019-12-31 02:42:58 Error: [Cake\Http\Exception\NotFoundException] Please replace templates/Pages/home.php with your own version or re-enable debug mode. in /Users/quanle/Sites/secure_vps/templates/Pages/home.php on line 26
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/View/View.php:1164
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/View/View.php:1125
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/View/View.php:750
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:691
+- /Users/quanle/Sites/secure_vps/src/Controller/PagesController.php:65
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /
+Client IP: 127.0.0.1
+
+
+2019-12-31 03:17:56 Warning: Warning (2): Use of undefined constant STDIN - assumed 'STDIN' (this will throw an Error in a future version of PHP) in [/Users/quanle/Sites/secure_vps/src/Controller/HomesController.php, line 77]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+App\Controller\HomesController::getClient() - APP/Controller/HomesController.php, line 77
+App\Controller\HomesController::index() - APP/Controller/HomesController.php, line 24
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 524
+Cake\Controller\ControllerFactory::invoke() - CORE/src/Controller/ControllerFactory.php, line 79
+Cake\Http\BaseApplication::handle() - CORE/src/Http/BaseApplication.php, line 229
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Middleware\CsrfProtectionMiddleware::process() - CORE/src/Http/Middleware/CsrfProtectionMiddleware.php, line 132
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Routing\Middleware\RoutingMiddleware::process() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 162
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Routing\Middleware\AssetMiddleware::process() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 68
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Error\Middleware\ErrorHandlerMiddleware::process() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 118
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+DebugKit\Middleware\DebugKitMiddleware::process() - ROOT/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php, line 60
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 90
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 03:17:56 Warning: Warning (2): fgets() expects parameter 1 to be resource, string given in [/Users/quanle/Sites/secure_vps/src/Controller/HomesController.php, line 77]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+fgets - [internal], line ??
+App\Controller\HomesController::getClient() - APP/Controller/HomesController.php, line 77
+App\Controller\HomesController::index() - APP/Controller/HomesController.php, line 24
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 524
+Cake\Controller\ControllerFactory::invoke() - CORE/src/Controller/ControllerFactory.php, line 79
+Cake\Http\BaseApplication::handle() - CORE/src/Http/BaseApplication.php, line 229
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Middleware\CsrfProtectionMiddleware::process() - CORE/src/Http/Middleware/CsrfProtectionMiddleware.php, line 132
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Routing\Middleware\RoutingMiddleware::process() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 162
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Routing\Middleware\AssetMiddleware::process() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 68
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Error\Middleware\ErrorHandlerMiddleware::process() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 118
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+DebugKit\Middleware\DebugKitMiddleware::process() - ROOT/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php, line 60
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 90
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 03:17:56 Error: [InvalidArgumentException] Invalid code in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php on line 187
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:80
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:24
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 03:17:56 Warning: Warning (512): Unable to emit headers. Headers sent in file=/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php line=831 in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 72]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 72
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 03:17:56 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php:831) in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 169]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+header - [internal], line ??
+Cake\Http\ResponseEmitter::emitStatusLine() - CORE/src/Http/ResponseEmitter.php, line 169
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 75
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 03:17:56 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php:831) in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 198]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+header - [internal], line ??
+Cake\Http\ResponseEmitter::emitHeaders() - CORE/src/Http/ResponseEmitter.php, line 198
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 76
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 03:17:56 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php:831) in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 198]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+header - [internal], line ??
+Cake\Http\ResponseEmitter::emitHeaders() - CORE/src/Http/ResponseEmitter.php, line 198
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 76
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 03:20:43 Error: [Cake\View\Exception\MissingTemplateException] Template file 'Homes/index.php' could not be found.
+
+The following paths were searched:
+
+- /Users/quanle/Sites/secure_vps/templates/
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/templates/
+ in Homes/index.php on line 1335
+Exception Attributes: array (
+  'file' => 'Homes/index.php',
+  'paths' => 
+  array (
+    0 => '/Users/quanle/Sites/secure_vps/templates/',
+    1 => '/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/templates/',
+  ),
+)
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/View/View.php:747
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:691
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:533
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 03:32:29 Error: [Error] Class 'App\Controller\Google_Service_Drive_DriveFile' not found in /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php on line 45
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 03:32:45 Error: [Google_Service_Exception] {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "insufficientPermissions",
+    "message": "Insufficient Permission: Request had insufficient authentication scopes."
+   }
+  ],
+  "code": 403,
+  "message": "Insufficient Permission: Request had insufficient authentication scopes."
+ }
+}
+ in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php on line 118
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:94
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Task/Runner.php:176
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:58
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php:842
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php:232
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:90
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:53
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 03:35:26 Warning: Warning (2): Use of undefined constant STDIN - assumed 'STDIN' (this will throw an Error in a future version of PHP) in [/Users/quanle/Sites/secure_vps/src/Controller/HomesController.php, line 91]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+App\Controller\HomesController::getClient() - APP/Controller/HomesController.php, line 91
+App\Controller\HomesController::index() - APP/Controller/HomesController.php, line 25
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 524
+Cake\Controller\ControllerFactory::invoke() - CORE/src/Controller/ControllerFactory.php, line 79
+Cake\Http\BaseApplication::handle() - CORE/src/Http/BaseApplication.php, line 229
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Middleware\CsrfProtectionMiddleware::process() - CORE/src/Http/Middleware/CsrfProtectionMiddleware.php, line 132
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Routing\Middleware\RoutingMiddleware::process() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 162
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Routing\Middleware\AssetMiddleware::process() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 68
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Error\Middleware\ErrorHandlerMiddleware::process() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 118
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+DebugKit\Middleware\DebugKitMiddleware::process() - ROOT/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php, line 60
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 90
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 03:35:26 Warning: Warning (2): fgets() expects parameter 1 to be resource, string given in [/Users/quanle/Sites/secure_vps/src/Controller/HomesController.php, line 91]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+fgets - [internal], line ??
+App\Controller\HomesController::getClient() - APP/Controller/HomesController.php, line 91
+App\Controller\HomesController::index() - APP/Controller/HomesController.php, line 25
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 524
+Cake\Controller\ControllerFactory::invoke() - CORE/src/Controller/ControllerFactory.php, line 79
+Cake\Http\BaseApplication::handle() - CORE/src/Http/BaseApplication.php, line 229
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Middleware\CsrfProtectionMiddleware::process() - CORE/src/Http/Middleware/CsrfProtectionMiddleware.php, line 132
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Routing\Middleware\RoutingMiddleware::process() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 162
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Routing\Middleware\AssetMiddleware::process() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 68
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Error\Middleware\ErrorHandlerMiddleware::process() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 118
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+DebugKit\Middleware\DebugKitMiddleware::process() - ROOT/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php, line 60
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 90
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 03:35:26 Error: [InvalidArgumentException] Invalid code in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php on line 187
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:95
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:25
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 03:35:26 Warning: Warning (512): Unable to emit headers. Headers sent in file=/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php line=831 in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 72]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 72
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 03:35:27 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php:831) in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 169]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+header - [internal], line ??
+Cake\Http\ResponseEmitter::emitStatusLine() - CORE/src/Http/ResponseEmitter.php, line 169
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 75
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 03:35:27 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php:831) in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 198]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+header - [internal], line ??
+Cake\Http\ResponseEmitter::emitHeaders() - CORE/src/Http/ResponseEmitter.php, line 198
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 76
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 03:35:27 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php:831) in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 198]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+header - [internal], line ??
+Cake\Http\ResponseEmitter::emitHeaders() - CORE/src/Http/ResponseEmitter.php, line 198
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 76
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 03:36:18 Error: [Google_Service_Exception] {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "insufficientPermissions",
+    "message": "Insufficient Permission: Request had insufficient authentication scopes."
+   }
+  ],
+  "code": 403,
+  "message": "Insufficient Permission: Request had insufficient authentication scopes."
+ }
+}
+ in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php on line 118
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:94
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Task/Runner.php:176
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:58
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php:842
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php:232
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:90
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:53
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 04:04:09 Error: [Google_Service_Exception] {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "insufficientPermissions",
+    "message": "Insufficient Permission: Request had insufficient authentication scopes."
+   }
+  ],
+  "code": 403,
+  "message": "Insufficient Permission: Request had insufficient authentication scopes."
+ }
+}
+ in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php on line 118
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:94
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Task/Runner.php:176
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:58
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php:842
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php:232
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:90
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:53
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 04:15:38 Error: [Google_Service_Exception] {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "insufficientPermissions",
+    "message": "Insufficient Permission: Request had insufficient authentication scopes."
+   }
+  ],
+  "code": 403,
+  "message": "Insufficient Permission: Request had insufficient authentication scopes."
+ }
+}
+ in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php on line 118
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:94
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Task/Runner.php:176
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:58
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php:842
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php:232
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:90
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:53
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 04:16:51 Error: [Google_Service_Exception] {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "insufficientPermissions",
+    "message": "Insufficient Permission: Request had insufficient authentication scopes."
+   }
+  ],
+  "code": 403,
+  "message": "Insufficient Permission: Request had insufficient authentication scopes."
+ }
+}
+ in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php on line 118
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:94
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Task/Runner.php:176
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:58
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php:842
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php:232
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:90
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:53
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 04:19:08 Error: [Google_Service_Exception] {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "insufficientPermissions",
+    "message": "Insufficient Permission: Request had insufficient authentication scopes."
+   }
+  ],
+  "code": 403,
+  "message": "Insufficient Permission: Request had insufficient authentication scopes."
+ }
+}
+ in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php on line 118
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:94
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Task/Runner.php:176
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:58
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php:842
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php:232
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:90
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:53
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 04:24:29 Error: [Google_Service_Exception] {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "insufficientPermissions",
+    "message": "Insufficient Permission: Request had insufficient authentication scopes."
+   }
+  ],
+  "code": 403,
+  "message": "Insufficient Permission: Request had insufficient authentication scopes."
+ }
+}
+ in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php on line 118
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:94
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Task/Runner.php:176
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:58
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php:842
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php:232
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:90
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:53
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 04:24:31 Error: [Google_Service_Exception] {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "insufficientPermissions",
+    "message": "Insufficient Permission: Request had insufficient authentication scopes."
+   }
+  ],
+  "code": 403,
+  "message": "Insufficient Permission: Request had insufficient authentication scopes."
+ }
+}
+ in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php on line 118
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:94
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Task/Runner.php:176
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:58
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php:842
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php:232
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:90
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:53
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 04:28:05 Error: [Google_Service_Exception] {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "insufficientPermissions",
+    "message": "Insufficient Permission: Request had insufficient authentication scopes."
+   }
+  ],
+  "code": 403,
+  "message": "Insufficient Permission: Request had insufficient authentication scopes."
+ }
+}
+ in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php on line 118
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:94
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Task/Runner.php:176
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:58
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php:842
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php:232
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:90
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:53
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 04:34:16 Error: [Google_Service_Exception] {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "insufficientPermissions",
+    "message": "Insufficient Permission: Request had insufficient authentication scopes."
+   }
+  ],
+  "code": 403,
+  "message": "Insufficient Permission: Request had insufficient authentication scopes."
+ }
+}
+ in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php on line 118
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:94
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Task/Runner.php:176
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:58
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php:842
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php:232
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:90
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:53
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 04:35:09 Error: [InvalidArgumentException] Invalid token format in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php on line 449
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:96
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:25
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 04:35:30 Warning: Warning (2): Use of undefined constant STDIN - assumed 'STDIN' (this will throw an Error in a future version of PHP) in [/Users/quanle/Sites/secure_vps/src/Controller/HomesController.php, line 91]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+App\Controller\HomesController::getClient() - APP/Controller/HomesController.php, line 91
+App\Controller\HomesController::index() - APP/Controller/HomesController.php, line 25
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 524
+Cake\Controller\ControllerFactory::invoke() - CORE/src/Controller/ControllerFactory.php, line 79
+Cake\Http\BaseApplication::handle() - CORE/src/Http/BaseApplication.php, line 229
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Middleware\CsrfProtectionMiddleware::process() - CORE/src/Http/Middleware/CsrfProtectionMiddleware.php, line 132
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Routing\Middleware\RoutingMiddleware::process() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 162
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Routing\Middleware\AssetMiddleware::process() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 68
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Error\Middleware\ErrorHandlerMiddleware::process() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 118
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+DebugKit\Middleware\DebugKitMiddleware::process() - ROOT/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php, line 60
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 90
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 04:35:30 Warning: Warning (2): fgets() expects parameter 1 to be resource, string given in [/Users/quanle/Sites/secure_vps/src/Controller/HomesController.php, line 91]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+fgets - [internal], line ??
+App\Controller\HomesController::getClient() - APP/Controller/HomesController.php, line 91
+App\Controller\HomesController::index() - APP/Controller/HomesController.php, line 25
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 524
+Cake\Controller\ControllerFactory::invoke() - CORE/src/Controller/ControllerFactory.php, line 79
+Cake\Http\BaseApplication::handle() - CORE/src/Http/BaseApplication.php, line 229
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Middleware\CsrfProtectionMiddleware::process() - CORE/src/Http/Middleware/CsrfProtectionMiddleware.php, line 132
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Routing\Middleware\RoutingMiddleware::process() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 162
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Routing\Middleware\AssetMiddleware::process() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 68
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Error\Middleware\ErrorHandlerMiddleware::process() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 118
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+DebugKit\Middleware\DebugKitMiddleware::process() - ROOT/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php, line 60
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 90
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 04:35:30 Error: [InvalidArgumentException] Invalid code in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php on line 187
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:95
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:25
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 04:35:30 Warning: Warning (512): Unable to emit headers. Headers sent in file=/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php line=831 in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 72]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 72
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 04:35:30 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php:831) in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 169]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+header - [internal], line ??
+Cake\Http\ResponseEmitter::emitStatusLine() - CORE/src/Http/ResponseEmitter.php, line 169
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 75
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 04:35:30 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php:831) in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 198]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+header - [internal], line ??
+Cake\Http\ResponseEmitter::emitHeaders() - CORE/src/Http/ResponseEmitter.php, line 198
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 76
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 04:35:30 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php:831) in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 198]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+header - [internal], line ??
+Cake\Http\ResponseEmitter::emitHeaders() - CORE/src/Http/ResponseEmitter.php, line 198
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 76
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 04:46:31 Error: [Google_Service_Exception] {
+ "error": {
+  "errors": [
+   {
+    "domain": "global",
+    "reason": "notFound",
+    "message": "File not found: backup.",
+    "locationType": "parameter",
+    "location": "fileId"
+   }
+  ],
+  "code": 404,
+  "message": "File not found: backup."
+ }
+}
+ in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php on line 118
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:94
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Task/Runner.php:176
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Http/REST.php:58
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php:842
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php:232
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:90
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:57
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 06:48:30 Error: [Google_Exception] (list) unknown parameter: 'name' in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php on line 147
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:226
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:35
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 06:49:30 Error: [Google_Exception] (list) unknown parameter: 'name' in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php on line 147
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:226
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:35
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 06:49:54 Error: [Google_Exception] (list) unknown parameter: 'name' in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php on line 147
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:226
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:35
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 06:52:07 Error: [Google_Exception] (list) unknown parameter: 'Name' in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Service/Resource.php on line 147
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/google/apiclient-services/src/Google/Service/Drive/Resource/Files.php:226
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:35
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 06:55:58 Warning: Warning (2): Use of undefined constant STDIN - assumed 'STDIN' (this will throw an Error in a future version of PHP) in [/Users/quanle/Sites/secure_vps/src/Controller/HomesController.php, line 104]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+App\Controller\HomesController::getClient() - APP/Controller/HomesController.php, line 104
+App\Controller\HomesController::index() - APP/Controller/HomesController.php, line 25
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 524
+Cake\Controller\ControllerFactory::invoke() - CORE/src/Controller/ControllerFactory.php, line 79
+Cake\Http\BaseApplication::handle() - CORE/src/Http/BaseApplication.php, line 229
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Middleware\CsrfProtectionMiddleware::process() - CORE/src/Http/Middleware/CsrfProtectionMiddleware.php, line 132
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Routing\Middleware\RoutingMiddleware::process() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 162
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Routing\Middleware\AssetMiddleware::process() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 68
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Error\Middleware\ErrorHandlerMiddleware::process() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 118
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+DebugKit\Middleware\DebugKitMiddleware::process() - ROOT/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php, line 60
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 90
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 06:55:58 Warning: Warning (2): fgets() expects parameter 1 to be resource, string given in [/Users/quanle/Sites/secure_vps/src/Controller/HomesController.php, line 104]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+fgets - [internal], line ??
+App\Controller\HomesController::getClient() - APP/Controller/HomesController.php, line 104
+App\Controller\HomesController::index() - APP/Controller/HomesController.php, line 25
+Cake\Controller\Controller::invokeAction() - CORE/src/Controller/Controller.php, line 524
+Cake\Controller\ControllerFactory::invoke() - CORE/src/Controller/ControllerFactory.php, line 79
+Cake\Http\BaseApplication::handle() - CORE/src/Http/BaseApplication.php, line 229
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 77
+Cake\Http\Middleware\CsrfProtectionMiddleware::process() - CORE/src/Http/Middleware/CsrfProtectionMiddleware.php, line 132
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Routing\Middleware\RoutingMiddleware::process() - CORE/src/Routing/Middleware/RoutingMiddleware.php, line 162
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Routing\Middleware\AssetMiddleware::process() - CORE/src/Routing/Middleware/AssetMiddleware.php, line 68
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Error\Middleware\ErrorHandlerMiddleware::process() - CORE/src/Error/Middleware/ErrorHandlerMiddleware.php, line 118
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+DebugKit\Middleware\DebugKitMiddleware::process() - ROOT/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php, line 60
+Cake\Http\Runner::handle() - CORE/src/Http/Runner.php, line 73
+Cake\Http\Runner::run() - CORE/src/Http/Runner.php, line 58
+Cake\Http\Server::run() - CORE/src/Http/Server.php, line 90
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 06:55:58 Error: [InvalidArgumentException] Invalid code in /Users/quanle/Sites/secure_vps/vendor/google/apiclient/src/Google/Client.php on line 187
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:108
+- /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php:25
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/Controller.php:524
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Controller/ControllerFactory.php:79
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/BaseApplication.php:229
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:77
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Middleware/CsrfProtectionMiddleware.php:132
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/RoutingMiddleware.php:162
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Routing/Middleware/AssetMiddleware.php:68
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Middleware/ErrorHandlerMiddleware.php:118
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/debug_kit/src/Middleware/DebugKitMiddleware.php:60
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:73
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Runner.php:58
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/Server.php:90
+- /Users/quanle/Sites/secure_vps/webroot/index.php:40
+
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+
+2019-12-31 06:55:58 Warning: Warning (512): Unable to emit headers. Headers sent in file=/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php line=831 in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 72]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 72
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 06:55:58 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php:831) in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 169]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+header - [internal], line ??
+Cake\Http\ResponseEmitter::emitStatusLine() - CORE/src/Http/ResponseEmitter.php, line 169
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 75
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 06:55:58 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php:831) in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 198]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+header - [internal], line ??
+Cake\Http\ResponseEmitter::emitHeaders() - CORE/src/Http/ResponseEmitter.php, line 198
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 76
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 06:55:58 Warning: Warning (2): Cannot modify header information - headers already sent by (output started at /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/Debugger.php:831) in [/Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Http/ResponseEmitter.php, line 198]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleError() - CORE/src/Error/BaseErrorHandler.php, line 178
+DebugKit\Plugin::DebugKit\{closure}() - ROOT/vendor/cakephp/debug_kit/src/Plugin.php, line 89
+header - [internal], line ??
+Cake\Http\ResponseEmitter::emitHeaders() - CORE/src/Http/ResponseEmitter.php, line 198
+Cake\Http\ResponseEmitter::emit() - CORE/src/Http/ResponseEmitter.php, line 76
+Cake\Http\Server::emit() - CORE/src/Http/Server.php, line 130
+[main] - ROOT/webroot/index.php, line 40
+
+
+
+2019-12-31 07:10:48 Error: Fatal Error (1): Allowed memory size of 134217728 bytes exhausted (tried to allocate 1062037920 bytes) in [/Users/quanle/Sites/secure_vps/src/Controller/HomesController.php, line 51]
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+Trace:
+Cake\Error\BaseErrorHandler::handleFatalError() - CORE/src/Error/BaseErrorHandler.php, line 248
+Cake\Error\BaseErrorHandler::Cake\Error\{closure}() - CORE/src/Error/BaseErrorHandler.php, line 122
+[main] - [internal], line ??
+
+
+
+2019-12-31 07:10:48 Error: [Cake\Error\FatalErrorException] Allowed memory size of 134217728 bytes exhausted (tried to allocate 1062037920 bytes) in /Users/quanle/Sites/secure_vps/src/Controller/HomesController.php on line 51
+Stack Trace:
+- /Users/quanle/Sites/secure_vps/vendor/cakephp/cakephp/src/Error/BaseErrorHandler.php:122
+- [main] - [internal], line ??
+Request URL: /Homes/index
+Client IP: 127.0.0.1
+
+

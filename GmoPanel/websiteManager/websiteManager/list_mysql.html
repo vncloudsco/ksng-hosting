@@ -1,0 +1,85 @@
+{% extends "base.html"  %}
+{% load static %}
+{% load app_tags %}
+
+{% block content %}
+    <script type="text/javascript" src="{% static 'assets/js/bootstrap-confirmation.min.js' %}"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $('[data-toggle=confirmation]').confirmation({
+              rootSelector: '[data-toggle=confirmation]',
+              // other options
+            });
+        });
+    </script>
+    <style type="text/css">
+        .popover{
+            border: 1px solid #DADADA !important;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24) !important;
+            transition: all 0.3s cubic-bezier(.25,.8,.25,1) !important;
+            z-index: 9999999;
+            width: 150px;
+            text-align: center;
+        }
+    </style>
+    <div class="content">
+        <div class="row animated fadeInDown">
+            <div class="col-sm-12">
+                <div class="widget">
+                    <div class="widget-header">
+                    <h2>MySql List</h2>
+                    <div class="additional-btn">
+<!--                        <a href="#" class="">Root PhpMyadmin</a>-->
+                    </div>
+                    </div>
+                    <div class="widget-content padding">
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Website</th>
+                                        <th>Username</th>
+                                        <th>Password</th>
+                                        <th>Database name</th>
+                                        <th data-sortable="false">Option</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% if not data %}
+                                        <tr>
+                                            <td colspan="6" style="text-align: center;">
+                                                No domain is available! You want to login to MysqlManager! Please <a href="http://{{ipServer}}/mysqlmanager" target="_blank" class=""> Click </a>
+                                            </td>
+                                        </tr>
+                                    {% else %}
+                                        {% for item in data %}
+                                            <tr>
+                                                <td>{{ forloop.counter }}</td>
+                                                <td>{{item.domain}}</td>
+                                                <td>{{item.db_user}}</td>
+                                                <td><span my-db-pass-id="{{item.id}}">{{item.db_password}}</span></td>
+                                                <td>{{item.db_name}}</td>
+                                                <td>
+                                                    <div class="btn-group btn-group-xs">
+                                                        <a href="http://{{ipServer}}/mysqlmanager" target="_blank" data-toggle="tooltip" title="Login" class="btn btn-primary db-login"><i class="icon-login"></i></a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        {% endfor %}
+                                        <tr>
+                                            <td colspan="6">
+                                                <span>Showing 1 to {{count}} of {{count}} entries</span>
+                                            </td>
+                                        </tr>
+                                    {% endif %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" src="{% static 'js/ajax.js' %}?{% cache_bust %}"></script>
+{% endblock %}
