@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from backupManager.models import BackupLog
+from websiteManager.models import Provision
 import os
 import sys
 import shutil
@@ -10,12 +12,14 @@ import pymysql
 import django
 from plogical.phpSetting import execute, execute_outputfile
 
+
 class BackupManager:
 
     def __init__(self, argv=None):
         self.provi = argv
         self.log = '/home/kusanagi/'+argv+'/log/backup.log'
         self.pwrd = self.get_root_pass()
+        self.dbinfo = Provision.objects.get(provision_name='%s' % self.provi)
     
     @staticmethod
     def append_log(log, message):
@@ -33,7 +37,7 @@ class BackupManager:
                 grep = re.findall(r'password', line)
                 if grep:
                     pwrd = line.split('"')[1]
-        except BaseException:
+        except FileNotFoundError:
             return False
         return pwrd
 
@@ -52,11 +56,13 @@ class BackupManager:
 
     def backup_db(self):
 
-        data = self.get_db_name()
+        # data = self.get_db_name()
         # print(data)
-        db_name = data[1]
+        # db_name = data[1]
+        # data = Provision.objects.get(provision_name='%s' % self.provi)
+        db_name = self.dbinfo.db_name
         try:
-            sqldir = '/home/kusanagi/' + self.provi + '/sql_backup/'
+            sqldir = '/home/kusanagi/%s/sql_backup/' % self.provi
             p = pathlib.Path(sqldir)
             if not p.exists():
                 p.mkdir(mode=0o755, parents=True, exist_ok=True)
@@ -72,22 +78,29 @@ class BackupManager:
 
     def update_backup_record(self, backup_type, result):
 
-        data = self.get_db_name()
-        provi_id = data[0]
+        # data = self.get_db_name()
+        # provi_id = data[0]
+        provi_id = self.dbinfo.id
 
-        db = pymysql.connect("localhost", "root", self.pwrd, "secure_vps")
-        cursor = db.cursor()
-        cursor.execute("select id from logs where provision_id=%d and status=0 and backup_type=%d" % (provi_id, backup_type))
-        res = cursor.fetchone()
-        record_id = res[0]
+        # db = pymysql.connect("localhost", "root", self.pwrd, "secure_vps")
+        # cursor = db.cursor()
+        # cursor.execute("select id from logs where provision_id=%d and status=0 and backup_type=%d" % (provi_id, backup_type))
+        # res = cursor.fetchone()
+        # record_id = res[0]
+        record = BackupLog.objects.get(provision_id='%d' % provi_id, status='0', backup_type='%d' % backup_type)
 
         if result:
-            cursor.execute("update logs set status=1,message='Done' where provision_id=%d and id=%d" % (provi_id, record_id))
+            # cursor.execute("update logs set status=1,message='Done' where provision_id=%d and id=%d" % (provi_id, record_id))
+            record.status = 1
+            record.message = 'Done'
         else:
-            cursor.execute("update logs set status=-1,message='Failed. See %s' where provision_id=%d and id=%d" % (self.log, provi_id, record_id))
+            # cursor.execute("update logs set status=-1,message='Failed. See %s' where provision_id=%d and id=%d" % (self.log, provi_id, record_id))
+            record.status = -1
+            record.message = 'Failed. See %s' % self.log
 
-        db.commit()
-        db.close()
+        record.save()
+        # db.commit()
+        # db.close()
 
     def compress_provision_dir(self, chdir=None):
         date = datetime.now()
