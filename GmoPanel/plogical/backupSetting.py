@@ -41,25 +41,7 @@ class BackupManager:
             return False
         return pwrd
 
-    def get_db_name(self):
-        try:
-            db = pymysql.connect("localhost", "root", self.pwrd, "secure_vps")
-            cursor = db.cursor()
-            cursor.execute("select id,db_name from provision where provision_name='%s'" % self.provi)
-            data = cursor.fetchone()
-            db.close()
-            return data
-        except pymysql.err.OperationalError as err:
-            print(' An error has occurred \n', err)
-        except pymysql.err.InternalError as err:
-            print(' An error has occurred \n', err)
-
     def backup_db(self):
-
-        # data = self.get_db_name()
-        # print(data)
-        # db_name = data[1]
-        # data = Provision.objects.get(provision_name='%s' % self.provi)
         db_name = self.dbinfo.db_name
         try:
             sqldir = '/home/kusanagi/%s/sql_backup/' % self.provi
@@ -77,30 +59,17 @@ class BackupManager:
         execute_outputfile(cmd, self.log)
 
     def update_backup_record(self, backup_type, result):
-
-        # data = self.get_db_name()
-        # provi_id = data[0]
         provi_id = self.dbinfo.id
-
-        # db = pymysql.connect("localhost", "root", self.pwrd, "secure_vps")
-        # cursor = db.cursor()
-        # cursor.execute("select id from logs where provision_id=%d and status=0 and backup_type=%d" % (provi_id, backup_type))
-        # res = cursor.fetchone()
-        # record_id = res[0]
         record = BackupLog.objects.get(provision_id='%d' % provi_id, status='0', backup_type='%d' % backup_type)
 
         if result:
-            # cursor.execute("update logs set status=1,message='Done' where provision_id=%d and id=%d" % (provi_id, record_id))
             record.status = 1
             record.message = 'Done'
         else:
-            # cursor.execute("update logs set status=-1,message='Failed. See %s' where provision_id=%d and id=%d" % (self.log, provi_id, record_id))
             record.status = -1
             record.message = 'Failed. See %s' % self.log
 
         record.save()
-        # db.commit()
-        # db.close()
 
     def compress_provision_dir(self, chdir=None):
         date = datetime.now()
@@ -191,16 +160,9 @@ class BackupManager:
         os.remove(tarname + '.tar.gz')
 
     def initial_backup_record(self, backup_type):
-        
-        data = self.get_db_name()
-        provi_id = data[0]
-
-        db = pymysql.connect("localhost", "root", self.pwrd, "secure_vps")
-        cursor = db.cursor()
-        cursor.execute("insert into logs(provision_id,status,backup_type) values(%d,0,%d)" % (provi_id, backup_type))
-
-        db.commit()
-        db.close()
+        provi_id = self.dbinfo.id
+        new_record = BackupLog(provision_id='%s' % provi_id, status='0', backup_type='%s' % backup_type)
+        new_record.save()
 
     def delete_old_local_backup(self, chdir=None, number=0):
         count = 0
@@ -219,32 +181,32 @@ class BackupManager:
 
 
 class BackupAllProvision:
-    
-        def __init__(self):
-            self.password = BackupManager.get_root_pass()
-            self.pro_list = self.list_all_provision()
 
-        def list_all_provision(self):
-            db = pymysql.connect("localhost", "root", self.password, "secure_vps")
-            cursor = db.cursor()
-            cursor.execute("select provision_name from provision")
-            data = cursor.fetchall
-            db.close()
-            return data
+    def __init__(self):
+        self.password = BackupManager.get_root_pass()
+        # self.pro_list = self.list_all_provision()
+        self.pro_list = Provision.objects.filter(deactive_flg="0")
 
-        def local_backup(self, chdir=None):
-            for k in self.pro_list():
-                BackupManager(k[0]).initial_backup_record(0)
-                BackupManager(k[0]).local_backup(chdir)
+    def list_all_provision(self):
+        db = pymysql.connect("localhost", "root", self.password, "secure_vps")
+        cursor = db.cursor()
+        cursor.execute("select provision_name from provision")
+        data = cursor.fetchall
+        db.close()
+        return data
 
-        def remote_backup(self, remote_user, remote_host, remote_port, remote_pass, remote_dest):
-            for k in self.pro_list():
-                BackupManager(k[0]).initial_backup_record(1)
-                BackupManager(k[0]).remote_backup(remote_user, remote_host, remote_port, remote_pass, remote_dest)
+    def local_backup(self, chdir=None):
+        for k in self.pro_list():
+            BackupManager(k.provision_name).initial_backup_record(0)
+            BackupManager(k.provision_name).local_backup(chdir)
 
-        def drive_backup(self, drive_dir):
-            for k in self.pro_list():
-                BackupManager(k[0]).initial_backup_record(2)
-                BackupManager(k[0]).drive_backup(drive_dir)
+    def remote_backup(self, remote_user, remote_host, remote_port, remote_pass, remote_dest):
+        for k in self.pro_list():
+            BackupManager(k.provision_name).initial_backup_record(1)
+            BackupManager(k.provision_name).remote_backup(remote_user, remote_host, remote_port, remote_pass, remote_dest)
 
+    def drive_backup(self, drive_dir):
+        for k in self.pro_list():
+            BackupManager(k.provision_name).initial_backup_record(2)
+            BackupManager(k.provision_name).drive_backup(drive_dir)
 
