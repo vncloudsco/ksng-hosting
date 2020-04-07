@@ -5,7 +5,7 @@ import os
 import re
 import glob
 import shutil
-import plogical.functionLib as fLib
+import functionLib as fLib
 
 
 class SettingManager:
@@ -29,17 +29,10 @@ class SettingManager:
 
     def backup_nginx_conf(self):
         for fi in glob.glob(self.path):
-            shutil.copy(fi, '/etc/backup_restric/')
-
-    def rollback(self, rule_id):
-        bk_path = '/etc/backup_restric/%s_*' % self.provision
-        for fi in glob.glob(bk_path):
-            shutil.copy(fi, '/etc/nginx/conf.d/')
-        os.remove('/etc/nginx/restrict_access/user_%s_%s' % (self.provision, rule_id))
-        os.remove('/etc/nginx/restrict_access/au_%s_%s' % (self.provision, rule_id))
+            shutil.copy(fi, '/etc/backup_restrict/')
 
     def rollback_nginx_only(self):
-        bk_path = '/etc/backup_restric/%s_*' % self.provision
+        bk_path = '/etc/backup_restrict/%s_*' % self.provision
         for fi in glob.glob(bk_path):
             shutil.copy(fi, '/etc/nginx/conf.d/')
 
@@ -92,7 +85,6 @@ class SettingManager:
             print('can not add restriction rule to wp-login url')
             return False
         else:
-            # url != 'wp-login':
             if self.check_existence_in_file(url, self.path):
                 print(' the %s location has been added' % url)
                 return False
@@ -109,7 +101,9 @@ class SettingManager:
             print('Done')
             return True
 
-        self.rollback(rule_id)
+        self.rollback_nginx_only()
+        os.remove(output_file)
+        os.remove('/etc/nginx/restrict_access/user_%s_%s' % (self.provision, rule_id))
         return False
 
     def add_filterip(self, url=None, ip_address=None, rule_id=None):
@@ -133,7 +127,6 @@ class SettingManager:
             print('can not add restriction rule to wp-login url')
             return False
         else:
-            # url != 'wp-login':
             if self.check_existence_in_file(url, self.path):
                 print(' the %s location has been added' % url)
                 return False
@@ -149,7 +142,8 @@ class SettingManager:
             print('Done')
             return True
 
-        self.rollback(rule_id)
+        self.rollback_nginx_only()
+        os.remove(output_file)
         return False
 
     def remove_conf_related_nginx(self, pat=None):
@@ -236,11 +230,11 @@ class SettingManager:
                 for fi in glob.glob(self.path):
                     shutil.copy(fi, '/etc/nginx/bk_nginx_conf/')
                     shutil.copy(fi, '/etc/temp_nginx_conf/')
-                shutil.chown('/etc/temp_nginx_conf/', 'kusanagi', 'kusanagi')
+                shutil.chown('/etc/temp_nginx_conf/', 'httpd', 'www')
                 for root, dirs, files in os.walk('/etc/temp_nginx_conf/'):
                     for name in files:
-                        shutil.chown(os.path.join(root, name), 'kusanagi', 'kusanagi')
-            return True
+                        shutil.chown(os.path.join(root, name), 'httpd', 'www')
+                return True
 
     def edit_nginx(self, domain_name):
         if not fLib.verify_prov_existed(self.provision) or not fLib.verify_prov_existed(domain_name):
@@ -266,6 +260,6 @@ class SettingManager:
                 fLib.reload_service('nginx')
                 return True
             else:
-                print('nginx conf check failed. Please run nginx -t for more details')
+                print('nginx conf check failed. Please run "nginx -t" for more details')
                 return False
 
