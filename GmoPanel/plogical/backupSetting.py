@@ -10,6 +10,7 @@ from datetime import datetime
 import re
 import django
 from plogical.phpSetting import execute, execute_outputfile
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class BackupManager:
@@ -59,7 +60,10 @@ class BackupManager:
 
     def update_backup_record(self, backup_type, result):
         provi_id = self.dbinfo.id
-        record = BackupLog.objects.get(provision_id='%d' % provi_id, status='0', backup_type='%d' % backup_type)
+        try:
+            record = BackupLog.objects.get(provision_id='%d' % provi_id, status='0', backup_type='%d' % backup_type)
+        except ObjectDoesNotExist as error:
+            print(error)
 
         if result:
             record.status = 1
