@@ -140,7 +140,7 @@ class BackupManager:
             self.update_backup_record(1, 0)
             # return {'status': 0, 'msg': 'Check %s for more details' % self.log}
 
-    def drive_backup(self, drive_dir):
+    def drive_backup(self, drive_dir=None):
 
         self.append_log(self.log, '--- Backup to Google Drive')
         self.backup_db()
