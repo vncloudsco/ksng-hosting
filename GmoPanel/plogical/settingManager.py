@@ -263,3 +263,33 @@ class SettingManager:
                 print('nginx conf check failed. Please run "nginx -t" for more details')
                 return False
 
+    def f_cache(self, action=None):
+        if action == 'on':
+            regex = re.compile(r"set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache")
+            for fi in glob.glob(self.path):
+                f = open(fi, 'rt')
+                g = open('/opt/tmp_nginx.conf', 'wt')
+                for line in f:
+                    line = re.sub('set $do_not_cache 0; ## page cache', line)
+                    g.write(line)
+                f.close()
+                g.close()
+                shutil.copy('/opt/tmp_nginx.conf', fi)
+            os.remove('/opt/tmp_nginx.conf')
+
+    def replace_in_nginx(self, regex_pattern, replacement):
+        regex = re.compile(r"%s" % regex_pattern)
+        for fi in glob.glob(self.path):
+            f = open(fi, 'rt')
+            g = open('/opt/tmp_nginx.conf', 'wt')
+            for line in f:
+                line = re.sub('%s' % replacement, line)
+                g.write(line)
+            f.close()
+            g.close()
+            shutil.copy('/opt/tmp_nginx.conf', fi)
+        os.remove('/opt/tmp_nginx.conf')
+
+
+
+
