@@ -161,7 +161,7 @@ class BackupManager:
         new_record = BackupLog(provision_id='%s' % provi_id, status='0', backup_type='%s' % backup_type)
         new_record.save()
 
-    def delete_old_local_backup(self, chdir=None, number=0):
+    def delete_old_local_backup(self, chdir=None, number=999):
         count = 0
         pattern = chdir+self.provi+'\.\d+'
         regex = re.compile(pattern)
@@ -197,3 +197,7 @@ class BackupAllProvision:
         for k in self.pro_list:
             BackupManager(k.provision_name).initial_backup_record(2)
             BackupManager(k.provision_name).drive_backup(drive_dir)
+
+    def delete_old_local_backup_all_provision(self, chdir=None, number=999):
+        for k in self.pro_list:
+            BackupManager(k.provision_name).delete_old_local_backup(chdir, number)

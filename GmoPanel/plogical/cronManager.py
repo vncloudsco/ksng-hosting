@@ -3,6 +3,7 @@
 from crontab import CronTab
 import django
 
+
 class CronManager:
     def __init__(self, command=None, comment=None):
         self.command = command
@@ -12,7 +13,7 @@ class CronManager:
         self.job.minute.on(0)
         self.job.hour.on(23)
 
-    def daily(self, *dow):
+    def daily(self, dow):
         self.job.dow.on(*dow)
         self.cron.write()
 
