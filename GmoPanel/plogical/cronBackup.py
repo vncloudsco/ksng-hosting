@@ -12,15 +12,15 @@ from plogical.backupSetting import BackupAllProvision, BackupManager
 from backupManager.models import CronJob
 
 
-def retention(freq, number):
+def retention(freq=None, number=None):
     chdir = '/home/kusanagi/backup/%s/' % freq
     job = BackupAllProvision()
-    job.delete_old_local_backup_all_provision(chdir, number)
+    job.delete_old_local_backup_all_provision(chdir, int(number))
 
 
-def back_up(freq, number):
+def back_up(freq=None, number=None):
     try:
-        tasks = CronJob.objects.get(id="%s" % number)
+        tasks = CronJob.objects.get(id="%s" % int(number))
     except ObjectDoesNotExist as error:
         return error
     job = BackupAllProvision()
