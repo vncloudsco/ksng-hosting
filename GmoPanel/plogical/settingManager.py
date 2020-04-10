@@ -6,6 +6,7 @@ import re
 import glob
 import shutil
 import pathlib
+import urllib.parse
 import plogical.functionLib as fLib
 
 
@@ -264,6 +265,19 @@ class SettingManager:
                 print('nginx conf check failed. Please run "nginx -t" for more details')
                 return False
 
+    def replace_in_nginx(self, regex_pattern, replacement):
+        regex = re.compile(regex_pattern)
+        for fi in glob.glob(self.path):
+            f = open(fi, 'rt')
+            g = open('/opt/tmp_nginx.conf', 'wt')
+            for line in f:
+                line = regex.sub(replacement, line)
+                g.write(line)
+            f.close()
+            g.close()
+            shutil.copy('/opt/tmp_nginx.conf', fi)
+        os.remove('/opt/tmp_nginx.conf')
+
     def f_cache(self, action=None, uri=None):
         if action == 'on':
             # regex = re.compile(r"set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache")
@@ -283,24 +297,39 @@ class SettingManager:
                 if p.owner() == 'httpd' and int(res) == 1:
                     fqdn = fLib.get_fqdn(self.provision)
                     if uri:
-                        print(uri)
-                        print(fqdn)
+                        url_unicode = urllib.parse.quote(uri)
+                        print(url_unicode)
+                        res = fLib.execute('grep -i -a -r -m 1 -E "^KEY.*:https?://%s%s" %s' % (fqdn, url_unicode, nginx_cache_dir))
+                        g = open('/opt/tmp_nginx.conf', 'w')
+                        g.write(res)
+                        g.close()
+                        g = open('/opt/tmp_nginx.conf', 'r')
+                        for line in g:
+                            binary_file = line.replace(':KEY:', '').split()[0]
+                            os.remove(binary_file)
+                        g.close()
                     else:
-                        res = fLib.execute('grep -r %s %s' % (fqdn, nginx_cache_dir))
-                        print(res)
+                        res = fLib.execute('grep -r -E "%s" %s' % (fqdn, nginx_cache_dir))
+                        g = open('/opt/tmp_nginx.conf', 'w')
+                        g.write(res)
+                        g.close()
+                        g = open('/opt/tmp_nginx.conf', 'r')
+                        for line in g:
+                            binary_file = line.split()[2]
+                            os.remove(binary_file)
+                        g.close()
+            else:
+                print('Nginx cache dir %s is not found' % nginx_cache_dir)
+                return False
 
-    def replace_in_nginx(self, regex_pattern, replacement):
-        regex = re.compile(regex_pattern)
-        for fi in glob.glob(self.path):
-            f = open(fi, 'rt')
-            g = open('/opt/tmp_nginx.conf', 'wt')
-            for line in f:
-                line = regex.sub(replacement, line)
-                g.write(line)
-            f.close()
-            g.close()
-            shutil.copy('/opt/tmp_nginx.conf', fi)
-        os.remove('/opt/tmp_nginx.conf')
+        nginx_check = fLib.check_nginx_valid()
+        if nginx_check == 0:
+            fLib.reload_service('nginx')
+            return True
+        else:
+            return False
+
+
 
 
 
