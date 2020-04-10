@@ -5,7 +5,8 @@ import os
 import re
 import glob
 import shutil
-import functionLib as fLib
+import pathlib
+import plogical.functionLib as fLib
 
 
 class SettingManager:
@@ -263,12 +264,30 @@ class SettingManager:
                 print('nginx conf check failed. Please run "nginx -t" for more details')
                 return False
 
-    def f_cache(self, action=None):
+    def f_cache(self, action=None, uri=None):
         if action == 'on':
             # regex = re.compile(r"set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache")
             pat = 'set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache'
             repl = 'set $do_not_cache 0; ## page cache'
             self.replace_in_nginx(pat, repl)
+        if action == 'off':
+            pat = 'set\s+\$do_not_cache\s+0\s*;\s*#+\s*page\s*cache'
+            repl = 'set $do_not_cache 1; ## page cache'
+            self.replace_in_nginx(pat, repl)
+        if action == 'clear':
+            nginx_cache_dir = '/var/cache/nginx/wordpress'
+            p = pathlib.Path(nginx_cache_dir)
+            if p.exists():
+                print("owner", p.owner())
+                res = fLib.execute('ls -dl %s | wc -l' % nginx_cache_dir) # deo hieu de lam gi
+                if p.owner() == 'httpd' and int(res) == 1:
+                    fqdn = fLib.get_fqdn(self.provision)
+                    if uri:
+                        print(uri)
+                        print(fqdn)
+                    else:
+                        res = fLib.execute('grep -r %s %s' % (fqdn, nginx_cache_dir))
+                        print(res)
 
     def replace_in_nginx(self, regex_pattern, replacement):
         regex = re.compile(regex_pattern)
