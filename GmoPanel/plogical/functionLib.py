@@ -124,3 +124,14 @@ def check_nginx_valid():
     return int(res)
 
 
+def get_fqdn(profile):
+    fqdn = None
+    with open('/etc/nginx/conf.d/%s_http.conf' % profile, 'r') as fp: lines = fp.read().splitlines()
+    for line in lines:
+        grep = re.findall(r'server_name', line)
+        if grep:
+            fqdn = line.split()[1]
+            break
+    return fqdn
+
+
