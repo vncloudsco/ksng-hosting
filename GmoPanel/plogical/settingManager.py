@@ -298,6 +298,8 @@ class SettingManager:
                     fqdn = fLib.get_fqdn(self.provision)
                     if uri:
                         url_unicode = urllib.parse.quote(uri)
+                        if not url_unicode.startswith('/', 0, 1):
+                            url_unicode = '/%s' % url_unicode
                         res = fLib.execute('grep -i -a -r -m 1 -E "^KEY.*:https?://%s%s" %s' % (fqdn, url_unicode, nginx_cache_dir))
                         g = open('/opt/tmp_nginx.conf', 'w')
                         g.write(res)
@@ -328,8 +330,8 @@ class SettingManager:
         else:
             return False
 
-
-
-
-
-
+    def b_cache(self, action=None):
+        if action == 'on':
+            pass
+        if action == 'off':
+            pass
