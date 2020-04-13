@@ -9,7 +9,7 @@ def execute(command):
     try:
         res = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         return res.stdout
-    except BaseException as error:
+    except subprocess.CalledProcessError as error:
         return error
 
 

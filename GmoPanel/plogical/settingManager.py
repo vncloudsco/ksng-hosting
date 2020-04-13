@@ -1,13 +1,20 @@
 #!/usr/bin/env python3
 
 import os
-# import subprocess
+import sys
+import subprocess
 import re
 import glob
 import shutil
 import pathlib
 import urllib.parse
 import plogical.functionLib as fLib
+import django
+sys.path.append('/opt/scripts_py/GmoPanel')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "GmoPanel.settings")
+django.setup()
+from websiteManager.models import Provision
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class SettingManager:
@@ -300,25 +307,43 @@ class SettingManager:
                         url_unicode = urllib.parse.quote(uri)
                         if not url_unicode.startswith('/', 0, 1):
                             url_unicode = '/%s' % url_unicode
-                        res = fLib.execute('grep -i -a -r -m 1 -E "^KEY.*:https?://%s%s" %s' % (fqdn, url_unicode, nginx_cache_dir))
-                        g = open('/opt/tmp_nginx.conf', 'w')
-                        g.write(res)
-                        g.close()
-                        g = open('/opt/tmp_nginx.conf', 'r')
-                        for line in g:
-                            binary_file = line.replace(':KEY:', '').split()[0]
-                            os.remove(binary_file)
-                        g.close()
+                        command = 'grep -i -a -r -m 1 -E "^KEY.*:https?://%s%s" %s' % (
+                        fqdn, url_unicode, nginx_cache_dir)
+                        # res = fLib.execute('grep -i -a -r -m 1 -E "^KEY.*:https?://%s%s" %s' % (
+                        # fqdn, url_unicode, nginx_cache_dir))
+                        try:
+                            res = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE,
+                                                 stderr=subprocess.PIPE, universal_newlines=True)
+                            g = open('/opt/tmp_nginx.conf', 'w')
+                            g.write(res.stdout)
+                            g.close()
+                            g = open('/opt/tmp_nginx.conf', 'r')
+                            for line in g:
+                                binary_file = line.replace(':KEY:', '').split()[0]
+                                os.remove(binary_file)
+                            g.close()
+                        except subprocess.CalledProcessError as error:
+                            if error.returncode > 0:
+                                print("URL has not been cached")
+                                return True
                     else:
-                        res = fLib.execute('grep -r -E "%s" %s' % (fqdn, nginx_cache_dir))
-                        g = open('/opt/tmp_nginx.conf', 'w')
-                        g.write(res)
-                        g.close()
-                        g = open('/opt/tmp_nginx.conf', 'r')
-                        for line in g:
-                            binary_file = line.split()[2]
-                            os.remove(binary_file)
-                        g.close()
+                        command = 'grep -r -E "%s" %s' % (fqdn, nginx_cache_dir)
+                        # res = fLib.execute('grep -r -E "%s" %s' % (fqdn, nginx_cache_dir))
+                        try:
+                            res = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE,
+                                                 stderr=subprocess.PIPE, universal_newlines=True)
+                            g = open('/opt/tmp_nginx.conf', 'w')
+                            g.write(res.stdout)
+                            g.close()
+                            g = open('/opt/tmp_nginx.conf', 'r')
+                            for line in g:
+                                binary_file = line.split()[2]
+                                os.remove(binary_file)
+                            g.close()
+                        except subprocess.CalledProcessError as error:
+                            if error.returncode > 0:
+                                print("No cache found")
+                                return True
             else:
                 print('Nginx cache dir %s is not found' % nginx_cache_dir)
                 return False
@@ -328,10 +353,34 @@ class SettingManager:
             fLib.reload_service('nginx')
             return True
         else:
+            print('Nginx conf check failed. Please run "nginx -t" for more details')
             return False
 
     def b_cache(self, action=None):
+        try:
+            profile_info = Provision.objects.get(provision_name='%s' % self.provision)
+        except ObjectDoesNotExist as error:
+            return error
+        kusanagi_dir = '/home/kusanagi/%s' % self.provision
+        app_id = profile_info.app_id
+        # fqdn = profile_info.domain
+        if not pathlib.Path(kusanagi_dir).exists():
+            print("%s is not found" % kusanagi_dir)
+            return False
+        if app_id == 1:
+            if os.path.isfile('%s/wp-config.php' % kusanagi_dir):
+                wpconfig = '%s/wp-config.php' % kusanagi_dir
+            elif os.path.isfile('%s/DocumentRoot/wp-config.php' % kusanagi_dir):
+                wpconfig = '%s/DocumentRoot/wp-config.php' % kusanagi_dir
+            else:
+                wpconfig = ""
+        if wpconfig == "":
+            print("WordPress is not installed. Nothing to do")
+            return False
+        tmp_file = '/opt/tmp_nginx.conf'
         if action == 'on':
-            pass
+            pat = "^\s*define\s*(\s*'WP_CACHE'.*$"
+            repl = "define('WP_CACHE', true);"
+            self.replace_multiple(wpconfig, tmp_file, pat, repl)
         if action == 'off':
             pass
