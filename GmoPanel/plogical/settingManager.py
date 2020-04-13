@@ -272,9 +272,9 @@ class SettingManager:
                 print('nginx conf check failed. Please run "nginx -t" for more details')
                 return False
 
-    def replace_in_nginx(self, regex_pattern, replacement):
+    def replace_in_file(self, regex_pattern, replacement, file_path):
         regex = re.compile(regex_pattern)
-        for fi in glob.glob(self.path):
+        for fi in glob.glob(file_path):
             f = open(fi, 'rt')
             g = open('/opt/tmp_nginx.conf', 'wt')
             for line in f:
@@ -290,16 +290,15 @@ class SettingManager:
             # regex = re.compile(r"set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache")
             pat = 'set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache'
             repl = 'set $do_not_cache 0; ## page cache'
-            self.replace_in_nginx(pat, repl)
+            self.replace_in_file(pat, repl, self.path)
         if action == 'off':
             pat = 'set\s+\$do_not_cache\s+0\s*;\s*#+\s*page\s*cache'
             repl = 'set $do_not_cache 1; ## page cache'
-            self.replace_in_nginx(pat, repl)
+            self.replace_in_file(pat, repl, self.path)
         if action == 'clear':
             nginx_cache_dir = '/var/cache/nginx/wordpress'
             p = pathlib.Path(nginx_cache_dir)
             if p.exists():
-                print("owner", p.owner())
                 res = fLib.execute('ls -dl %s | wc -l' % nginx_cache_dir) # deo hieu de lam gi
                 if p.owner() == 'httpd' and int(res) == 1:
                     fqdn = fLib.get_fqdn(self.provision)
@@ -381,6 +380,6 @@ class SettingManager:
         if action == 'on':
             pat = "^\s*define\s*(\s*'WP_CACHE'.*$"
             repl = "define('WP_CACHE', true);"
-            self.replace_multiple(wpconfig, tmp_file, pat, repl)
+            self.replace_in_file(pat, repl, wpconfig)
         if action == 'off':
             pass
