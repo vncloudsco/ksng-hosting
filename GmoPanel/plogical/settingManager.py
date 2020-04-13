@@ -355,14 +355,13 @@ class SettingManager:
             print('Nginx conf check failed. Please run "nginx -t" for more details')
             return False
 
-    def b_cache(self, action=None):
+    def b_cache(self, action=None, uri=None):
         try:
             profile_info = Provision.objects.get(provision_name='%s' % self.provision)
         except ObjectDoesNotExist as error:
             return error
         kusanagi_dir = '/home/kusanagi/%s' % self.provision
         app_id = profile_info.app_id
-        # fqdn = profile_info.domain
         if not pathlib.Path(kusanagi_dir).exists():
             print("%s is not found" % kusanagi_dir)
             return False
@@ -376,10 +375,24 @@ class SettingManager:
         if wpconfig == "":
             print("WordPress is not installed. Nothing to do")
             return False
-        tmp_file = '/opt/tmp_nginx.conf'
+        regex = re.compile("^.*define\('WP_CACHE'")
+        count = 0
+        with open(wpconfig, 'r') as f:
+            for line in f:
+                if regex.search(line):
+                    count += 1
+        if count > 1 or count == 0:
+            print('None or multiple WP_CACHE constant')
+            return False
         if action == 'on':
-            pat = "^\s*define\s*(\s*'WP_CACHE'.*$"
+            pat = "^\s*#+\s*define\s*\(\s*'WP_CACHE'.*$"
             repl = "define('WP_CACHE', true);"
             self.replace_in_file(pat, repl, wpconfig)
         if action == 'off':
-            pass
+            pat = "^\s*define\('WP_CACHE'.*$"
+            repl = "#define('WP_CACHE', true);"
+            self.replace_in_file(pat, repl, wpconfig)
+        if action == 'clear':
+            command = 'php %s/tools/bcache.clear.php %s' %(kusanagi_dir, uri)
+            fLib.execute(command)
+        return True
