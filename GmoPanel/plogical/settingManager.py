@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
 import os
-import sys
 import subprocess
 import re
 import glob
@@ -9,12 +8,6 @@ import shutil
 import pathlib
 import urllib.parse
 import plogical.functionLib as fLib
-import django
-sys.path.append('/opt/scripts_py/GmoPanel')
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "GmoPanel.settings")
-django.setup()
-from websiteManager.models import Provision
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class SettingManager:
@@ -356,16 +349,25 @@ class SettingManager:
             return False
 
     def b_cache(self, action=None, uri=None):
-        try:
-            profile_info = Provision.objects.get(provision_name='%s' % self.provision)
-        except ObjectDoesNotExist as error:
-            return error
+        # try:
+        #    profile_info = Provision.objects.get(provision_name='%s' % self.provision)
+        #except ObjectDoesNotExist as error:
+        #    return error
+        # app_id = profile_info.app_id
+        with open('/etc/kusanagi.d/profile.conf', 'rt') as f:
+            for line in f:
+                if re.search(r"\[%s\]" % self.provision, line):
+                    for i in range(3):
+                        li = next(f)
+                        if re.search(r"KUSANAGI_TYPE", li):
+                            app_id = li.split('"')[1]
+                    break
+
         kusanagi_dir = '/home/kusanagi/%s' % self.provision
-        app_id = profile_info.app_id
         if not pathlib.Path(kusanagi_dir).exists():
             print("%s is not found" % kusanagi_dir)
             return False
-        if app_id == 1:
+        if app_id == "WordPress":
             if os.path.isfile('%s/wp-config.php' % kusanagi_dir):
                 wpconfig = '%s/wp-config.php' % kusanagi_dir
             elif os.path.isfile('%s/DocumentRoot/wp-config.php' % kusanagi_dir):
