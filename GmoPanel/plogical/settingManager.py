@@ -397,7 +397,8 @@ class SettingManager:
             self.replace_in_file(pat, repl, wpconfig)
         if action == 'clear':
             print('Clearing cache')
-            command = 'php %s/tools/bcache.clear.php %s' %(kusanagi_dir, uri)
+            os.chdir('%s/tools' % kusanagi_dir)
+            command = 'php ./bcache.clear.php %s' % uri
             fLib.execute(command)
         print('Done')
         return True
