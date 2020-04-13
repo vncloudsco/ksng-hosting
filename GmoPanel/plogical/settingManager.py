@@ -280,15 +280,18 @@ class SettingManager:
 
     def f_cache(self, action=None, uri=None):
         if action == 'on':
+            print('Turning on')
             # regex = re.compile(r"set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache")
             pat = 'set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache'
             repl = 'set $do_not_cache 0; ## page cache'
             self.replace_in_file(pat, repl, self.path)
         if action == 'off':
+            print('Turning off')
             pat = 'set\s+\$do_not_cache\s+0\s*;\s*#+\s*page\s*cache'
             repl = 'set $do_not_cache 1; ## page cache'
             self.replace_in_file(pat, repl, self.path)
         if action == 'clear':
+            print('Clearing cache')
             nginx_cache_dir = '/var/cache/nginx/wordpress'
             p = pathlib.Path(nginx_cache_dir)
             if p.exists():
@@ -343,17 +346,13 @@ class SettingManager:
         nginx_check = fLib.check_nginx_valid()
         if nginx_check == 0:
             fLib.reload_service('nginx')
+            print('Done')
             return True
         else:
             print('Nginx conf check failed. Please run "nginx -t" for more details')
             return False
 
     def b_cache(self, action=None, uri=None):
-        # try:
-        #    profile_info = Provision.objects.get(provision_name='%s' % self.provision)
-        #except ObjectDoesNotExist as error:
-        #    return error
-        # app_id = profile_info.app_id
         with open('/etc/kusanagi.d/profile.conf', 'rt') as f:
             for line in f:
                 if re.search(r"\[%s\]" % self.provision, line):
@@ -387,14 +386,18 @@ class SettingManager:
             print('None or multiple WP_CACHE constant')
             return False
         if action == 'on':
+            print('Turning on')
             pat = "^\s*#+\s*define\s*\(\s*'WP_CACHE'.*$"
             repl = "define('WP_CACHE', true);"
             self.replace_in_file(pat, repl, wpconfig)
         if action == 'off':
+            print('Turning off')
             pat = "^\s*define\('WP_CACHE'.*$"
             repl = "#define('WP_CACHE', true);"
             self.replace_in_file(pat, repl, wpconfig)
         if action == 'clear':
+            print('Clearing cache')
             command = 'php %s/tools/bcache.clear.php %s' %(kusanagi_dir, uri)
             fLib.execute(command)
+        print('Done')
         return True
