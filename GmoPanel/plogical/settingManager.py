@@ -393,7 +393,7 @@ class SettingManager:
             print('None or multiple WP_CACHE constant')
             return False
         if action == 'status':
-            pat = r"^\s*define\s*(\s*'WP_CACHE\s*=\s*True"
+            pat = r"^\s*define\s*\(\s*'WP_CACHE'\s*,\s*true"
             if self.check_existence_in_file(pat, wpconfig):
                 print('bcache is on')
             else:
