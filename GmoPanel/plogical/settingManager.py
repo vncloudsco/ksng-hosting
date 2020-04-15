@@ -49,18 +49,6 @@ class SettingManager:
         f.close()
         g.close()
 
-    @staticmethod
-    def replace_multiple_in_file(file_path=None, pattern=None, replacement=None):
-        for fi in glob.glob(file_path):
-            f = open(fi, 'rt')
-            g = open('/opt/tmp_nginx.conf', 'wt')
-            for line in f:
-                for pat, repl in zip(pattern, replacement):
-                    line = re.sub(pat, repl, line)
-                    g.write(line)
-            f.close()
-            g.close()
-
     def inject_rule_to_nginx(self, anchor_string=None, file_included=None):
         for fi in glob.glob(self.path):
             f = open(fi, 'rt')
@@ -277,7 +265,8 @@ class SettingManager:
                 print('nginx conf check failed. Please run "nginx -t" for more details')
                 return False
 
-    def replace_in_file(self, regex_pattern, replacement, file_path):
+    @staticmethod
+    def replace_in_file(regex_pattern, replacement, file_path):
         regex = re.compile(regex_pattern)
         for fi in glob.glob(file_path):
             f = open(fi, 'rt')
@@ -294,9 +283,9 @@ class SettingManager:
         if action == 'status':
             pat = r"set\s* \$do_not_cache\s*0\s*;\s*#+\s*page\s*cache"
             if self.check_existence_in_file(pat, '/etc/nginx/conf.d/%s_http.conf' % self.provision):
-                print('fcache is on')
+                print('on')
             else:
-                print('fcache is off')
+                print('off')
             return
         if action == 'on':
             print('Turning on')
@@ -407,9 +396,9 @@ class SettingManager:
         if action == 'status':
             pat = r"^\s*define\s*\(\s*'WP_CACHE'\s*,\s*true"
             if self.check_existence_in_file(pat, wpconfig):
-                print('bcache is on')
+                print('on')
             else:
-                print('bcache if off')
+                print('off')
             return
         if action == 'on':
             print('Turning on')
@@ -455,9 +444,9 @@ class SettingManager:
                 print('waf is on')
             elif fLib.is_active('httpd') == 0 and os.path.isfile(apache_waf_root_conf) \
                     and not self.check_existence_in_file('#kusanagi_comment_do_not_delete;', apache_waf_root_conf):
-                print('waf is on')
+                print('on')
             else:
-                print('waf is off')
+                print('off')
             return
         if action == 'on':
             print('Turn on waf')
@@ -492,10 +481,6 @@ class SettingManager:
             repl = r'\1#include \2'
             self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_http.conf')
             self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_ssl.conf')
-            # test func
-            pat = (r'([^#]+)IncludeOptional[ \t]+(modsecurity\.d/.*)', r'([^#]+)SecAuditLog[ \t]+(.*)')
-            repl = (r'\1#IncludeOptional \2', r'\1#SecAuditLog \2')
-            self.replace_multiple_in_file('/etc/httpd/conf.d/conduong.info_http.conf', pat, repl)
 
             pat = r'([^#]+)IncludeOptional[ \t]+(modsecurity\.d/.*)'
             repl = r'\1#IncludeOptional \2'
