@@ -438,9 +438,11 @@ class SettingManager:
         nginx_waf_root_conf = '/etc/nginx/conf.d/kusanagi_naxsi_core.conf'
         apache_waf_root_conf = '/etc/httpd/conf.d/mod_security.conf'
         if action == 'status':
-            if fLib.is_active('nginx') == 0 and os.path.isfile(nginx_waf_root_conf) and not self.check_existence_in_file('#kusanagi_comment_do_not_delete;', nginx_waf_root_conf):
+            if fLib.is_active('nginx') == 0 and os.path.isfile(nginx_waf_root_conf) \
+                    and not self.check_existence_in_file('#kusanagi_comment_do_not_delete;', nginx_waf_root_conf):
                 print('waf is on')
-            elif fLib.is_active('httpd') == 0 and os.path.isfile(apache_waf_root_conf) and not self.check_existence_in_file('#kusanagi_comment_do_not_delete;', apache_waf_root_conf):
+            elif fLib.is_active('httpd') == 0 and os.path.isfile(apache_waf_root_conf) \
+                    and not self.check_existence_in_file('#kusanagi_comment_do_not_delete;', apache_waf_root_conf):
                 print('waf is on')
             else:
                 print('waf is off')
@@ -467,14 +469,6 @@ class SettingManager:
                 repl = r"SecAuditLog \1"
                 self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
                 self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
-            # fLib.reload_service('httpd')
-            # if fLib.check_nginx_valid() == 0:
-            #    fLib.reload_service('nginx')
-            #    print('Done')
-            #    return True
-            # else:
-            #    print('Nginx conf check failed.')
-            #    return False
 
         if action == 'off':
             print('Turn off waf')
@@ -503,21 +497,4 @@ class SettingManager:
         else:
             print('Nginx conf check failed.')
             return False
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
