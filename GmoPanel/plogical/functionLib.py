@@ -135,3 +135,14 @@ def get_fqdn(profile):
     return fqdn
 
 
+def yum_install(package):
+    command = 'rpm -q %s > /dev/null 2>&1; echo $?' % package
+    res = execute(command)
+    if int(res) == 0:
+        return 0
+    else:
+        yum = execute('yum install -y %s > /dev/null 2>&1; echo $? ' % package)
+        return yum.stdout
+
+
+
