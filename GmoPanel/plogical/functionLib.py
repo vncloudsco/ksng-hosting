@@ -40,8 +40,9 @@ def restart_service(service):
 
 
 def reload_service(service):
-    command = 'systemctl reload %s' % service
-    execute(command)
+    if is_enabled(service) == 0:
+        command = 'systemctl reload %s' % service
+        execute(command)
 
 
 def stop_and_disable_service(service):
@@ -142,7 +143,7 @@ def yum_install(package):
         return 0
     else:
         yum = execute('yum install -y %s > /dev/null 2>&1; echo $? ' % package)
-        return yum.stdout
+        return int(yum.stdout)
 
 
 

@@ -276,19 +276,26 @@ class SettingManager:
             f.close()
             g.close()
             shutil.copy('/opt/tmp_nginx.conf', fi)
-        os.remove('/opt/tmp_nginx.conf')
+        # os.remove('/opt/tmp_nginx.conf')
 
     def f_cache(self, action=None, uri=None):
+        if action == 'status':
+            pat = r"set\s* \$do_not_cache\s*0\s*;\s*#+\s*page\s*cache"
+            if self.check_existence_in_file(pat, '/etc/nginx/conf.d/%s_http.conf' % self.provision):
+                print('fcache is on')
+            else:
+                print('fcache is off')
+            return
         if action == 'on':
             print('Turning on')
             # regex = re.compile(r"set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache")
-            pat = 'set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache'
-            repl = 'set $do_not_cache 0; ## page cache'
+            pat = r'set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache'
+            repl = r'set $do_not_cache 0; ## page cache'
             self.replace_in_file(pat, repl, self.path)
         if action == 'off':
             print('Turning off')
-            pat = 'set\s+\$do_not_cache\s+0\s*;\s*#+\s*page\s*cache'
-            repl = 'set $do_not_cache 1; ## page cache'
+            pat = r'set\s+\$do_not_cache\s+0\s*;\s*#+\s*page\s*cache'
+            repl = r'set $do_not_cache 1; ## page cache'
             self.replace_in_file(pat, repl, self.path)
         if action == 'clear':
             print('Clearing cache')
@@ -376,7 +383,7 @@ class SettingManager:
         if wpconfig == "":
             print("WordPress is not installed. Nothing to do")
             return False
-        regex = re.compile("^.*define\('WP_CACHE'")
+        regex = re.compile(r"^.*define\('WP_CACHE'")
         count = 0
         with open(wpconfig, 'r') as f:
             for line in f:
@@ -385,15 +392,22 @@ class SettingManager:
         if count > 1 or count == 0:
             print('None or multiple WP_CACHE constant')
             return False
+        if action == 'status':
+            pat = r"^\s*define\s*(\s*'WP_CACHE\s*=\s*True"
+            if self.check_existence_in_file(pat, wpconfig):
+                print('bcache is on')
+            else:
+                print('bcache if off')
+            return
         if action == 'on':
             print('Turning on')
-            pat = "^\s*#+\s*define\s*\(\s*'WP_CACHE'.*$"
-            repl = "define('WP_CACHE', true);"
+            pat = r"^\s*#+\s*define\s*\(\s*'WP_CACHE'.*$"
+            repl = r"define('WP_CACHE', true);"
             self.replace_in_file(pat, repl, wpconfig)
         if action == 'off':
             print('Turning off')
-            pat = "^\s*define\('WP_CACHE'.*$"
-            repl = "#define('WP_CACHE', true);"
+            pat = r"^\s*define\('WP_CACHE'.*$"
+            repl = r"#define('WP_CACHE', true);"
             self.replace_in_file(pat, repl, wpconfig)
         if action == 'clear':
             print('Clearing cache')
@@ -402,3 +416,108 @@ class SettingManager:
             fLib.execute(command)
         print('Done')
         return True
+
+    def install_httpd_waf_modules(self):
+        e = fLib.yum_install('kusanagi-httpd-waf')
+        fLib.yum_install('mod_security')
+        fLib.yum_install('mod_security_crs')
+        crs_conf = '/etc/httpd/modsecurity.d/modsecurity_crs_10_config.conf'
+        if os.path.isfile(crs_conf):
+            pat = r"HTTP/0.9 HTTP/1.0 HTTP/1.1'"
+            repl = r"HTTP/0.9 HTTP/1.0 HTTP/1.1 HTTP/2.0'"
+            self.replace_in_file(pat, repl, crs_conf)
+        if pathlib.Path('/var/lib/mod_security').exists():
+            shutil.chown('/var/lib/mod_security', 'httpd', 'www')
+        if not os.path.isfile('/var/lib/mod_security/global'):
+            pathlib.Path('/var/lib/mod_security/global').touch()
+        if not os.path.isfile('/var/lib/mod_security/ip'):
+            pathlib.Path('/var/lib/mod_security/ip').touch()
+        return e
+
+    def waf(self, action=None):
+        nginx_waf_root_conf = '/etc/nginx/conf.d/kusanagi_naxsi_core.conf'
+        apache_waf_root_conf = '/etc/httpd/conf.d/mod_security.conf'
+        if action == 'status':
+            if fLib.is_active('nginx') == 0 and os.path.isfile(nginx_waf_root_conf) and not self.check_existence_in_file('#kusanagi_comment_do_not_delete;', nginx_waf_root_conf):
+                print('waf is on')
+            elif fLib.is_active('httpd') == 0 and os.path.isfile(apache_waf_root_conf) and not self.check_existence_in_file('#kusanagi_comment_do_not_delete;', apache_waf_root_conf):
+                print('waf is on')
+            else:
+                print('waf is off')
+            return
+        if action == 'on':
+            print('Turn on waf')
+            pat = '#kusanagi_comment_do_not_delete;'
+            repl = ''
+            self.replace_in_file(pat, repl, nginx_waf_root_conf)
+            pat = r'#+\t*\s*include\t*\s*(naxsi\.d/.*)'
+            repl = r'include \1'
+            self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_http.conf')
+            self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_ssl.conf')
+            # http-install mod security modules
+            if self.install_httpd_waf_modules() == 0:
+                pat = '#kusanagi_comment_do_not_delete;'
+                repl = ''
+                self.replace_in_file(pat, repl, apache_waf_root_conf)
+                pat = r"#+[ \t]*IncludeOptional[ \t]+(modsecurity\.d/.*)"
+                repl = r"IncludeOptional \1"
+                self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
+                self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
+                pat = r'#+[ \t]*SecAuditLog[ \t]+(.*)'
+                repl = r"SecAuditLog \1"
+                self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
+                self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
+            # fLib.reload_service('httpd')
+            # if fLib.check_nginx_valid() == 0:
+            #    fLib.reload_service('nginx')
+            #    print('Done')
+            #    return True
+            # else:
+            #    print('Nginx conf check failed.')
+            #    return False
+
+        if action == 'off':
+            print('Turn off waf')
+            pat = r'^'
+            repl = r'#kusanagi_comment_do_not_delete;'
+            self.replace_in_file(pat, repl, nginx_waf_root_conf)
+            self.replace_in_file(pat, repl, apache_waf_root_conf)
+            pat = r'([^#]+)include[ \t]+(naxsi\.d/.*)'
+            repl = r'\1#include \2'
+            self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_http.conf')
+            self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_ssl.conf')
+            pat = r'([^#]+)IncludeOptional[ \t]+(modsecurity\.d/.*)'
+            repl = r'\1#IncludeOptional \2'
+            self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
+            self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
+            pat = r'([^#]+)SecAuditLog[ \t]+(.*)'
+            repl = r'\1#SecAuditLog \2'
+            self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
+            self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
+
+        fLib.reload_service('httpd')
+        if fLib.check_nginx_valid() == 0:
+            fLib.reload_service('nginx')
+            print('Done')
+            return True
+        else:
+            print('Nginx conf check failed.')
+            return False
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
