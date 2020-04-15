@@ -283,10 +283,9 @@ class SettingManager:
         if action == 'status':
             pat = r"set\s* \$do_not_cache\s*0\s*;\s*#+\s*page\s*cache"
             if self.check_existence_in_file(pat, '/etc/nginx/conf.d/%s_http.conf' % self.provision):
-                print('on')
+                return 'on'
             else:
-                print('off')
-            return
+                return 'off'
         if action == 'on':
             print('Turning on')
             # regex = re.compile(r"set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache")
@@ -396,10 +395,10 @@ class SettingManager:
         if action == 'status':
             pat = r"^\s*define\s*\(\s*'WP_CACHE'\s*,\s*true"
             if self.check_existence_in_file(pat, wpconfig):
-                print('on')
+                return 'on'
             else:
-                print('off')
-            return
+                return 'off'
+
         if action == 'on':
             print('Turning on')
             pat = r"^\s*#+\s*define\s*\(\s*'WP_CACHE'.*$"
@@ -441,15 +440,15 @@ class SettingManager:
         if action == 'status':
             if fLib.is_active('nginx') == 0 and os.path.isfile(nginx_waf_root_conf) \
                     and not self.check_existence_in_file('#kusanagi_comment_do_not_delete;', nginx_waf_root_conf):
-                print('waf is on')
+                return 'on'
             elif fLib.is_active('httpd') == 0 and os.path.isfile(apache_waf_root_conf) \
                     and not self.check_existence_in_file('#kusanagi_comment_do_not_delete;', apache_waf_root_conf):
-                print('on')
+                return 'on'
             else:
-                print('off')
-            return
+                return 'off'
+
         if action == 'on':
-            print('Turn on waf')
+            print('Turning on')
             pat = '#kusanagi_comment_do_not_delete;'
             repl = ''
             self.replace_in_file(pat, repl, nginx_waf_root_conf)
@@ -472,7 +471,7 @@ class SettingManager:
                 self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
 
         if action == 'off':
-            print('Turn off waf')
+            print('Turning off')
             pat = r'^'
             repl = r'#kusanagi_comment_do_not_delete;'
             self.replace_in_file(pat, repl, nginx_waf_root_conf)
