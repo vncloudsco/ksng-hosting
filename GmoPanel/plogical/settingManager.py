@@ -504,14 +504,62 @@ class SettingManager:
 
 
 class Waf(SettingManager):
-    def __init__(self):
-        self.nginx_waf_root_conf = '/etc/nginx/conf.d/kusanagi_naxsi_core.conf'
 
     def perform(self, action=None):
+        nginx_waf_root_conf = '/etc/nginx/conf.d/kusanagi_naxsi_core.conf'
+        apache_waf_root_conf = '/etc/httpd/conf.d/mod_security.conf'
+        waf_comment = '#kusanagi_comment_do_not_delete;'
+
         if action == 'status':
-            if fLib.is_active('nginx') == 0 and os.path.isfile(self.nginx_waf_root_conf) \
-                    and not self.check_existence_in_file('#kusanagi_comment_do_not_delete;', self.nginx_waf_root_conf):
+            if fLib.is_active('nginx') == 0 and os.path.isfile(nginx_waf_root_conf) \
+                    and not self.check_existence_in_file('#kusanagi_comment_do_not_delete;', nginx_waf_root_conf):
+                return 'on'
+            elif fLib.is_active('httpd') == 0 and os.path.isfile(apache_waf_root_conf) \
+                    and not self.check_existence_in_file('#kusanagi_comment_do_not_delete;', apache_waf_root_conf):
                 return 'on'
             else:
                 return 'off'
+
+        if action == 'on':
+            print('Turning on')
+            pat = waf_comment
+            repl = ''
+            self.replace_in_file(pat, repl, nginx_waf_root_conf)
+            pat = r'#+\t*\s*include\t*\s*(naxsi\.d/.*)'
+            repl = r'include \1'
+            self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_http.conf')
+            self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_ssl.conf')
+            # http-install mod security modules
+            if self.install_httpd_waf_modules() == 0:
+                pat = waf_comment
+                repl = ''
+                self.replace_in_file(pat, repl, apache_waf_root_conf)
+                pat = (r'#+[ \t]*IncludeOptional[ \t]+(modsecurity\.d/.*)', r'#+[ \t]*SecAuditLog[ \t]+(.*)')
+                repl = (r'IncludeOptional \1', r'SecAuditLog \1')
+                self.replace_multiple_in_file('/etc/httpd/conf.d/*_http.conf', pat, repl)
+                self.replace_multiple_in_file('/etc/httpd/conf.d/*_ssl.conf', pat, repl)
+
+        if action == 'off':
+            print('Turning off')
+            pat = r'^'
+            repl = r'#kusanagi_comment_do_not_delete;'
+            self.replace_in_file(pat, repl, nginx_waf_root_conf)
+            self.replace_in_file(pat, repl, apache_waf_root_conf)
+            pat = r'([^#]+)include[ \t]+(naxsi\.d/.*)'
+            repl = r'\1#include \2'
+            self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_http.conf')
+            self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_ssl.conf')
+            pat = (r'([^#]+)IncludeOptional[ \t]+(modsecurity\.d/.*)', r'([^#]+)SecAuditLog[ \t]+(.*)')
+            repl = (r'\1#IncludeOptional \2', r'\1#SecAuditLog \2')
+            self.replace_multiple_in_file('/etc/httpd/conf.d/*_http.conf', pat, repl)
+            self.replace_multiple_in_file('/etc/httpd/conf.d/*_ssl.conf', pat, repl)
+
+        fLib.reload_service('httpd')
+        if fLib.check_nginx_valid() == 0:
+            fLib.reload_service('nginx')
+            print('Done')
+            return True
+        else:
+            print('Nginx conf check failed.')
+            return False
 
