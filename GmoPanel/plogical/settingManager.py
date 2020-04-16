@@ -49,6 +49,18 @@ class SettingManager:
         f.close()
         g.close()
 
+    @staticmethod
+    def replace_multiple_in_file(file_path=None, pattern=None, replacement=None):
+        for fi in glob.glob(file_path):
+            with open(fi, 'rt') as f:
+                g = open('/opt/tmp_nginx.conf', 'wt')
+                for line in f:
+                    for pat, repl in zip(pattern, replacement):
+                        line = re.sub(pat, repl, line)
+                    g.write(line)
+            g.close()
+            shutil.copy('/opt/tmp_nginx.conf', fi)
+
     def inject_rule_to_nginx(self, anchor_string=None, file_included=None):
         for fi in glob.glob(self.path):
             f = open(fi, 'rt')
@@ -461,14 +473,18 @@ class SettingManager:
                 pat = '#kusanagi_comment_do_not_delete;'
                 repl = ''
                 self.replace_in_file(pat, repl, apache_waf_root_conf)
-                pat = r"#+[ \t]*IncludeOptional[ \t]+(modsecurity\.d/.*)"
-                repl = r"IncludeOptional \1"
-                self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
-                self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
-                pat = r'#+[ \t]*SecAuditLog[ \t]+(.*)'
-                repl = r"SecAuditLog \1"
-                self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
-                self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
+                # pat = r"#+[ \t]*IncludeOptional[ \t]+(modsecurity\.d/.*)"
+                # repl = r"IncludeOptional \1"
+                # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
+                # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
+                # pat = r'#+[ \t]*SecAuditLog[ \t]+(.*)'
+                # repl = r"SecAuditLog \1"
+                # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
+                # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
+                pat = (r'#+[ \t]*IncludeOptional[ \t]+(modsecurity\.d/.*)', r'#+[ \t]*SecAuditLog[ \t]+(.*)')
+                repl = (r'IncludeOptional \1', r'SecAuditLog \1')
+                self.replace_multiple_in_file('/etc/httpd/conf.d/*_http.conf', pat, repl)
+                self.replace_multiple_in_file('/etc/httpd/conf.d/*_ssl.conf', pat, repl)
 
         if action == 'off':
             print('Turning off')
@@ -481,14 +497,18 @@ class SettingManager:
             self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_http.conf')
             self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_ssl.conf')
 
-            pat = r'([^#]+)IncludeOptional[ \t]+(modsecurity\.d/.*)'
-            repl = r'\1#IncludeOptional \2'
-            self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
-            self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
-            pat = r'([^#]+)SecAuditLog[ \t]+(.*)'
-            repl = r'\1#SecAuditLog \2'
-            self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
-            self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
+            # pat = r'([^#]+)IncludeOptional[ \t]+(modsecurity\.d/.*)'
+            # repl = r'\1#IncludeOptional \2'
+            # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
+            # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
+            # pat = r'([^#]+)SecAuditLog[ \t]+(.*)'
+            # repl = r'\1#SecAuditLog \2'
+            # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
+            # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
+            pat = (r'([^#]+)IncludeOptional[ \t]+(modsecurity\.d/.*)', r'([^#]+)SecAuditLog[ \t]+(.*)')
+            repl = (r'\1#IncludeOptional \2', r'\1#SecAuditLog \2')
+            self.replace_multiple_in_file('/etc/httpd/conf.d/*_http.conf', pat, repl)
+            self.replace_multiple_in_file('/etc/httpd/conf.d/*_ssl.conf', pat, repl)
 
         fLib.reload_service('httpd')
         if fLib.check_nginx_valid() == 0:
