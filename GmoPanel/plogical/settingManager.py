@@ -473,14 +473,6 @@ class SettingManager:
                 pat = '#kusanagi_comment_do_not_delete;'
                 repl = ''
                 self.replace_in_file(pat, repl, apache_waf_root_conf)
-                # pat = r"#+[ \t]*IncludeOptional[ \t]+(modsecurity\.d/.*)"
-                # repl = r"IncludeOptional \1"
-                # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
-                # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
-                # pat = r'#+[ \t]*SecAuditLog[ \t]+(.*)'
-                # repl = r"SecAuditLog \1"
-                # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
-                # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
                 pat = (r'#+[ \t]*IncludeOptional[ \t]+(modsecurity\.d/.*)', r'#+[ \t]*SecAuditLog[ \t]+(.*)')
                 repl = (r'IncludeOptional \1', r'SecAuditLog \1')
                 self.replace_multiple_in_file('/etc/httpd/conf.d/*_http.conf', pat, repl)
@@ -496,15 +488,6 @@ class SettingManager:
             repl = r'\1#include \2'
             self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_http.conf')
             self.replace_in_file(pat, repl, '/etc/nginx/conf.d/*_ssl.conf')
-
-            # pat = r'([^#]+)IncludeOptional[ \t]+(modsecurity\.d/.*)'
-            # repl = r'\1#IncludeOptional \2'
-            # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
-            # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
-            # pat = r'([^#]+)SecAuditLog[ \t]+(.*)'
-            # repl = r'\1#SecAuditLog \2'
-            # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_http.conf')
-            # self.replace_in_file(pat, repl, '/etc/httpd/conf.d/*_ssl.conf')
             pat = (r'([^#]+)IncludeOptional[ \t]+(modsecurity\.d/.*)', r'([^#]+)SecAuditLog[ \t]+(.*)')
             repl = (r'\1#IncludeOptional \2', r'\1#SecAuditLog \2')
             self.replace_multiple_in_file('/etc/httpd/conf.d/*_http.conf', pat, repl)
@@ -518,4 +501,17 @@ class SettingManager:
         else:
             print('Nginx conf check failed.')
             return False
+
+
+class Waf(SettingManager):
+    def __init__(self):
+        self.nginx_waf_root_conf = '/etc/nginx/conf.d/kusanagi_naxsi_core.conf'
+
+    def perform(self, action=None):
+        if action == 'status':
+            if fLib.is_active('nginx') == 0 and os.path.isfile(self.nginx_waf_root_conf) \
+                    and not self.check_existence_in_file('#kusanagi_comment_do_not_delete;', self.nginx_waf_root_conf):
+                return 'on'
+            else:
+                return 'off'
 
