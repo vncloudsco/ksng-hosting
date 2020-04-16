@@ -18,6 +18,9 @@ class SettingManager:
         self.template_file = '/etc/nginx/restrict_access/rule.template'
         self.filter_template_file = '/etc/nginx/restrict_rule/rule.template'
         self.tmp_file = '/opt/user_defined_rule.txt'
+        self.app_id = self.get_app_id(self.provision)
+        self.kusanagi_dir = '/home/kusanagi/%s' % self.provision
+        # self.fqdn = fLib.get_fqdn(self.provision)
 
     @staticmethod
     def check_existence_in_file(pattern, source_files):
@@ -323,8 +326,6 @@ class SettingManager:
                             url_unicode = '/%s' % url_unicode
                         command = 'grep -i -a -r -m 1 -E "^KEY.*:https?://%s%s" %s' % (
                         fqdn, url_unicode, nginx_cache_dir)
-                        # res = fLib.execute('grep -i -a -r -m 1 -E "^KEY.*:https?://%s%s" %s' % (
-                        # fqdn, url_unicode, nginx_cache_dir))
                         try:
                             res = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE,
                                                  stderr=subprocess.PIPE, universal_newlines=True)
@@ -342,7 +343,6 @@ class SettingManager:
                                 return True
                     else:
                         command = 'grep -r -E "%s" %s' % (fqdn, nginx_cache_dir)
-                        # res = fLib.execute('grep -r -E "%s" %s' % (fqdn, nginx_cache_dir))
                         try:
                             res = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE,
                                                  stderr=subprocess.PIPE, universal_newlines=True)
@@ -371,25 +371,36 @@ class SettingManager:
             print('Nginx conf check failed. Please run "nginx -t" for more details')
             return False
 
-    def b_cache(self, action=None, uri=None):
+    @staticmethod
+    def get_app_id(provision):
         with open('/etc/kusanagi.d/profile.conf', 'rt') as f:
             for line in f:
-                if re.search(r"\[%s\]" % self.provision, line):
+                if re.search(r"\[%s\]" % provision, line):
                     for i in range(3):
                         li = next(f)
                         if re.search(r"KUSANAGI_TYPE", li):
                             app_id = li.split('"')[1]
                     break
+        return app_id
 
-        kusanagi_dir = '/home/kusanagi/%s' % self.provision
-        if not pathlib.Path(kusanagi_dir).exists():
-            print("%s is not found" % kusanagi_dir)
+    def b_cache(self, action=None, uri=None):
+        # with open('/etc/kusanagi.d/profile.conf', 'rt') as f:
+        #    for line in f:
+        #        if re.search(r"\[%s\]" % self.provision, line):
+        #            for i in range(3):
+        #                li = next(f)
+        #                if re.search(r"KUSANAGI_TYPE", li):
+        #                    app_id = li.split('"')[1]
+        #            break
+
+        if not pathlib.Path(self.kusanagi_dir).exists():
+            print("%s is not found" % self.kusanagi_dir)
             return False
-        if app_id == "WordPress":
-            if os.path.isfile('%s/wp-config.php' % kusanagi_dir):
-                wpconfig = '%s/wp-config.php' % kusanagi_dir
-            elif os.path.isfile('%s/DocumentRoot/wp-config.php' % kusanagi_dir):
-                wpconfig = '%s/DocumentRoot/wp-config.php' % kusanagi_dir
+        if self.app_id == "WordPress":
+            if os.path.isfile('%s/wp-config.php' % self.kusanagi_dir):
+                wpconfig = '%s/wp-config.php' % self.kusanagi_dir
+            elif os.path.isfile('%s/DocumentRoot/wp-config.php' % self.kusanagi_dir):
+                wpconfig = '%s/DocumentRoot/wp-config.php' % self.kusanagi_dir
             else:
                 wpconfig = ""
         if wpconfig == "":
@@ -423,11 +434,14 @@ class SettingManager:
             self.replace_in_file(pat, repl, wpconfig)
         if action == 'clear':
             print('Clearing cache')
-            os.chdir('%s/tools' % kusanagi_dir)
+            os.chdir('%s/tools' % self.kusanagi_dir)
             command = 'php ./bcache.clear.php %s' % uri
             fLib.execute(command)
         print('Done')
         return True
+
+
+class Waf(SettingManager):
 
     def install_httpd_waf_modules(self):
         e = fLib.yum_install('kusanagi-httpd-waf')
@@ -445,9 +459,6 @@ class SettingManager:
         if not os.path.isfile('/var/lib/mod_security/ip'):
             pathlib.Path('/var/lib/mod_security/ip').touch()
         return e
-
-
-class Waf(SettingManager):
 
     def perform(self, action=None):
         nginx_waf_root_conf = '/etc/nginx/conf.d/kusanagi_naxsi_core.conf'
