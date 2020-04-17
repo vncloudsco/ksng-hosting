@@ -18,9 +18,8 @@ class SettingManager:
         self.template_file = '/etc/nginx/restrict_access/rule.template'
         self.filter_template_file = '/etc/nginx/restrict_rule/rule.template'
         self.tmp_file = '/opt/user_defined_rule.txt'
-        self.app_id = self.get_app_id(self.provision)
+        self.app_id = fLib.get_app_id(self.provision)
         self.kusanagi_dir = '/home/kusanagi/%s' % self.provision
-        # self.fqdn = fLib.get_fqdn(self.provision)
 
     @staticmethod
     def check_existence_in_file(pattern, source_files):
@@ -303,7 +302,6 @@ class SettingManager:
                 return 'off'
         if action == 'on':
             print('Turning on')
-            # regex = re.compile(r"set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache")
             pat = r'set\s+\$do_not_cache\s+1\s*;\s+#+\s+page\s+cache'
             repl = r'set $do_not_cache 0; ## page cache'
             self.replace_in_file(pat, repl, self.path)
@@ -371,31 +369,11 @@ class SettingManager:
             print('Nginx conf check failed. Please run "nginx -t" for more details')
             return False
 
-    @staticmethod
-    def get_app_id(provision):
-        with open('/etc/kusanagi.d/profile.conf', 'rt') as f:
-            for line in f:
-                if re.search(r"\[%s\]" % provision, line):
-                    for i in range(3):
-                        li = next(f)
-                        if re.search(r"KUSANAGI_TYPE", li):
-                            app_id = li.split('"')[1]
-                    break
-        return app_id
-
     def b_cache(self, action=None, uri=None):
-        # with open('/etc/kusanagi.d/profile.conf', 'rt') as f:
-        #    for line in f:
-        #        if re.search(r"\[%s\]" % self.provision, line):
-        #            for i in range(3):
-        #                li = next(f)
-        #                if re.search(r"KUSANAGI_TYPE", li):
-        #                    app_id = li.split('"')[1]
-        #            break
-
         if not pathlib.Path(self.kusanagi_dir).exists():
             print("%s is not found" % self.kusanagi_dir)
             return False
+        wpconfig = None
         if self.app_id == "WordPress":
             if os.path.isfile('%s/wp-config.php' % self.kusanagi_dir):
                 wpconfig = '%s/wp-config.php' % self.kusanagi_dir

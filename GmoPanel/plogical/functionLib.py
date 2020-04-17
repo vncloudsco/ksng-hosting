@@ -146,4 +146,40 @@ def yum_install(package):
         return int(yum.stdout)
 
 
+def get_app_id(provision):
+    app_id = None
+    with open('/etc/kusanagi.d/profile.conf', 'rt') as f:
+        for line in f:
+            if re.search(r"\[%s\]" % provision, line):
+                for i in range(3):
+                    li = next(f)
+                    if re.search(r"KUSANAGI_TYPE", li):
+                        app_id = li.split('"')[1]
+                break
+    return app_id
+
+
+def is_root_domain(fqdn):
+    if re.search('www', fqdn):
+        apex = fqdn.split('www.')[1]
+        res = execute('dig %s a' % apex)
+        if not re.search(r'.*IN.*[^SO]A.*[0-9.]{7,15}', res):
+            return 2
+        else:
+            with_www = 0
+    else:
+        res = execute('dig www.%s a' % fqdn)
+        if not re.search(r'.*IN.*[^SO]A.*[0-9.]{7,15}', res):
+            return 2
+        else:
+            apex = fqdn
+            with_www = 1
+    res = execute('whois %s' % apex)
+    if re.search(r'^NOT FOUND|^No match', res):
+        return 2
+    else:
+        if with_www == 1:
+            return 0
+        else:
+            return 1
 
