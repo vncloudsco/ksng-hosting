@@ -255,7 +255,8 @@ class SettingManager:
     def edit_nginx(self, domain_name):
         if not fLib.verify_prov_existed(self.provision) or not fLib.verify_prov_existed(domain_name):
             return False
-        if not os.path.isfile('/etc/temp_nginx_conf/%s_http.conf' % self.provision) or not os.path.isfile('/etc/temp_nginx_conf/%s_ssl.conf' % self.provision):
+        if not os.path.isfile('/etc/temp_nginx_conf/%s_http.conf' % self.provision) \
+                or not os.path.isfile('/etc/temp_nginx_conf/%s_ssl.conf' % self.provision):
             print('No temporary nginx file exists. Please backup firstly')
             return False
         # check new nginx conf right after editing
