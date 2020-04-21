@@ -143,7 +143,7 @@ class SslMng:
                         break
                 if has_auto:
                     f = open(cron_file, 'a+')
-                    f.write('07 03 * * 0 /usr/bin/kusanagi update cert')
+                    f.write('07 03 * * 0 /usr/bin/kusanagi update cert \n')
                     f.close()
                 else:
                     print('Auto renew certificate already enabled. Nothing to do')
@@ -183,7 +183,7 @@ class SslMng:
             return 0
 
     def lets_existed(self):
-        if os.path.isdir('/etc/letsencrypt/archive/%' % self.fqdn):
+        if os.path.isdir('/etc/letsencrypt/archive/%s' % self.fqdn):
             return 1
         else:
             res = fLib.execute('ls /etc/letsencrypt/archive/%s-* > /dev/null 2>&1;echo $?' % self.fqdn)
@@ -203,9 +203,9 @@ class SslMng:
         expire_date = '%s/%s' % (month, tmp)
         expire_date = fLib.execute('date -d "{}" +%s'.format(expire_date))
         now = fLib.execute('date +%s')
-        m = (expire_date - now) / 86400
+        m = (int(expire_date) - int(now)) / 86400
         if 0 < int(m):
-            print('The certificate will expire in %s day(s)' % m)
+            print('The certificate will expire in %s day(s)' % int(m))
         else:
             print('The certificate has EXPIRED')
 
