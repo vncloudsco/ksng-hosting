@@ -201,9 +201,10 @@ class SslMng:
         month = date_array[month]
         tmp = res.split('=')[1].split(' ')[1]+'/'+res.split('=')[1].split(' ')[3]
         expire_date = '%s/%s' % (month, tmp)
-        cmd = '`date -d {} +%s` - `date +%s`)/86400'.format(expire_date)
-        m = fLib.execute(cmd)
-        if 0 < m:
+        expire_date = fLib.execute('date -d "{}" +%s'.format(expire_date))
+        now = fLib.execute('date +%s')
+        m = (expire_date - now) / 86400
+        if 0 < int(m):
             print('The certificate will expire in %s day(s)' % m)
         else:
             print('The certificate has EXPIRED')
