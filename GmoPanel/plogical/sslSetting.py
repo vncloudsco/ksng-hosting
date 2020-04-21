@@ -175,3 +175,38 @@ class SslMng:
         else:
             print('Nginx conf check failed.')
             # return False
+
+    def cert_existed(self):
+        if os.path.isfile('/etc/kusanagi.d/ssl/%s/%s.crt' % (self.provision, self.fqdn)):
+            return 1
+        else:
+            return 0
+
+    def lets_existed(self):
+        if os.path.isdir('/etc/letsencrypt/archive/%' % self.fqdn):
+            return 1
+        else:
+            res = fLib.execute('ls /etc/letsencrypt/archive/%s-* > /dev/null 2>&1;echo $?' % self.fqdn)
+            if res == 0:
+                return 1
+            else:
+                return 0
+
+    @staticmethod
+    def diff_date(cert_file=None):
+        date_array = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06', 'Jul': '07',
+                      'Aug': '08', 'Sep': '09', 'Oct': '10', 'Nov': '11', 'Dec': '12'}
+        res = fLib.execute('openssl x509 -in %s -enddate -noout' % cert_file)
+        month = res.split('=')[1].split(' ')[0]
+        month = date_array[month]
+        tmp = res.split('=')[1].split(' ')[1]+'/'+res.split('=')[1].split(' ')[3]
+        expire_date = '%s/%s' % (month, tmp)
+        cmd = '`date -d {} +%s` - `date +%s`)/86400'.format(expire_date)
+        m = fLib.execute(cmd)
+        if 0 < m:
+            print('The certificate will expire in %s day(s)' % m)
+        else:
+            print('The certificate has EXPIRED')
+
+    def ssl_status(self):
+        pass
