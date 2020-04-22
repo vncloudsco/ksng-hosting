@@ -177,28 +177,6 @@ class SslMng:
             print('Nginx conf check failed.')
             # return False
 
-    def cert_existed(self):
-        if os.path.isfile('/etc/kusanagi.d/ssl/%s/%s.crt' % (self.provision, self.fqdn)):
-            return 1
-        else:
-            return 0
-
-    def lets_existed(self):
-        exist = 0
-        for let_dir in glob.glob('/etc/letsencrypt/archive/%s*' % self.fqdn):
-            for root, dirs, files in os.walk(let_dir):
-                for name in files:
-                    full_name = os.path.join(root, name)
-                    if os.path.isfile(full_name) and re.search(r'cert\d*.pem', full_name):
-                        exist = 1
-                        break
-                if exist:
-                    break
-        if exist == 1:
-            return 1
-        else:
-            return 0
-
     @staticmethod
     def diff_date(cert_file=None):
         date_array = {'Jan': '01', 'Feb': '02', 'Mar': '03', 'Apr': '04', 'May': '05', 'Jun': '06', 'Jul': '07',
@@ -220,7 +198,7 @@ class SslMng:
         has_installed = 0
         with open('/etc/nginx/conf.d/%s_ssl.conf' % self.provision, 'rt') as f:
             for line in f:
-                if re.search(r'^\s*ssl_certificate', line) and not re.search(r'localhost.crt', line):
+                if re.search(r'^\s*ssl_certificate\s+', line) and not re.search(r'localhost\.', line):
                     cert_file = line.split('ssl_certificate')[1].split(';')[0].strip()
                     has_installed = 1
                     break
@@ -232,6 +210,4 @@ class SslMng:
                 print('Nginx conf: cert file doesn\'t exist')
         else:
             print('Not installed SSL')
-
-
 
