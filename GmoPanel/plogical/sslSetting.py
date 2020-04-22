@@ -3,8 +3,7 @@
 import os
 import re
 import shutil
-import glob
-import subprocess
+from datetime import datetime
 from plogical.settingManager import SettingManager as setMng
 import plogical.functionLib as fLib
 
@@ -136,7 +135,7 @@ class SslMng:
                 has_auto = 0
                 for root, dirs, files in os.walk('/etc/letsencrypt/live'):
                     for name in files:
-                        if os.path.islink(os.path.join(root, name)) and re.search('fullchain.pem',
+                        if os.path.islink(os.path.join(root, name)) and re.search(r'fullchain\.pem',
                                                                                   os.path.join(root, name)):
                             has_auto = 1
                             break
@@ -159,6 +158,32 @@ class SslMng:
                 g.close()
                 shutil.copy('/opt/tmp_nginx.conf', cron_file)
                 os.remove('/opt/tmp_nginx.conf')
+
+    def k_cert_change(self, cert_file_path=None, key_file_path=None):
+        ssl_dir = '/etc/kusanagi.d/ssl/%s' % self.provision
+        if cert_file_path and key_file_path:
+            date_str = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
+            cert_file_name = cert_file_path.rsplit('/', 1)[1]
+            target_cert = '%s/%s' % (ssl_dir, cert_file_name)
+            if os.path.isfile(target_cert):
+                shutil.move(target_cert, '%s.%s' % (target_cert, date_str))
+            shutil.copy(cert_file_path, target_cert)
+
+            key_file_name = key_file_path.rsplit('/', 1)[1]
+            target_key = '%s/%s' % (ssl_dir, key_file_name)
+            if os.path.isfile(target_key):
+                shutil.move(target_key, '%s.%s' % (target_key, date_str))
+            shutil.copy(key_file_path, target_key)
+
+            pat = (r'^(\s*ssl_certificate\s+)\S+;', r'^(\s*ssl_certificate_key\s+)\S+;')
+            repl = (r'\1%s;' % target_cert, r'\1%s;' % target_key)
+            setMng.replace_multiple_in_file('/etc/nginx/conf.d/%s_ssl.conf' % self.provision, pat, repl)
+            pat = (r'^(\s*SSLCertificateFile\s+)\S+', r'^(\s*SSLCertificateKeyFile\s+)\S+')
+            repl = (r'\1%s' % target_cert, r'\1%s' % target_key)
+            setMng.replace_multiple_in_file('/etc/httpd/conf.d/%s_ssl.conf' % self.provision, pat, repl)
+
+            print("Change SSL Certificate configuration.")
+            self.wp_replace_proto('http', 'https', self.fqdn)
 
     def k_ssl(self, email=None, https=None, hsts=None):
         if email != "":
