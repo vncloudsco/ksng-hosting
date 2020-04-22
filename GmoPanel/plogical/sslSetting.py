@@ -3,6 +3,7 @@
 import os
 import re
 import shutil
+import glob
 import subprocess
 from plogical.settingManager import SettingManager as setMng
 import plogical.functionLib as fLib
@@ -183,14 +184,19 @@ class SslMng:
             return 0
 
     def lets_existed(self):
-        if os.path.isdir('/etc/letsencrypt/archive/%s' % self.fqdn):
+        for let_dir in glob.glob('/etc/letsencrypt/archive/%s*' % self.fqdn):
+            for root, dirs, files in os.walk(let_dir):
+                for name in files:
+                    full_name = os.path.join(root, name)
+                    if os.path.isfile(full_name) and re.search(r'cert\d*.pem', full_name):
+                        exist = 1
+                        break
+                if exist:
+                    break
+        if exist == 1:
             return 1
         else:
-            res = fLib.execute('ls /etc/letsencrypt/archive/%s-* > /dev/null 2>&1;echo $?' % self.fqdn)
-            if res == 0:
-                return 1
-            else:
-                return 0
+            return 0
 
     @staticmethod
     def diff_date(cert_file=None):
