@@ -221,13 +221,15 @@ class SslMng:
         with open('/etc/nginx/conf.d/%s_ssl.conf' % self.provision, 'rt') as f:
             for line in f:
                 if re.search(r'^\s*ssl_certificate', line) and not re.search(r'localhost.crt', line):
-                    cert_file = line.split('ssl_certificate')[1].split(';')[0]
+                    cert_file = line.split('ssl_certificate')[1].split(';')[0].strip()
                     has_installed = 1
                     break
         if has_installed:
             if os.path.isfile(cert_file):
                 print(fLib.execute('openssl x509 -in %s -subject -issuer -dates -noout' % cert_file))
                 self.diff_date(cert_file)
+            else:
+                print('Nginx conf: cert file doesn\'t exist')
         else:
             print('Not installed SSL')
 
