@@ -162,6 +162,8 @@ class SslMng:
     def k_cert_change(self, cert_file_path=None, key_file_path=None):
         ssl_dir = '/etc/kusanagi.d/ssl/%s' % self.provision
         if cert_file_path and key_file_path:
+            if not os.path.isdir(ssl_dir):
+                os.mkdir(ssl_dir, mode=0o755)
             date_str = datetime.now().strftime("%Y-%m-%d_%H:%M:%S")
             cert_file_name = cert_file_path.rsplit('/', 1)[1]
             target_cert = '%s/%s' % (ssl_dir, cert_file_name)
@@ -185,8 +187,17 @@ class SslMng:
             print("Change SSL Certificate configuration.")
             self.wp_replace_proto('http', 'https', self.fqdn)
 
+            fLib.reload_service('httpd')
+            if fLib.check_nginx_valid() == 0:
+                fLib.reload_service('nginx')
+                print('Done')
+                # return True
+            else:
+                print('Nginx conf check failed.')
+                # return False
+
     def k_ssl(self, email=None, https=None, hsts=None):
-        if email != "":
+        if email:
             self.enable_ssl(email)
             self.k_autorenewal('on')
         if hsts != "":
