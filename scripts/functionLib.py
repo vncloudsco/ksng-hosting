@@ -35,8 +35,9 @@ def is_active(service):
 
 
 def restart_service(service):
-    command = 'systemctl restart %s' % service
-    execute(command)
+    if is_active(service):
+        command = 'systemctl restart %s' % service
+        execute(command)
 
 
 def reload_service(service):
