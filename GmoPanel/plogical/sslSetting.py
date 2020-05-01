@@ -3,6 +3,7 @@
 import os
 import re
 import shutil
+import pathlib
 from datetime import datetime
 from plogical.settingManager import SettingManager as setMng
 import plogical.functionLib as fLib
@@ -67,7 +68,7 @@ class SslMng:
                 setMng.replace_in_file(pat, repl, httpd_http)
             setMng.replace_in_file(r'E=REDIRECT_SSL:on', r'E=REDIRECT_SSL:off', httpd_http)
             if os.path.isfile(self.wpconfig):
-                setMng.replace_in_file(r"^define\('FORCE_SSL_ADMIN", r"#define('FORCE_SSL_ADMIN", httpd_http)
+                setMng.replace_in_file(r"^define\('FORCE_SSL_ADMIN", r"#define('FORCE_SSL_ADMIN", self.wpconfig)
             old_proto = 'https'
             new_proto = 'http'
         self.wp_replace_proto(old_proto, new_proto, self.fqdn)
@@ -246,4 +247,44 @@ class SslMng:
                 print('Nginx conf: cert file doesn\'t exist')
         else:
             print('Not installed SSL')
+
+    def remove_ssl(self):
+        has_installed = 0
+        with open('/etc/nginx/conf.d/%s_ssl.conf' % self.provision, 'rt') as f:
+            for line in f:
+                if re.search(r'^\s*ssl_certificate\s+', line) and not re.search(r'localhost\.', line):
+                    cert_file = line.split('ssl_certificate')[1].split(';')[0].strip()
+                    has_installed = 1
+                if re.search(r'^\s*ssl_certificate_key\s+', line) and not re.search(r'localhost\.', line):
+                    key_file = line.split('ssl_certificate_key')[1].split(';')[0].strip()
+                    break
+        if has_installed:
+            if not pathlib.Path('/opt/ssl/recycle_bin').exists():
+                pathlib.Path('/opt/ssl/recycle_bin').mkdir(mode=0o755, parents=True, exist_ok=True)
+            self.k_https('noredirect')
+            pat = (r'^(\s*ssl_certificate\s+)\S+;', r'^(\s*ssl_certificate_key\s+)\S+;')
+            repl = (r'\1/etc/pki/tls/certs/localhost.crt;', r'\1/etc/pki/tls/private/localhost.key;')
+            setMng.replace_multiple_in_file('/etc/nginx/conf.d/%s_ssl.conf' % self.provision, pat, repl)
+            pat = (r'^(\s*SSLCertificateFile\s+)\S+', r'^(\s*SSLCertificateKeyFile\s+)\S+')
+            repl = (r'\1/etc/pki/tls/certs/localhost.crt;', r'\1/etc/pki/tls/private/localhost.key;')
+            setMng.replace_multiple_in_file('/etc/httpd/conf.d/%s_ssl.conf' % self.provision, pat, repl)
+            if os.path.isfile('/etc/letsencrypt/renewal/%s.conf' % self.fqdn):
+                shutil.move('/etc/letsencrypt/renewal/%s.conf' % self.fqdn, '/opt/ssl/recycle_bin/')
+            for root, dirs, files in os.walk('/etc/letsencrypt/renewal'):
+                for name in files:
+                    if re.search(r'%s-\d+' % self.fqdn, os.path.join(root, name)):
+                        renewal_file = os.path.join(root, name)
+                        shutil.move(renewal_file, '/opt/ssl/recycle_bin/')
+            shutil.move(cert_file, '/opt/ssl/recycle_bin/')
+            shutil.move(key_file, '/opt/ssl/recycle_bin/')
+            fLib.reload_service('httpd')
+            if fLib.check_nginx_valid() == 0:
+                fLib.reload_service('nginx')
+                print('Done')
+                return True
+            else:
+                print('Nginx conf check failed.')
+                return False
+        else:
+            print('Not installed SSL. Nothing to do')
 
