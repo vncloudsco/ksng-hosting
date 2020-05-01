@@ -3,7 +3,6 @@
 import os
 import re
 import shutil
-import pathlib
 from datetime import datetime
 from plogical.settingManager import SettingManager as setMng
 import plogical.functionLib as fLib
@@ -253,14 +252,14 @@ class SslMng:
         with open('/etc/nginx/conf.d/%s_ssl.conf' % self.provision, 'rt') as f:
             for line in f:
                 if re.search(r'^\s*ssl_certificate\s+', line) and not re.search(r'localhost\.', line):
-                    cert_file = line.split('ssl_certificate')[1].split(';')[0].strip()
+                    # cert_file = line.split('ssl_certificate')[1].split(';')[0].strip()
                     has_installed = 1
-                if re.search(r'^\s*ssl_certificate_key\s+', line) and not re.search(r'localhost\.', line):
-                    key_file = line.split('ssl_certificate_key')[1].split(';')[0].strip()
+                # if re.search(r'^\s*ssl_certificate_key\s+', line) and not re.search(r'localhost\.', line):
+                #    key_file = line.split('ssl_certificate_key')[1].split(';')[0].strip()
                     break
         if has_installed:
-            if not pathlib.Path('/opt/ssl/recycle_bin').exists():
-                pathlib.Path('/opt/ssl/recycle_bin').mkdir(mode=0o755, parents=True, exist_ok=True)
+            if not os.path.isdir('/etc/kusanagi.d/ssl/recycle_bin'):
+                os.mkdir('/etc/kusanagi.d/ssl/recycle_bin', mode=0o755)
             self.k_https('noredirect')
             pat = (r'^(\s*ssl_certificate\s+)\S+;', r'^(\s*ssl_certificate_key\s+)\S+;')
             repl = (r'\1/etc/pki/tls/certs/localhost.crt;', r'\1/etc/pki/tls/private/localhost.key;')
@@ -269,14 +268,14 @@ class SslMng:
             repl = (r'\1/etc/pki/tls/certs/localhost.crt;', r'\1/etc/pki/tls/private/localhost.key;')
             setMng.replace_multiple_in_file('/etc/httpd/conf.d/%s_ssl.conf' % self.provision, pat, repl)
             if os.path.isfile('/etc/letsencrypt/renewal/%s.conf' % self.fqdn):
-                shutil.move('/etc/letsencrypt/renewal/%s.conf' % self.fqdn, '/opt/ssl/recycle_bin/')
+                shutil.move('/etc/letsencrypt/renewal/%s.conf' % self.fqdn, '/etc/kusanagi.d/ssl/recycle_bin/')
             for root, dirs, files in os.walk('/etc/letsencrypt/renewal'):
                 for name in files:
                     if re.search(r'%s-\d+' % self.fqdn, os.path.join(root, name)):
                         renewal_file = os.path.join(root, name)
-                        shutil.move(renewal_file, '/opt/ssl/recycle_bin/')
-            shutil.move(cert_file, '/opt/ssl/recycle_bin/')
-            shutil.move(key_file, '/opt/ssl/recycle_bin/')
+                        shutil.move(renewal_file, '/etc/kusanagi.d/ssl/recycle_bin/')
+            # shutil.move(cert_file, '/etc/kusanagi.d/ssl/recycle_bin/')
+            # shutil.move(key_file, '/etc/kusanagi.d/ssl/recycle_bin/')
             fLib.reload_service('httpd')
             if fLib.check_nginx_valid() == 0:
                 fLib.reload_service('nginx')
