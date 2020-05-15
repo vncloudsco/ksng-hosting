@@ -47,8 +47,8 @@ class BackupManager:
             sqldir = '/home/kusanagi/%s/sql_backup/' % self.provi
             p = pathlib.Path(sqldir)
             if not p.exists():
-                p.mkdir(mode=0o755, parents=True, exist_ok=True)
-                shutil.chown(sqldir, 'kusanagi', 'kusanagi')
+                p.mkdir(mode=0o775, parents=True, exist_ok=True)
+                shutil.chown(sqldir, 'kusanagi', 'www')
         except BaseException as error:
             print(error)
 
@@ -78,6 +78,10 @@ class BackupManager:
         date = datetime.now()
         today = date.strftime("%Y-%m-%d")
         if chdir:
+            p = pathlib.Path(chdir)
+            if not p.exists():
+                p.mkdir(mode=0o775, parents=True, exist_ok=True)
+                shutil.chown(chdir, 'kusanagi', 'www')
             tarname = chdir + self.provi + '.' + today
         else:
             tarname = '/home/kusanagi/backup/' + self.provi + '.' + today
