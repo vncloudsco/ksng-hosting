@@ -27,7 +27,7 @@ class phpManager():
 
     @staticmethod
     def get_current_ver():
-        for i in ('php', 'php53', 'php70', 'php71', 'php72', 'php73'):
+        for i in ('php', 'php53', 'php70', 'php71', 'php72', 'php73', 'php74'):
             if fLib.is_active(i+'-fpm') == 0:
                 return i
 
