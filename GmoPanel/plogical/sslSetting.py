@@ -275,7 +275,8 @@ class SslMng:
                 for name in files:
                     if re.search(r'%s-\d+' % self.fqdn, os.path.join(root, name)):
                         renewal_file = os.path.join(root, name)
-                        shutil.move(renewal_file, '/etc/kusanagi.d/ssl/recycle_bin/')
+                        dest_file = '/etc/kusanagi.d/ssl/recycle_bin/%s' % name
+                        shutil.move(renewal_file, dest_file)
             # shutil.move(cert_file, '/etc/kusanagi.d/ssl/recycle_bin/')
             # shutil.move(key_file, '/etc/kusanagi.d/ssl/recycle_bin/')
             fLib.reload_service('httpd')
