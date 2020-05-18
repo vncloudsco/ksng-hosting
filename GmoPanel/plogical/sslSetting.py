@@ -290,3 +290,20 @@ class SslMng:
             print('Not installed SSL. Nothing to do')
             return True
 
+    def k_view_cert(self):
+        has_installed = 0
+        cert_file = '/etc/pki/tls/certs/localhost.crt'
+        key_file = '/etc/pki/tls/private/localhost.key'
+        with open('/etc/nginx/conf.d/%s_ssl.conf' % self.provision, 'rt') as f:
+            for line in f:
+                if re.search(r'^\s*ssl_certificate\s+', line) and not re.search(r'localhost\.', line):
+                    cert_file = line.split('ssl_certificate')[1].split(';')[0].strip()
+                    has_installed = 1
+                if re.search(r'^\s*ssl_certificate_key\s+', line) and not re.search(r'localhost\.', line):
+                    key_file = line.split('ssl_certificate_key')[1].split(';')[0].strip()
+                    # break
+        if has_installed:
+            return True
+        else:
+            return False
+
