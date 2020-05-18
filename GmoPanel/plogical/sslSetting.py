@@ -191,10 +191,10 @@ class SslMng:
             if fLib.check_nginx_valid() == 0:
                 fLib.reload_service('nginx')
                 print('Done')
-                # return True
+                return True
             else:
                 print('Nginx conf check failed.')
-                # return False
+                return False
 
     def k_ssl(self, email=None, https=None, hsts=None):
         if email:
@@ -208,10 +208,10 @@ class SslMng:
         if fLib.check_nginx_valid() == 0:
             fLib.reload_service('nginx')
             print('Done')
-            # return True
+            return True
         else:
             print('Nginx conf check failed.')
-            # return False
+            return False
 
     @staticmethod
     def diff_date(cert_file=None):
@@ -244,8 +244,10 @@ class SslMng:
                 self.diff_date(cert_file)
             else:
                 print('Nginx conf: cert file doesn\'t exist')
+                return False
         else:
             print('Not installed SSL')
+            return False
 
     def remove_ssl(self):
         has_installed = 0
@@ -286,4 +288,5 @@ class SslMng:
                 return False
         else:
             print('Not installed SSL. Nothing to do')
+            return True
 
