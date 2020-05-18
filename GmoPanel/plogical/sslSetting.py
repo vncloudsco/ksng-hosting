@@ -226,9 +226,12 @@ class SslMng:
         now = fLib.execute('date +%s')
         m = (int(expire_date) - int(now)) / 86400
         if 0 < int(m):
-            print('The certificate will expire in %s day(s)' % int(m))
+            # print('The certificate will expire in %s day(s)' % int(m))
+            life_time = 'The certificate will expire in %s day(s)' % int(m)
         else:
-            print('The certificate has EXPIRED')
+            # print('The certificate has EXPIRED')
+            life_time = 'The certificate has EXPIRED'
+        return life_time
 
     def ssl_status(self):
         has_installed = 0
@@ -240,8 +243,10 @@ class SslMng:
                     break
         if has_installed:
             if os.path.isfile(cert_file):
-                print(fLib.execute('openssl x509 -in %s -subject -issuer -dates -noout' % cert_file))
-                self.diff_date(cert_file)
+                # print(fLib.execute('openssl x509 -in %s -subject -issuer -dates -noout' % cert_file))
+                # self.diff_date(cert_file)
+                ssl_info = fLib.execute('openssl x509 -in %s -subject -issuer -dates -noout' % cert_file)
+                return {'general_info': ssl_info, 'expiration_date': self.diff_date(cert_file)}
             else:
                 print('Nginx conf: cert file doesn\'t exist')
                 return False
