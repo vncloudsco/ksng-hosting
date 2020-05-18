@@ -58,7 +58,7 @@ class SslMng:
             old_proto = 'http'
             new_proto = 'https'
         if action == 'noredirect':
-            print('Disable redirect all traffic to HTTPS (Permanently')
+            print('Disable redirect all traffic to HTTPS (Permanently)')
             setMng.replace_in_file(r'^([^#]+\s*)rewrite \^(.*)\$ https:', r'\1#rewrite ^(.*)$ https:', nginx_http)
             setMng.replace_in_file(r'RewriteEngine Off', r'RewriteEngine On', httpd_http)
             if not setMng.check_existence_in_file('REDIRECT_SSL:', httpd_http):
