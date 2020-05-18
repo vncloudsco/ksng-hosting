@@ -270,7 +270,7 @@ class SslMng:
             repl = (r'\1/etc/pki/tls/certs/localhost.crt;', r'\1/etc/pki/tls/private/localhost.key;')
             setMng.replace_multiple_in_file('/etc/httpd/conf.d/%s_ssl.conf' % self.provision, pat, repl)
             if os.path.isfile('/etc/letsencrypt/renewal/%s.conf' % self.fqdn):
-                shutil.move('/etc/letsencrypt/renewal/%s.conf' % self.fqdn, '/etc/kusanagi.d/ssl/recycle_bin/')
+                shutil.move('/etc/letsencrypt/renewal/%s.conf' % self.fqdn, '/etc/kusanagi.d/ssl/recycle_bin/%s.conf' % self.fqdn)
             for root, dirs, files in os.walk('/etc/letsencrypt/renewal'):
                 for name in files:
                     if re.search(r'%s-\d+' % self.fqdn, os.path.join(root, name)):
@@ -306,4 +306,3 @@ class SslMng:
             return True
         else:
             return False
-
