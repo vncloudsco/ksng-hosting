@@ -13,7 +13,6 @@ import mysql.connector as MySQLdb
 import hashlib
 import fileinput
 import subprocess
-
 import json
 from plogical import hashPassword,system_os
 from websiteManager.models import Provision
@@ -139,12 +138,12 @@ class Website:
                 # import data .sql to database
                 os.system('mysql -p{} {} < {}'.format(pass_mysql,db_name,path+'/'+namesql))
                 # random Pass admin and hash pass
-                pass_admin = hashPassword.generateToken(10)
+                pass_admin = hashPassword.generate_pass(10)
                 pass_admin_md5 = hashlib.md5(pass_admin.encode()).hexdigest()
                 db = MySQLdb.connect(host='localhost',user='root',passwd=pass_mysql,database=db_name)
                 cursor = db.cursor()
                 cursor.execute("UPDATE {}options SET option_value = 'http://{}' WHERE option_id in(1,2)".format(wp_prefix,data['domain']))
-                cursor.execute("UPDATE {}users SET user_login='WPadmiN',user_pass={},user_email={},user_nicename='Admin',display_name='Admin' WHERE ID = 1".format(wp_prefix,pass_admin_md5,data['email']))
+                cursor.execute("UPDATE {}users SET user_login='WPadmiN',user_pass='{}',user_email='{}',user_nicename='Admin',display_name='Admin' WHERE ID = 1".format(wp_prefix,pass_admin_md5,str(data['email'])))
                 db.commit()
                 db.close()
             except ConnectionError:
@@ -193,6 +192,8 @@ class Website:
         except BaseException as e:
             if os.path.isdir(path):
                 shutil.rmtree(path)
+            if os.path.isfile(provisionPath + '/wp-config.php.origi'):
+                shutil.move(provisionPath+'/wp-config.php.origi',provisionPath+'/wp-config.php')
             return {'status': 0, 'msg': str(e)}
 
     def migration_wp(self,domain=None):
@@ -202,7 +203,7 @@ class Website:
         """
         try:
             # extractall
-            os.chdir('/home/{}/{}/Up/'.format(self.userName, self.proName))
+            os.chdir('/home/{}/{}/Up/'.format(self.userName,self.proName))
             os.system('tar -xzf /home/{}/{}/Up/*.tar.gz'.format(self.userName,self.proName))
             os.system('unzip -qq /home/{}/{}/Up/*.zip'.format(self.userName,self.proName))
             os.system('gunzip -d /home/{}/{}/Up/*.sql.gz'.format(self.userName,self.proName))
@@ -305,6 +306,7 @@ class Website:
         :return:
         """
         try:
+
             # extractall
             os.chdir('/home/{}/{}/Up/'.format(self.userName, self.proName))
             os.system('tar -xzf /home/{}/{}/Up/*.tar.gz'.format(self.userName, self.proName))
@@ -341,8 +343,9 @@ class Website:
         :param db_name:
         :return:
         """
-        # extractall
+
         try:
+            # extractall
             os.chdir('/home/{}/Up/'.format(self.userName))
             os.system('tar -xzf /home/{}/Up/*.tar.gz'.format(self.userName))
             os.system('unzip -qq /home/{}/Up/*.zip'.format(self.userName))
@@ -360,7 +363,6 @@ class Website:
             list_file = glob.glob('/home/{}/Up/*.sql'.format(self.userName))
             if list_file:
                 sql_path = list_file[0]
-                print(sql_path)
                 shutil.move(sql_path,'/home/{}/Up/kusanagi.sql'.format(self.userName))
                 os.system("sed 's/ENGINE=MyISAM/ENGINE=InnoDB/g' /home/{}/Up/kusanagi.sql  > /home/{}/Up/kusanagi.InnoDB.sql".format(self.userName,self.userName))
                 if os.path.getsize('/home/{}/Up/kusanagi.InnoDB.sql'.format(self.userName)) > 10:
