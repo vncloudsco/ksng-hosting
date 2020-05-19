@@ -5,7 +5,7 @@ import sys
 import glob
 import django
 import wget
-import zipfile
+import gzip
 import logging
 import shutil
 import re
@@ -88,7 +88,8 @@ class Website:
             wget.download('http://tentenwordpress1.top/db/wp{}.sql'.format(data['theme_id']), path+'/'+namesql)
             # with zipfile.ZipFile(path+'/'+namezip,'r') as zip_ref:
             #     zip_ref.extractall(path)
-            os.system('unzip -qq ' + path + '/{}'.format(namezip))
+            # os.system('unzip -qq ' + path + '/{}'.format(namezip))
+            shutil.unpack_archive("%s/%s" % (path, namezip), extract_dir=path)
             if not os.path.isdir(path+'/'+'wp-content'):
                 raise ValueError('Failed - No such wp-content source directory')
 
@@ -175,8 +176,16 @@ class Website:
             f.close()
             shutil.rmtree(path)
             shutil.chown('/home/{}/{}'.format(self.userName, self.proName), user='kusanagi', group='www')
-            os.system('find {} -type d | xargs chmod 0775'.format(provisionPath))
-            os.system('find {} -type f | xargs chmod 0664'.format(provisionPath))
+            # os.system('find {} -type d | xargs chmod 0775'.format(provisionPath))
+            # os.system('find {} -type f | xargs chmod 0664'.format(provisionPath))
+            for root, dirs, files in os.walk('/home/%s/%s/' % (self.userName, self.proName)):
+                for name in dirs:
+                    shutil.chown(os.path.join(root, name), 'kusanagi', 'www')
+                    os.chmod(os.path.join(root, name), 0o775)
+                for name in files:
+                    shutil.chown(os.path.join(root, name), 'kusanagi', 'www')
+                    os.chmod(os.path.join(root, name), 0o664)
+
             shutil.chown(provisionPath+'/wp-config.php', user='kusanagi', group='www')
             if os.path.isfile("{}/wp-content/advanced-cache.php".format(pathRoot)):
                 os.remove("{}/wp-content/advanced-cache.php".format(pathRoot))
@@ -204,10 +213,23 @@ class Website:
         """
         try:
             # extractall
+            zip_file_path = '/home/%s/%s/Up/*.zip' % (self.userName, self.proName)
+            tar_file_path = '/home/%s/%s/Up/*.tar.gz' % (self.userName, self.proName)
+            sql_gz_file = '/home/%s/%s/Up/*.sql.gz' % (self.userName, self.proName)
             os.chdir('/home/{}/{}/Up/'.format(self.userName, self.proName))
-            os.system('tar -xzf /home/{}/{}/Up/*.tar.gz'.format(self.userName, self.proName))
-            os.system('unzip -qq /home/{}/{}/Up/*.zip'.format(self.userName, self.proName))
-            os.system('gunzip -d /home/{}/{}/Up/*.sql.gz'.format(self.userName, self.proName))
+            # os.system('tar -xzf /home/{}/{}/Up/*.tar.gz'.format(self.userName, self.proName))
+            for fi in glob.glob(tar_file_path):
+                shutil.unpack_archive(fi, extract_dir='/home/%s/%s/Up' % (self.userName, self.proName))
+            # os.system('unzip -qq /home/{}/{}/Up/*.zip'.format(self.userName, self.proName))
+            for fi in glob.glob(zip_file_path):
+                shutil.unpack_archive(fi, extract_dir='/home/%s/%s/Up' % (self.userName, self.proName))
+            # os.system('gunzip -d /home/{}/{}/Up/*.sql.gz'.format(self.userName, self.proName))
+            for fi in glob.glob(sql_gz_file):
+                sql_file = fi.rsplit('.', 1)[0]
+                block_size = 65536
+                with gzip.open(fi, 'rb') as in_file, open(sql_file, 'wb') as out_file:
+                    shutil.copyfileobj(in_file, out_file, block_size)
+
             list_path = system_os.find_sub('/home/{}/{}/Up/'.format(self.userName, self.proName), '.trash')
             for sub in list_path:
                 shutil.rmtree(sub)
