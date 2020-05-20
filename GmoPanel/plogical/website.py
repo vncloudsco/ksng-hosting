@@ -1,19 +1,19 @@
 import os
-import psutil
-from pathlib import Path
-import sys
+# import psutil
+# from pathlib import Path
+# import sys
 import glob
 import django
 import wget
 import gzip
-import logging
+# import logging
 import shutil
 import re
 import mysql.connector as MySQLdb
 import hashlib
-import fileinput
+# import fileinput
 import subprocess
-import json
+# import json
 from plogical import hashPassword,system_os
 from plogical.settingManager import SettingManager as setMng
 from websiteManager.models import Provision
@@ -175,7 +175,8 @@ class Website:
             f.write(dataText)
             f.close()
             shutil.rmtree(path)
-            shutil.chown('/home/{}/{}'.format(self.userName, self.proName), user='kusanagi', group='www')
+            shutil.chown('/home/{}/{}'.format(self.userName, self.proName), user=self.userName, group='www')
+            os.chmod('/home/%s/%s' % (self.userName, self.proName), 0o775)
             # os.system('find {} -type d | xargs chmod 0775'.format(provisionPath))
             # os.system('find {} -type f | xargs chmod 0664'.format(provisionPath))
             for root, dirs, files in os.walk('/home/%s/%s/' % (self.userName, self.proName)):
@@ -187,6 +188,7 @@ class Website:
                     os.chmod(os.path.join(root, name), 0o664)
 
             shutil.chown(provisionPath+'/wp-config.php', user='kusanagi', group='www')
+            os.chmod(provisionPath+'/wp-config.php', 0o440)
             if os.path.isfile("{}/wp-content/advanced-cache.php".format(pathRoot)):
                 os.remove("{}/wp-content/advanced-cache.php".format(pathRoot))
 
@@ -216,14 +218,18 @@ class Website:
             zip_file_path = '/home/%s/%s/Up/*.zip' % (self.userName, self.proName)
             tar_file_path = '/home/%s/%s/Up/*.tar.gz' % (self.userName, self.proName)
             sql_gz_file = '/home/%s/%s/Up/*.sql.gz' % (self.userName, self.proName)
+
             os.chdir('/home/{}/{}/Up/'.format(self.userName, self.proName))
             # os.system('tar -xzf /home/{}/{}/Up/*.tar.gz'.format(self.userName, self.proName))
+            # os.system('unzip -qq /home/{}/{}/Up/*.zip'.format(self.userName, self.proName))
+            # os.system('gunzip -d /home/{}/{}/Up/*.sql.gz'.format(self.userName, self.proName))
+
             for fi in glob.glob(tar_file_path):
                 shutil.unpack_archive(fi, extract_dir='/home/%s/%s/Up' % (self.userName, self.proName))
-            # os.system('unzip -qq /home/{}/{}/Up/*.zip'.format(self.userName, self.proName))
+            # extract source zip
             for fi in glob.glob(zip_file_path):
                 shutil.unpack_archive(fi, extract_dir='/home/%s/%s/Up' % (self.userName, self.proName))
-            # os.system('gunzip -d /home/{}/{}/Up/*.sql.gz'.format(self.userName, self.proName))
+            # extract sql zip file
             for fi in glob.glob(sql_gz_file):
                 sql_file = fi.rsplit('.', 1)[0]
                 block_size = 65536
@@ -309,13 +315,23 @@ class Website:
                 shutil.rmtree('/home/{}/{}/Up'.format(self.userName, self.proName))
             os.chdir('/home/{}/{}'.format(self.userName, self.proName))
             os.system('rsync -azh /backup/wpdefault.vn/DocumentRoot/ /home/{}/{}/DocumentRoot/'.format(self.userNam, self.proName))
-            shutil.chown('/home/{}/{}'.format(self.userName, self.proName), user=self.userName, group=self.userName)
-            os.system('find {} -type d | xargs chmod 0755'.format('/home/{}/{}'.format(self.userName, self.proName)))
-            os.system('find {} -type f | xargs chmod 0644'.format('/home/{}/{}'.format(self.userName, self.proName)))
+            shutil.chown('/home/{}/{}'.format(self.userName, self.proName), user=self.userName, group='www')
+            os.chmod('/home/%s/%s' % (self.userName, self.proName), 0o775)
+            # os.system('find {} -type d | xargs chmod 0755'.format('/home/{}/{}'.format(self.userName, self.proName)))
+            # os.system('find {} -type f | xargs chmod 0644'.format('/home/{}/{}'.format(self.userName, self.proName)))
+            for root, dirs, files in os.walk('/home/%s/%s/' % (self.userName, self.proName)):
+                for name in dirs:
+                    shutil.chown(os.path.join(root, name), 'kusanagi', 'www')
+                    os.chmod(os.path.join(root, name), 0o775)
+                for name in files:
+                    shutil.chown(os.path.join(root, name), 'kusanagi', 'www')
+                    os.chmod(os.path.join(root, name), 0o664)
             if os.path.isfile("/home/{}/{}/DocumentRoot/wp-content/advanced-cache.php".format(self.userName, self.proName)):
                 os.remove("/home/{}/{}/DocumentRoot/wp-content/advanced-cache.php".format(self.userName, self.proName))
             # turn on cache
-            #os.system('kusanagi target {} > /dev/null 2>&1; kusanagi bcache clear > /dev/null 2>&1; kusanagi fcache clear > /dev/null 2>&1; kusanagi bcache on > /dev/null 2>&1; kusanagi fcache on > /dev/null 2>&1'.format(self.proName))
+            # os.system('kusanagi target {} > /dev/null 2>&1; kusanagi bcache clear > /dev/null 2>&1; \
+            # kusanagi fcache clear > /dev/null 2>&1; kusanagi bcache on > /dev/null 2>&1; \
+            # kusanagi fcache on > /dev/null 2>&1'.format(self.proName))
             cache_set = setMng(self.proName)
             cache_set.b_cache('clear')
             cache_set.f_cache('clear')
@@ -336,10 +352,28 @@ class Website:
         try:
 
             # extractall
+            zip_file_path = '/home/%s/%s/Up/*.zip' % (self.userName, self.proName)
+            tar_file_path = '/home/%s/%s/Up/*.tar.gz' % (self.userName, self.proName)
+            sql_gz_file = '/home/%s/%s/Up/*.sql.gz' % (self.userName, self.proName)
+
             os.chdir('/home/{}/{}/Up/'.format(self.userName, self.proName))
-            os.system('tar -xzf /home/{}/{}/Up/*.tar.gz'.format(self.userName, self.proName))
-            os.system('unzip -qq /home/{}/{}/Up/*.zip'.format(self.userName, self.proName))
-            os.system('gunzip -d /home/{}/{}/Up/*.sql.gz'.format(self.userName, self.proName))
+            # os.system('tar -xzf /home/{}/{}/Up/*.tar.gz'.format(self.userName, self.proName))
+            # os.system('unzip -qq /home/{}/{}/Up/*.zip'.format(self.userName, self.proName))
+            # os.system('gunzip -d /home/{}/{}/Up/*.sql.gz'.format(self.userName, self.proName))
+
+            # extract source tarball
+            for fi in glob.glob(tar_file_path):
+                shutil.unpack_archive(fi, extract_dir='/home/%s/%s/Up' % (self.userName, self.proName))
+            # extract source zip
+            for fi in glob.glob(zip_file_path):
+                shutil.unpack_archive(fi, extract_dir='/home/%s/%s/Up' % (self.userName, self.proName))
+            # extract sql tar file
+            for fi in glob.glob(sql_gz_file):
+                sql_file = fi.rsplit('.', 1)[0]
+                block_size = 65536
+                with gzip.open(fi, 'rb') as in_file, open(sql_file, 'wb') as out_file:
+                    shutil.copyfileobj(in_file, out_file, block_size)
+
             list_path = system_os.find_sub('/home/{}/{}/Up/'.format(self.userName, self.proName), '.trash')
             for sub in list_path:
                 shutil.rmtree(sub)
@@ -355,8 +389,17 @@ class Website:
                     raise ValueError('Failed - can not find your website documentroot')
             shutil.rmtree('/home/{}/{}/Up'.format(self.userName, self.proName))
             shutil.chown('/home/{}/{}'.format(self.userName, self.proName), user=self.userName, group='www')
-            os.system('find {} -type d | xargs chmod 0775'.format('/home/{}/{}'.format(self.userName, self.proName)))
-            os.system('find {} -type f | xargs chmod 0664'.format('/home/{}/{}'.format(self.userName, self.proName)))
+            os.chmod('/home/%s/%s' % (self.userName, self.proName), 0o775)
+            # os.system('find {} -type d | xargs chmod 0775'.format('/home/{}/{}'.format(self.userName, self.proName)))
+            # os.system('find {} -type f | xargs chmod 0664'.format('/home/{}/{}'.format(self.userName, self.proName)))
+            for root, dirs, files in os.walk('/home/%s/%s/' % (self.userName, self.proName)):
+                for name in dirs:
+                    shutil.chown(os.path.join(root, name), 'kusanagi', 'www')
+                    os.chmod(os.path.join(root, name), 0o775)
+                for name in files:
+                    shutil.chown(os.path.join(root, name), 'kusanagi', 'www')
+                    os.chmod(os.path.join(root, name), 0o664)
+
             return {'status': 1, 'msg': 'Done!'}
         except BaseException as e:
             if os.path.isdir('/home/{}/{}/Up'.format(self.userName, self.proName)):
@@ -374,10 +417,28 @@ class Website:
 
         try:
             # extractall
+            zip_file_path = '/home/%s/Up/*.zip' % self.userName
+            tar_file_path = '/home/%s/Up/*.tar.gz' % self.userName
+            sql_gz_file = '/home/%s/Up/*.sql.gz' % self.userName
+
             os.chdir('/home/{}/Up/'.format(self.userName))
-            os.system('tar -xzf /home/{}/Up/*.tar.gz'.format(self.userName))
-            os.system('unzip -qq /home/{}/Up/*.zip'.format(self.userName))
-            os.system('gunzip -d /home/{}/Up/*.sql.gz'.format(self.userName))
+            # os.system('tar -xzf /home/{}/Up/*.tar.gz'.format(self.userName))
+            # os.system('unzip -qq /home/{}/Up/*.zip'.format(self.userName))
+            # os.system('gunzip -d /home/{}/Up/*.sql.gz'.format(self.userName))
+
+            # extract source tarball
+            for fi in glob.glob(tar_file_path):
+                shutil.unpack_archive(fi, extract_dir='/home/%s/Up' % self.userName)
+            # extract source zip
+            for fi in glob.glob(zip_file_path):
+                shutil.unpack_archive(fi, extract_dir='/home/%s/Up' % self.userName)
+            # extract sql tar file
+            for fi in glob.glob(sql_gz_file):
+                sql_file = fi.rsplit('.', 1)[0]
+                block_size = 65536
+                with gzip.open(fi, 'rb') as in_file, open(sql_file, 'wb') as out_file:
+                    shutil.copyfileobj(in_file, out_file, block_size)
+
             # remove .trash
             list_path = system_os.find_sub('/home/{}/{}/Up/'.format(self.userName, self.proName), '.trash')
             for sub in list_path:
@@ -387,7 +448,7 @@ class Website:
                 os.remove('/home/{}/Up/kusanagi.sql'.format(self.userName))
             if os.path.isfile('/home/{}/Up/kusanagi.InnoDB.sql'.format(self.userName)):
                 os.remove('/home/{}/Up/kusanagi.InnoDB.sql'.format(self.userName))
-            # find lisst .sql upload
+            # find list .sql upload
             list_file = glob.glob('/home/{}/Up/*.sql'.format(self.userName))
             if list_file:
                 sql_path = list_file[0]
