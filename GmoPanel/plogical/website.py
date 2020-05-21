@@ -11,10 +11,9 @@ import shutil
 import re
 import mysql.connector as MySQLdb
 import hashlib
-# import fileinput
 import subprocess
 # import json
-from plogical import hashPassword,system_os
+from plogical import hashPassword, system_os
 from plogical.settingManager import SettingManager as setMng
 from websiteManager.models import Provision
 from loginSys.models import Account
@@ -90,7 +89,7 @@ class Website:
             #     zip_ref.extractall(path)
             # os.system('unzip -qq ' + path + '/{}'.format(namezip))
             shutil.unpack_archive("%s/%s" % (path, namezip), extract_dir=path)
-            if not os.path.isdir(path+'/'+'wp-content'):
+            if not os.path.isdir(path+'/wp-content'):
                 raise ValueError('Failed - No such wp-content source directory')
 
             # apply source
@@ -175,10 +174,9 @@ class Website:
             f.write(dataText)
             f.close()
             shutil.rmtree(path)
+
             shutil.chown('/home/{}/{}'.format(self.userName, self.proName), user=self.userName, group='www')
             os.chmod('/home/%s/%s' % (self.userName, self.proName), 0o775)
-            # os.system('find {} -type d | xargs chmod 0775'.format(provisionPath))
-            # os.system('find {} -type f | xargs chmod 0664'.format(provisionPath))
             for root, dirs, files in os.walk('/home/%s/%s/' % (self.userName, self.proName)):
                 for name in dirs:
                     shutil.chown(os.path.join(root, name), 'kusanagi', 'www')
@@ -280,10 +278,11 @@ class Website:
             os.system('echo "mysqldump" $?')
             os.system('echo "SET FOREIGN_KEY_CHECKS = 1;" >> temp.txt')
             os.system('mysql -u{} -p{} {} < temp.txt'.format(db_user, db_pass, db_name))
-            os.system('echo "DROP ALL TABLE" $?')
+            # os.system('echo "DROP ALL TABLE" $?')
             # import database new
             shutil.move(mysql_path, '/home/{}/{}/kusanagi.sql'.format(self.userName, self.proName))
-            os.system("sed 's/ENGINE=MyISAM/ENGINE=InnoDB/g' kusanagi.sql  > kusanagi.InnoDB.sql")
+            # os.system("sed 's/ENGINE=MyISAM/ENGINE=InnoDB/g' kusanagi.sql  > kusanagi.InnoDB.sql")
+            setMng.replace_multiple('kusanagi.sql', 'kusanagi.InnoDB.sql', r'ENGINE=MyISAM', r'ENGINE=InnoDB')
             os.system('mysql -u{} -p{} -h localhost {} < kusanagi.InnoDB.sql'.format(db_user, db_pass, db_name))
             try:
                 db = MySQLdb.connect(host='localhost', user=db_user, passwd=db_pass, database=db_name)
@@ -315,10 +314,9 @@ class Website:
                 shutil.rmtree('/home/{}/{}/Up'.format(self.userName, self.proName))
             os.chdir('/home/{}/{}'.format(self.userName, self.proName))
             os.system('rsync -azh /backup/wpdefault.vn/DocumentRoot/ /home/{}/{}/DocumentRoot/'.format(self.userNam, self.proName))
+
             shutil.chown('/home/{}/{}'.format(self.userName, self.proName), user=self.userName, group='www')
             os.chmod('/home/%s/%s' % (self.userName, self.proName), 0o775)
-            # os.system('find {} -type d | xargs chmod 0755'.format('/home/{}/{}'.format(self.userName, self.proName)))
-            # os.system('find {} -type f | xargs chmod 0644'.format('/home/{}/{}'.format(self.userName, self.proName)))
             for root, dirs, files in os.walk('/home/%s/%s/' % (self.userName, self.proName)):
                 for name in dirs:
                     shutil.chown(os.path.join(root, name), 'kusanagi', 'www')
@@ -326,12 +324,10 @@ class Website:
                 for name in files:
                     shutil.chown(os.path.join(root, name), 'kusanagi', 'www')
                     os.chmod(os.path.join(root, name), 0o664)
+
             if os.path.isfile("/home/{}/{}/DocumentRoot/wp-content/advanced-cache.php".format(self.userName, self.proName)):
                 os.remove("/home/{}/{}/DocumentRoot/wp-content/advanced-cache.php".format(self.userName, self.proName))
-            # turn on cache
-            # os.system('kusanagi target {} > /dev/null 2>&1; kusanagi bcache clear > /dev/null 2>&1; \
-            # kusanagi fcache clear > /dev/null 2>&1; kusanagi bcache on > /dev/null 2>&1; \
-            # kusanagi fcache on > /dev/null 2>&1'.format(self.proName))
+
             cache_set = setMng(self.proName)
             cache_set.b_cache('clear')
             cache_set.f_cache('clear')
@@ -357,9 +353,6 @@ class Website:
             sql_gz_file = '/home/%s/%s/Up/*.sql.gz' % (self.userName, self.proName)
 
             os.chdir('/home/{}/{}/Up/'.format(self.userName, self.proName))
-            # os.system('tar -xzf /home/{}/{}/Up/*.tar.gz'.format(self.userName, self.proName))
-            # os.system('unzip -qq /home/{}/{}/Up/*.zip'.format(self.userName, self.proName))
-            # os.system('gunzip -d /home/{}/{}/Up/*.sql.gz'.format(self.userName, self.proName))
 
             # extract source tarball
             for fi in glob.glob(tar_file_path):
@@ -388,10 +381,9 @@ class Website:
                 else:
                     raise ValueError('Failed - can not find your website documentroot')
             shutil.rmtree('/home/{}/{}/Up'.format(self.userName, self.proName))
+
             shutil.chown('/home/{}/{}'.format(self.userName, self.proName), user=self.userName, group='www')
             os.chmod('/home/%s/%s' % (self.userName, self.proName), 0o775)
-            # os.system('find {} -type d | xargs chmod 0775'.format('/home/{}/{}'.format(self.userName, self.proName)))
-            # os.system('find {} -type f | xargs chmod 0664'.format('/home/{}/{}'.format(self.userName, self.proName)))
             for root, dirs, files in os.walk('/home/%s/%s/' % (self.userName, self.proName)):
                 for name in dirs:
                     shutil.chown(os.path.join(root, name), 'kusanagi', 'www')
@@ -422,9 +414,6 @@ class Website:
             sql_gz_file = '/home/%s/Up/*.sql.gz' % self.userName
 
             os.chdir('/home/{}/Up/'.format(self.userName))
-            # os.system('tar -xzf /home/{}/Up/*.tar.gz'.format(self.userName))
-            # os.system('unzip -qq /home/{}/Up/*.zip'.format(self.userName))
-            # os.system('gunzip -d /home/{}/Up/*.sql.gz'.format(self.userName))
 
             # extract source tarball
             for fi in glob.glob(tar_file_path):
@@ -452,8 +441,10 @@ class Website:
             list_file = glob.glob('/home/{}/Up/*.sql'.format(self.userName))
             if list_file:
                 sql_path = list_file[0]
-                shutil.move(sql_path,'/home/{}/Up/kusanagi.sql'.format(self.userName))
-                os.system("sed 's/ENGINE=MyISAM/ENGINE=InnoDB/g' /home/{}/Up/kusanagi.sql  > /home/{}/Up/kusanagi.InnoDB.sql".format(self.userName, self.userName))
+                shutil.move(sql_path, '/home/{}/Up/kusanagi.sql'.format(self.userName))
+                # os.system("sed 's/ENGINE=MyISAM/ENGINE=InnoDB/g' /home/{}/Up/kusanagi.sql  > /home/{}/Up/kusanagi.InnoDB.sql".format(self.userName, self.userName))
+                setMng.replace_multiple('/home/%s/Up/kusanagi.sql' % self.userName, '/home/%s/Up/kusanagi.InnoDB.sql' % self.userName, r'ENGINE=MyISAM', r'ENGINE=InnoDB')
+
                 if os.path.getsize('/home/{}/Up/kusanagi.InnoDB.sql'.format(self.userName)) > 10:
                     # get PW mysql
                     fileMysqlConf = open('/root/.my.cnf', "r").read().split('password="')
@@ -482,7 +473,4 @@ class Website:
             if os.path.isdir('/home/{}/Up'.format(self.userName)):
                 shutil.rmtree('/home/{}/Up'.format(self.userName))
             return {'status': 0, 'msg': str(e)}
-
-
-
 
