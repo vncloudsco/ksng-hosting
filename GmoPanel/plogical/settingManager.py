@@ -74,10 +74,10 @@ class SettingManager:
             f.close()
 
     def add_authentication(self, url=None, user=None, password=None, rule_id=None):
-        if not fLib.verify_prov_existed(self.provision):
-            return False
-        if not fLib.verify_nginx_prov_existed(self.provision):
-            return False
+        # if not fLib.verify_prov_existed(self.provision):
+        #    return False
+        # if not fLib.verify_nginx_prov_existed(self.provision):
+        #    return False
         if self.check_existence_in_file('au_%s_%s' % (self.provision, rule_id), self.path):
             print('the rule authentication ID already existed')
             return False
@@ -123,10 +123,10 @@ class SettingManager:
         return False
 
     def add_filterip(self, url=None, ip_address=None, rule_id=None):
-        if not fLib.verify_prov_existed(self.provision):
-            return False
-        if not fLib.verify_nginx_prov_existed(self.provision):
-            return False
+        # if not fLib.verify_prov_existed(self.provision):
+        #    return False
+        # if not fLib.verify_nginx_prov_existed(self.provision):
+        #    return False
         self.backup_nginx_conf()
         if self.check_existence_in_file('filter_%s_%s' % (self.provision, rule_id), self.path):
             print('the filter ID already existed')
@@ -176,10 +176,10 @@ class SettingManager:
 
     def delete_authentication(self, url=None, rule_id=None):
 
-        if not fLib.verify_prov_existed(self.provision):
-            return False
-        if not fLib.verify_nginx_prov_existed(self.provision):
-            return False
+        # if not fLib.verify_prov_existed(self.provision):
+        #    return False
+        # if not fLib.verify_nginx_prov_existed(self.provision):
+        #    return False
         self.backup_nginx_conf()
 
         if not self.check_existence_in_file('au_%s_%s' % (self.provision, rule_id), self.path):
@@ -205,10 +205,10 @@ class SettingManager:
             return False
 
     def delete_filterip(self, url=None, rule_id=None):
-        if not fLib.verify_prov_existed(self.provision):
-            return False
-        if not fLib.verify_nginx_prov_existed(self.provision):
-            return False
+        # if not fLib.verify_prov_existed(self.provision):
+        #    return False
+        # if not fLib.verify_nginx_prov_existed(self.provision):
+        #    return False
         self.backup_nginx_conf()
 
         if url == 'wp-login':
@@ -233,8 +233,8 @@ class SettingManager:
             return False
 
     def before_edit_nginx(self):
-        if not fLib.verify_prov_existed(self.provision):
-            return False
+        # if not fLib.verify_prov_existed(self.provision):
+        #    return False
         nginx_check = fLib.check_nginx_valid()
         if nginx_check > 0:
             print('nginx config check failed. Please abort')
@@ -253,8 +253,8 @@ class SettingManager:
                 return True
 
     def edit_nginx(self, domain_name):
-        if not fLib.verify_prov_existed(self.provision) or not fLib.verify_prov_existed(domain_name):
-            return False
+        # if not fLib.verify_prov_existed(self.provision) or not fLib.verify_prov_existed(domain_name):
+        #    return False
         if not os.path.isfile('/etc/temp_nginx_conf/%s_http.conf' % self.provision) \
                 or not os.path.isfile('/etc/temp_nginx_conf/%s_ssl.conf' % self.provision):
             print('No temporary nginx file exists. Please backup firstly')
