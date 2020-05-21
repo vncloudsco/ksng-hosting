@@ -17,7 +17,6 @@ class SettingManager:
         self.path = '/etc/nginx/conf.d/%s_*.conf' % self.provision
         self.template_file = '/etc/nginx/restrict_access/rule.template'
         self.filter_template_file = '/etc/nginx/restrict_rule/rule.template'
-        self.tmp_file = '/opt/user_defined_rule.txt'
         self.app_id = fLib.get_app_id(self.provision)
         self.kusanagi_dir = '/home/kusanagi/%s' % self.provision
 
@@ -123,10 +122,7 @@ class SettingManager:
         return False
 
     def add_filterip(self, url=None, ip_address=None, rule_id=None):
-        # if not fLib.verify_prov_existed(self.provision):
-        #    return False
-        # if not fLib.verify_nginx_prov_existed(self.provision):
-        #    return False
+
         self.backup_nginx_conf()
         if self.check_existence_in_file('filter_%s_%s' % (self.provision, rule_id), self.path):
             print('the filter ID already existed')
@@ -165,21 +161,18 @@ class SettingManager:
     def remove_conf_related_nginx(self, pat=None):
         for fi in glob.glob(self.path):
             f = open(fi, 'rt')
-            g = open(self.tmp_file, 'wt')
+            # g = open(self.tmp_file, 'wt')
+            g = open('/opt/tmp_nginx.conf', 'wt')
             for line in f:
                 if pat not in line:
                     g.write(line)
             f.close()
             g.close()
-            shutil.copy(self.tmp_file, fi)
-        os.remove(self.tmp_file)
+            shutil.copy('/opt/tmp_nginx.conf', fi)
+        os.remove('/opt/tmp_nginx.conf')
 
     def delete_authentication(self, url=None, rule_id=None):
 
-        # if not fLib.verify_prov_existed(self.provision):
-        #    return False
-        # if not fLib.verify_nginx_prov_existed(self.provision):
-        #    return False
         self.backup_nginx_conf()
 
         if not self.check_existence_in_file('au_%s_%s' % (self.provision, rule_id), self.path):
@@ -205,10 +198,7 @@ class SettingManager:
             return False
 
     def delete_filterip(self, url=None, rule_id=None):
-        # if not fLib.verify_prov_existed(self.provision):
-        #    return False
-        # if not fLib.verify_nginx_prov_existed(self.provision):
-        #    return False
+
         self.backup_nginx_conf()
 
         if url == 'wp-login':
@@ -233,8 +223,7 @@ class SettingManager:
             return False
 
     def before_edit_nginx(self):
-        # if not fLib.verify_prov_existed(self.provision):
-        #    return False
+
         nginx_check = fLib.check_nginx_valid()
         if nginx_check > 0:
             print('nginx config check failed. Please abort')
@@ -292,7 +281,7 @@ class SettingManager:
             f.close()
             g.close()
             shutil.copy('/opt/tmp_nginx.conf', fi)
-        # os.remove('/opt/tmp_nginx.conf')
+        os.remove('/opt/tmp_nginx.conf')
 
     def f_cache(self, action=None, uri=None):
         if action == 'status':
