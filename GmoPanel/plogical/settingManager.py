@@ -242,8 +242,7 @@ class SettingManager:
                 return True
 
     def edit_nginx(self, domain_name):
-        # if not fLib.verify_prov_existed(self.provision) or not fLib.verify_prov_existed(domain_name):
-        #    return False
+
         if not os.path.isfile('/etc/temp_nginx_conf/%s_http.conf' % self.provision) \
                 or not os.path.isfile('/etc/temp_nginx_conf/%s_ssl.conf' % self.provision):
             print('No temporary nginx file exists. Please backup firstly')
@@ -256,7 +255,6 @@ class SettingManager:
             # rollback
             for fi in glob.glob('/etc/nginx/bk_nginx_conf/%s_*.conf' % self.provision):
                 shutil.copy(fi, '/etc/nginx/conf.d/')
-            # fLib.reload_service('nginx')
             print('Insert failed. Might your conf is invalid')
             return False
         else:
@@ -305,7 +303,7 @@ class SettingManager:
             nginx_cache_dir = '/var/cache/nginx/wordpress'
             p = pathlib.Path(nginx_cache_dir)
             if p.exists():
-                res = fLib.execute('ls -dl %s | wc -l' % nginx_cache_dir) # deo hieu de lam gi
+                res = fLib.execute('ls -dl %s | wc -l' % nginx_cache_dir) # meo hieu de lam gi
                 if p.owner() == 'httpd' and int(res) == 1:
                     fqdn = fLib.get_fqdn(self.provision)
                     if uri:
@@ -382,7 +380,9 @@ class SettingManager:
                     count += 1
         if count > 1 or count == 0:
             print('None or multiple WP_CACHE constant')
-            return False
+            # return False
+            return 'mul'
+
         if action == 'status':
             pat = r"^\s*define\s*\(\s*'WP_CACHE'\s*,\s*true"
             if self.check_existence_in_file(pat, wpconfig):
