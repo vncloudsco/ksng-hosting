@@ -64,6 +64,7 @@ class BackupManager:
             record = BackupLog.objects.get(provision_id='%d' % provi_id, status='0', backup_type='%d' % backup_type)
         except ObjectDoesNotExist as error:
             print(error)
+            return False
 
         if result:
             record.status = 1
