@@ -89,7 +89,8 @@ class BackupManager:
         else:
             tarname = '/home/kusanagi/backup/' + self.provi + '.' + today
         source_dir = '/home/kusanagi/' + self.provi
-        shutil.make_archive(tarname, "gztar", source_dir, owner='httpd', group='www')
+        shutil.make_archive(tarname, "gztar", source_dir)
+        shutil.chown('%s.tar.gz' % tarname, 'httpd', 'www')
         return tarname
 
     def local_backup(self, chdir=None):
@@ -157,7 +158,8 @@ class BackupManager:
         cfg_file = '/root/.config/rclone/rclone.conf'
         with open(cfg_file, 'rt') as f:
             cfg = f.read()
-        result = rclone.with_config(cfg).copy('%s.tar.gz' % tarname, 'GGD1:%s' % drive_dir, ['--buffer-size=64M', '--log-file=%s' % self.log])
+        rc_options = ['--buffer-size=64M', '--drive-chunk-size=16384k', '--drive-upload-cutoff=16384k', '--log-file=%s' % self.log]
+        result = rclone.with_config(cfg).copy('%s.tar.gz' % tarname, 'GGD1:%s' % drive_dir, rc_options)
         res = result.get('code')
         if int(res) == 0:
             self.update_backup_record(2, 1)
