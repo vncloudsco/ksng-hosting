@@ -90,7 +90,7 @@ class BackupManager:
             tarname = '/home/kusanagi/backup/' + self.provi + '.' + today
         source_dir = '/home/kusanagi/' + self.provi
         shutil.make_archive(tarname, "gztar", source_dir)
-        shutil.chown('%s.tar.gz' % tarname, 'httpd', 'www')
+        shutil.chown('%s.tar.gz' % tarname, 'kusanagi', 'www')
         return tarname
 
     def local_backup(self, chdir=None):
@@ -153,12 +153,11 @@ class BackupManager:
         self.append_log(self.log, '--- Backup to Google Drive')
         self.backup_db()
         tarname = self.compress_provision_dir('/home/kusanagi/')
-        # cmd = 'rclone copy ' + tarname + '.tar.gz GGD1:' + drive_dir + ' 2>> ' + self.log + ' ; echo $?'
-        # res = execute(cmd)
+
         cfg_file = '/root/.config/rclone/rclone.conf'
         with open(cfg_file, 'rt') as f:
             cfg = f.read()
-        rc_options = ['--buffer-size=64M', '--drive-chunk-size=16384k', '--drive-upload-cutoff=16384k', '--log-file=%s' % self.log]
+        rc_options = ['--buffer-size=64M', '--drive-chunk-size=16M', '--drive-upload-cutoff=16M', '--log-file=%s' % self.log]
         result = rclone.with_config(cfg).copy('%s.tar.gz' % tarname, 'GGD1:%s' % drive_dir, rc_options)
         res = result.get('code')
         if int(res) == 0:
@@ -167,7 +166,7 @@ class BackupManager:
         else:
             self.update_backup_record(2, 0)
             # return {'status': 0, 'msg': 'Check %s for more details' % self.log}
-        os.remove(tarname + '.tar.gz')
+        os.remove('%s.tar.gz' % tarname)
 
     def initial_backup_record(self, backup_type):
         provi_id = self.dbinfo.id
