@@ -6,11 +6,13 @@ import os
 import sys
 import shutil
 import pathlib
+import rclone
 from datetime import datetime
 import re
 import django
 from plogical.phpSetting import execute, execute_outputfile
 from django.core.exceptions import ObjectDoesNotExist
+import threading
 
 
 class BackupManager:
@@ -150,9 +152,13 @@ class BackupManager:
         self.append_log(self.log, '--- Backup to Google Drive')
         self.backup_db()
         tarname = self.compress_provision_dir('/home/kusanagi/')
-        cmd = 'rclone copy ' + tarname + '.tar.gz GGD1:' + drive_dir + ' 2>> ' + self.log + ' ; echo $?'
-        res = execute(cmd)
-
+        # cmd = 'rclone copy ' + tarname + '.tar.gz GGD1:' + drive_dir + ' 2>> ' + self.log + ' ; echo $?'
+        # res = execute(cmd)
+        cfg_file = '/root/.config/rclone/rclone.conf'
+        with open(cfg_file, 'rt') as f:
+            cfg = f.read()
+        result = rclone.with_config(cfg).copy('%s.tar.gz' % tarname, 'GGD1:%s' % drive_dir, ['--buffer-size=64M', '--log-file=%s' % self.log])
+        res = result.get('code')
         if int(res) == 0:
             self.update_backup_record(2, 1)
             # return {'status': 1, 'msq': 'Backup completed successfully'}
@@ -180,6 +186,15 @@ class BackupManager:
         filelist.sort(key=os.path.getmtime)
         for i in range(left):
             os.remove(filelist[i])
+
+    def run_thread(self, name_fuc='local_backup', params=None):
+        if name_fuc == 'local_backup':
+            t = threading.Thread(target=self.local_backup)
+        elif name_fuc == 'remote_backup':
+            t = threading.Thread(target=self.remote_backup, args=params)
+        elif name_fuc == 'drive_backup':
+            t = threading.Thread(target=self.drive_backup, args=params)
+        t.start()
 
 
 class BackupAllProvision:
