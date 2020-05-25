@@ -89,7 +89,7 @@ class BackupManager:
         else:
             tarname = '/home/kusanagi/backup/' + self.provi + '.' + today
         source_dir = '/home/kusanagi/' + self.provi
-        shutil.make_archive(tarname, "gztar", source_dir)
+        shutil.make_archive(tarname, "gztar", source_dir, owner='httpd', group='www')
         return tarname
 
     def local_backup(self, chdir=None):
