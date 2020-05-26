@@ -157,7 +157,8 @@ class BackupManager:
         cfg_file = '/root/.config/rclone/rclone.conf'
         with open(cfg_file, 'rt') as f:
             cfg = f.read()
-        rc_options = ['--buffer-size=64M', '--drive-chunk-size=16M', '--drive-upload-cutoff=16M', '--log-file=%s' % self.log]
+        rc_options = ['--buffer-size=64M', '--transfers=5', '--drive-chunk-size=16M', '--drive-upload-cutoff=16M',
+                      '--log-file=%s' % self.log]
         result = rclone.with_config(cfg).copy('%s.tar.gz' % tarname, 'GGD1:%s' % drive_dir, rc_options)
         res = result.get('code')
         if int(res) == 0:
