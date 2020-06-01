@@ -79,21 +79,27 @@ class Website:
             pathRoot = '/home/{}/{}/DocumentRoot/'.format(self.userName, self.proName)
             if os.path.isdir(path):
                 shutil.rmtree(path)
-            os.mkdir(path)
+            os.mkdir(path, 0o775)
             os.chdir(path)
             namezip = 'wordpress{}.top.zip'.format(data['theme_id'])
             namesql = 'wp{}.sql'.format(data['theme_id'])
             wget.download('http://tentenwordpress1.top/code/tentenwordpress{}.top.zip'.format(data['theme_id']), path+'/'+namezip)
             wget.download('http://tentenwordpress1.top/db/wp{}.sql'.format(data['theme_id']), path+'/'+namesql)
-            # with zipfile.ZipFile(path+'/'+namezip,'r') as zip_ref:
-            #     zip_ref.extractall(path)
-            # os.system('unzip -qq ' + path + '/{}'.format(namezip))
+
             shutil.unpack_archive("%s/%s" % (path, namezip), extract_dir=path)
-            if not os.path.isdir(path+'/wp-content'):
+            # find real wp-source path_dir after unzip
+            has_wp_cont = 0
+            wp_source = ''
+            for root, dirs, files in os.walk(path):
+                for name in dirs:
+                    if name == 'wp-content':
+                        wp_source = os.path.join(root, name).rsplit('/', 1)[0]
+                        has_wp_cont = 1
+            if not has_wp_cont:
                 raise ValueError('Failed - No such wp-content source directory')
 
             # apply source
-            os.system('rsync --exclude=*.zip -azh {}/* {}'.format(path, pathRoot))
+            os.system('rsync --exclude=*.zip --exclude=*.sql -azh {}/* {}'.format(wp_source, pathRoot))
             if not os.path.isfile(pathRoot+'wp-config.php'):
                 raise ValueError('Failed - No such wp-config.php source file')
 
@@ -275,7 +281,7 @@ class Website:
             os.chdir('/home/{}/{}'.format(self.userName, self.proName))
             os.system("echo 'SET FOREIGN_KEY_CHECKS = 0;' > temp.txt")
             os.system('mysqldump -u{} -p{} --add-drop-table --no-data {} | grep ^DROP >> temp.txt'.format(db_user, db_pass, db_name))
-            os.system('echo "mysqldump" $?')
+            # os.system('echo "mysqldump" $?')
             os.system('echo "SET FOREIGN_KEY_CHECKS = 1;" >> temp.txt')
             os.system('mysql -u{} -p{} {} < temp.txt'.format(db_user, db_pass, db_name))
             # os.system('echo "DROP ALL TABLE" $?')
@@ -370,7 +376,7 @@ class Website:
             list_path = system_os.find_sub('/home/{}/{}/Up/'.format(self.userName, self.proName), '.trash')
             for sub in list_path:
                 shutil.rmtree(sub)
-            list_sub = system_os.find_sub('/home/{}/{}/Up/'.format(self.userName,self.proName), 'public_html')
+            list_sub = system_os.find_sub('/home/{}/{}/Up/'.format(self.userName, self.proName), 'public_html')
             if list_sub:
                 os.system('rsync -azh --exclude=*.zip {}/* /home/{}/{}/DocumentRoot/'.format(list_sub[0], self.userName, self.proName))
             else:
