@@ -9,7 +9,8 @@ def execute(command):
     try:
         res = subprocess.run(command, shell=True, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
         return res.stdout
-    except subprocess.CalledProcessError as error:
+    # except subprocess.CalledProcessError as error:
+    except BaseException as error:
         return error
 
 
@@ -144,7 +145,7 @@ def yum_install(package):
         return 0
     else:
         yum = execute('yum install -y %s > /dev/null 2>&1; echo $? ' % package)
-        return int(yum.stdout)
+        return int(yum)
 
 
 def get_app_id(provision):
